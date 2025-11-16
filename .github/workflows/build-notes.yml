@@ -17,10 +17,12 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
     
-    - name: Setup Typst
-      uses: yusancky/setup-typst@v2
-      with:
-        version: 'latest'
+    - name: Install Typst
+      run: |
+        wget https://github.com/typst/typst/releases/latest/download/typst-x86_64-unknown-linux-musl.tar.xz
+        tar -xf typst-x86_64-unknown-linux-musl.tar.xz
+        sudo mv typst-x86_64-unknown-linux-musl/typst /usr/local/bin/
+        typst --version
     
     - name: Get git hash
       id: git_hash
