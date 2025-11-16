@@ -1,0 +1,56 @@
+name: Build and Release Lecture Notes
+
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Setup Typst
+      uses: yusancky/setup-typst@v2
+      with:
+        version: 'latest'
+    
+    - name: Get git hash
+      id: git_hash
+      run: echo "hash=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+    
+    - name: Compile lecture notes
+      run: |
+        mkdir -p output
+        typst compile --input git-hash=${{ steps.git_hash.outputs.hash }} lec.typ output/lec.pdf
+        echo "Compiled lec.pdf with git hash: ${{ steps.git_hash.outputs.hash }}"
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: lecture-notes
+        path: output/lec.pdf
+        retention-days: 30
+    
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: output/lec.pdf
+        generate_release_notes: true
+        body: |
+          ## ECE 370 Lecture Notes Release
+          
+          Version: ${{ github.ref_name }}
+          Git Hash: ${{ steps.git_hash.outputs.hash }}
+          
+          Generated on: ${{ github.event.head_commit.timestamp }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
