@@ -85,7 +85,7 @@ For error corrections, please open an issue describing the error and its locatio
 
 ### 📧 Contact
 
-**Dr. Zhengnan Li**  
+Dr. Zhengnan Li  
 Assistant Professor  
 Department of Electrical and Computer Engineering  
 The University of Alabama  
