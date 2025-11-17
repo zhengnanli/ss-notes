@@ -195,9 +195,13 @@ Finally, we have the following pair of equations:
 
     [Time Reversal], [$x[-n]$], [$X(e^(-j omega))$],
 
-    // [Time Scaling (Decimation)],
-    // [$x[n/M]$ if $n$ multiple of $M$, 0 otherwise],
-    // [$1/M sum_(k=0)^(M-1) X(e^(j(omega - 2pi k)/M))$],
+    [Time Scaling (Upsampling)],
+    [$x[n slash k]$ if $n = k ell$, $ell in NN$, else 0],
+    [$X(e^(j k omega))$],
+
+    [Time Scaling (Downsampling)],
+    [$x[n M]$],
+    [$1/M sum_(k=0)^(M-1) X(e^(j(omega + 2 pi k)/M))$],
 
     [Convolution], [$x[n] * y[n]$], [$X(e^(j omega)) Y(e^(j omega))$],
 
