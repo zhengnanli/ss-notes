@@ -3,6 +3,8 @@
 
 This repository contains comprehensive lecture notes and examples for ECE 370: Signals and Systems at The University of Alabama.
 
+Download [here](https://github.com/zhengnanli/ss-notes/releases/latest/download/lec.pdf)!
+
 ### 📚 Course Information
 
 **Course**: ECE 370 - Signals and Systems  
