@@ -5,6 +5,8 @@ This repository contains comprehensive lecture notes and examples for ECE 370: S
 
 Download [here](https://github.com/zhengnanli/ss-notes/releases/latest/download/lec.pdf)!
 
+Special thank you to the creater of [jsk-lecnotes](https://github.com/jskherman/jsk-lecnotes)!
+
 ### 📚 Course Information
 
 **Course**: ECE 370 - Signals and Systems  
