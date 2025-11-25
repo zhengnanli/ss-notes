@@ -1,3 +1,5 @@
+// Adopted from: https://github.com/jskherman/jsk-lecnotes
+
 // Imports =============================================================
 
 #import "@preview/codelst:2.0.2": sourcecode
