@@ -70,7 +70,6 @@ Compiled PDFs will be generated in the current directory.
 ### 🔗 Useful Resources
 
 - **Primary Textbook**: *Signals and Systems* by Oppenheim and Willsky
-- **Secondary Reference**: *Signals and Systems* by Simon Haykin and Barry Van Veen
 - **MATLAB Documentation**: [Signal Processing Toolbox](https://www.mathworks.com/products/signal.html)
 - **Interactive Demos**: [MIT OpenCourseWare 6.003](https://ocw.mit.edu/courses/6-003-signals-and-systems-fall-2011/)
 - **Python Alternative**: [SciPy Signal Processing Tutorial](https://docs.scipy.org/doc/scipy/tutorial/signal.html)
@@ -101,12 +100,14 @@ This work is licensed under a [Creative Commons Attribution-ShareAlike 4.0 Inter
 
 Code examples are licensed under the [MIT License](LICENSE-CODE).
 
+The `lib.typ` is adapoted from [jsk-lecnotes](https://github.com/jskherman/jsk-lecnotes), which is [Apache-2.0 license](https://github.com/jskherman/jsk-lecnotes/blob/main/LICENSE) licensed. 
+
 ### 🙏 Acknowledgments
 
 - The University of Alabama ECE Department
 - Students who provided feedback and corrections
 - Open-source signal processing community
-- Contributors to the Typst typesetting system
+- Contributors to the Typst typesetting system, and special shout out to [@jskherman](https://github.com/jskherman) who made the template possible!
 
 ---
 
