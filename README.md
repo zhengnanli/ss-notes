@@ -111,5 +111,5 @@ The `lib.typ` is adapoted from [jsk-lecnotes](https://github.com/jskherman/jsk-l
 
 ---
 
-*Last Updated: November 2024*  
+*Last Updated: November 2025*  
 *Version: Fall 2025*
