@@ -4,9 +4,11 @@
 #show: lq.theme.schoolbook
 #show: schoolbook-style
 
-Similar to the development of continuous-time Fourier transform, we start by considering a general sequence $x[n]$ that is of finite duration, i.e., for some integers $N_1$ and $N_2$, $x[n] = 0$ outside the range $-N_1 <= x <= N_2$. A signal of this type is illustrated in the figure below. From this aperiodic signal, we construct a periodic sequence $tilde(x) [n]$ for which $x[n]$ is one period. As we choose the period $N$ to be large, $tilde(x) [n]$ is identical to $x[n]$ over a longer interval, i.e., $N -> infinity$, $tilde(x) [n] = x[n]$.
+Similar to the development of the continuous-time Fourier transform, we start by considering a general sequence $x[n]$ that is of finite duration, i.e., for some integers $N_1$ and $N_2$, $x[n] = 0$ outside the range $-N_1 <= n <= N_2$. A signal of this type is illustrated in the figure below. From this aperiodic signal, we construct a periodic sequence $tilde(x) [n]$ for which $x[n]$ is one period. As we choose the period $N$ to be large, $tilde(x) [n]$ is identical to $x[n]$ over a longer interval, i.e., $N -> infinity$, $tilde(x) [n] = x[n]$.
 
-#align(center)[
+#altfig(
+  alt: "Two stem plots. Left: an aperiodic discrete-time sequence x of n, nonzero only on the interval from minus N sub one to N sub two. Right: its periodic extension tilde x of n, formed by repeating the sequence every N samples; the central period is shown in blue and adjacent copies in green, with dashed red lines at plus and minus N and plus and minus two N.",
+  align(center)[
   #grid(
     columns: (1fr, 3fr),
     column-gutter: 2em,
@@ -98,9 +100,10 @@ Similar to the development of continuous-time Fourier transform, we start by con
           paint: red,
         )),
       )],
-  )]
+  )],
+)
 
-We start by examine the Fourier series representation of $tilde(x) [n]$, given by
+We start by examining the Fourier series representation of $tilde(x) [n]$, given by
 $
   tilde(x) [n] = sum_(k = chevron.l N chevron.r) a_k e^(j k ((2 pi)/N) n)
 $
@@ -132,13 +135,19 @@ $
 Finally, we have the following pair of equations:
 #definition("Discrete-time Fourier Transform")[
   The _analysis equation_ is
-  $
-    X(e^(j omega)) = sum_(n = -infinity)^(infinity) x[n] e^(-j omega n)
-  $
+  #eqalt(
+    "X of e to the j omega equals the sum over all integer n of x of n times e to the negative j omega n.",
+    $
+      X(e^(j omega)) = sum_(n = -infinity)^(infinity) x[n] e^(-j omega n)
+    $,
+  )
   and the corresponding _synthesis equation_ is
-  $
-    x[n] = 1 / (2 pi) integral_(2 pi) X(e^(j omega)) e^(j omega n) "d" omega
-  $
+  #eqalt(
+    "x of n equals one over two pi times the integral over any two-pi-length interval of X of e to the j omega times e to the j omega n, d omega.",
+    $
+      x[n] = 1 / (2 pi) integral_(2 pi) X(e^(j omega)) e^(j omega n) "d" omega
+    $,
+  )
   Note that since $X(e^(j omega)) e^(j omega n)$ is periodic with period $2 pi$, the interval of integration can be taken as _any_ interval of length $2 pi$.
 ]
 
@@ -347,11 +356,11 @@ $
 
 Taking the DTFT of both sides we have
 $
-  sum_(k = 0)^N a_k e^(0j k omega) Y(e^(j omega)) = sum_(k = 0)^M b_k e^(-j k omega) X(e^(j omega))
+  sum_(k = 0)^N a_k e^(-j k omega) Y(e^(j omega)) = sum_(k = 0)^M b_k e^(-j k omega) X(e^(j omega))
 $
 or equivalently,
 $
-  H(e^(j omega)) = (Y(e^(j omega))) / (X(e^(j omega))) = (sum_(k = 0)^(M) b_k e^(j k omega)) / (sum_(k = 0)^N a_k e^(-j k omega))
+  H(e^(j omega)) = (Y(e^(j omega))) / (X(e^(j omega))) = (sum_(k = 0)^(M) b_k e^(-j k omega)) / (sum_(k = 0)^N a_k e^(-j k omega))
 $
 
 #example("Linear Constant-Coefficient Difference Equations")[
@@ -376,15 +385,15 @@ $
 
 == Discrete Fourier Transform (NOT DTFT)
 
-Discrete Fourier Transform (DFT) is defined for finite length sequences by considering their periodic extension (sometimes with zero-padding). Let $x[n]$ be a finite length sequencey such that $x[n] = 0$ if $n in.not [0, N-1]$, the DFT is defined as
+Discrete Fourier Transform (DFT) is defined for finite length sequences by considering their periodic extension (sometimes with zero-padding). Let $x[n]$ be a finite-length sequence such that $x[n] = 0$ if $n in.not [0, N-1]$. The DFT is defined as
 $
-  x[k] = sum_(n = 0)^(N - 1) x[n] W_N^(k n), quad k = 0, 1, dots.c, N - 1
+  X[k] = sum_(n = 0)^(N - 1) x[n] W_N^(k n), quad k = 0, 1, dots.c, N - 1
 $
 where $W_N = e^(-j (2pi)/N)$.
 
 The inverse DFT is given by
 $
-  x[n] = 1/N sum_(n = 0)^(N - 1) X[k] W_N^(-k n), quad n = 0, 1, dots.c N - 1
+  x[n] = 1/N sum_(k = 0)^(N - 1) X[k] W_N^(-k n), quad n = 0, 1, dots.c, N - 1
 $
 
 Suppose we are given the _samples_ of a signal $bold(x)$, $bold(upright(x)) = vec(x(0)& x(1) & dots.c & x(N-1), delim: "[")^top$, we would like to get the DTFT of it, $bold(upright(X)) = vec(X(0)&X(1)&dots.c&X(N-1), delim: "[")^top$. We can do so by matrix multiplications 

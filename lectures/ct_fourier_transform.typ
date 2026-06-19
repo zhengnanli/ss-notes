@@ -10,7 +10,9 @@ $
 $
 where $omega_0 = (2 pi) / T$. Below, we plot both the time domain signal, and the Fourier series. Note that $T_1 < T_2$.
 
-#align(center)[
+#altfig(
+  alt: "Three plots side by side. Left: periodic square wave x of t with pulse half-width T sub one and period T. Middle: Fourier series coefficients a sub k for period T equal T sub one, sampling a sinc envelope coarsely. Right: a sub k for the larger period T equal T sub two, sampling the same envelope more densely.",
+  align(center)[
   #grid(
     columns: (1fr, 1fr, 1fr),
     column-gutter: 2em,
@@ -78,14 +80,17 @@ where $omega_0 = (2 pi) / T$. Below, we plot both the time domain signal, and th
       )
     ],
   )
-]
+],
+)
 
 As we can see from the above example, intuitively, when $T arrow infinity$ (i.e., the periodic signal becomes aperiodic), the Fourier series approaches the envelop function.
 
 == Representation of Aperiodic Signals: The Continuous-Time Fourier Transform
 We start with an aperiodic signal $x(t)$, which is zero when $|t| > T_1$ for some number $T_1$. We then construct a periodic signal $tilde(x)(t)$ for which $x(t)$ is one period. As we choose the period $T$ to be larger, say $T arrow infinity$, $tilde(x)(t) arrow x(t)$.
 
-#align(center)[
+#altfig(
+  alt: "Two plots. Left: an aperiodic pulse x of t that is nonzero only on the interval from minus T sub one to T sub one. Right: its periodic extension tilde x of t, formed by repeating the pulse every T units; the central period is drawn in blue and adjacent copies in green, with dashed red lines at plus and minus T and plus and minus two T.",
+  align(center)[
   #grid(
     columns: (1fr, 3fr),
     column-gutter: 2em,
@@ -183,7 +188,8 @@ We start with an aperiodic signal $x(t)$, which is zero when $|t| > T_1$ for som
           paint: red,
         )),
       )],
-  )]
+  )],
+)
 
 Let us now examine the effect of this on the Fourier series representation of $tilde(x)(t)$. We represent the $tilde(x) (t)$ by
 $
@@ -214,7 +220,7 @@ $
   x(t) = lim_(omega_0 arrow 0) 1 / (2 pi) sum_(k = -infinity)^(infinity) X(j k omega_0) e^(j k omega_0 t) omega_0 = 1 / (2 pi ) integral_RR X(j omega) e^(j omega t) "d" omega
 $
 
-The process of $omega_0 arrow infinity$ is depicted below. As $omega_0 arrow 0$, the summation converges to the integral of $X(j omega) e^(j omega t)$.
+The process of $omega_0 arrow 0$ is depicted below. As $omega_0 arrow 0$, the summation converges to the integral of $X(j omega) e^(j omega t)$.
 
 #let x = lq.linspace(-2, 5, num: 100)
 #let xd = lq.arange(-2, 5, step: 0.3)
@@ -236,6 +242,7 @@ The process of $omega_0 arrow infinity$ is depicted below. As $omega_0 arrow 0$,
 
 #align(center)[
   #cdiagram(
+    alt: "Smooth continuous curve of X of j omega times e to the j omega t plotted against omega, overlaid with a red staircase approximation that samples the curve at spacing omega-zero. The discrete samples approach the continuous integral as omega-zero approaches zero.",
     title: $X(j omega) e^(j omega t)$,
     xlabel: $omega$,
     ylim: (-2, 3),
@@ -263,13 +270,19 @@ The process of $omega_0 arrow infinity$ is depicted below. As $omega_0 arrow 0$,
 We define the Fourier transform pair as follows.
 #definition("Fourier Transformation Pair")[
   The Fourier transform is defined as
-  $
-    X(j omega) = integral_(-infinity)^(infinity) x(t) e^(-j omega t) "d"t
-  $
+  #eqalt(
+    "X of j omega equals the integral from negative infinity to infinity of x of t times e to the negative j omega t, d t.",
+    $
+      X(j omega) = integral_(-infinity)^(infinity) x(t) e^(-j omega t) "d"t
+    $,
+  )
   And the inverse Fourier transform is defined as
-  $
-    x(t) = 1/(2 pi) integral_(-infinity)^(infinity) X(j omega) e^(j omega t) "d" omega
-  $
+  #eqalt(
+    "x of t equals one over two pi times the integral from negative infinity to infinity of X of j omega times e to the j omega t, d omega.",
+    $
+      x(t) = 1/(2 pi) integral_(-infinity)^(infinity) X(j omega) e^(j omega t) "d" omega
+    $,
+  )
 ]
 
 When comparing the Fourier coefficients $a_k$ of a periodic signal $tilde(x) (t)$, and exploiting the fact that $x(t)$ is zero outside the range $s <= t <= s + T$, we have
@@ -285,7 +298,7 @@ where $X(j omega)$ is the Fourier transform of $x(t)$. Intuitively, $a_k$ are _s
 
 == Convergence of Fourier Transforms
 
-Similar to the Fourier series, there is a set of contidions which are sufficient to ensure that $tilde(x) (t)$ is equals to $x(t)$ for any $t$ except at a discontinuity. The Dirichlet conditions state require that
+Similar to the Fourier series, there is a set of conditions which are sufficient to ensure that $tilde(x) (t)$ is equal to $x(t)$ for any $t$ except at a discontinuity. The Dirichlet conditions require that
 
 - $x(t)$ be absolutely integrable: $integral_RR |x(t)| "d"t < infinity$.
 - $x(t)$ have a finite number of maxima and minima within any finite interval.
@@ -328,7 +341,9 @@ Similar to the Fourier series, there is a set of contidions which are sufficient
     X(j omega) = integral_(-T_1)^(T_1) e^(-j omega t) "d"t = (2 sin(omega T_1))/omega = 2 T_1 "sinc"((omega T_1)/pi)
   $
 
-  #align(center)[
+  #altfig(
+    alt: "Two plots. Left: a rectangular pulse x of t of height one, nonzero on the interval from minus T sub one to T sub one. Right: its Fourier transform X of j omega, a sinc-shaped envelope of height two T sub one with zero crossings at multiples of pi over T sub one.",
+    align(center)[
     #grid(
       columns: (1fr, 1fr),
       column-gutter: 2em,
@@ -371,7 +386,8 @@ Similar to the Fourier series, there is a set of contidions which are sufficient
           lq.place(-1, -0.1, align: center)[$-pi / T_1$],
         )
       ],
-    )]
+    )],
+  )
   Consider the Fourier transform of the signal $x(t)$
   $
     X(j omega) = cases(1\, quad |omega| < W, 0\, quad |omega| > W)
@@ -395,7 +411,7 @@ We list the properties without proof below
 $
   a x(t) + b y(t) arrow.l.r^limits(cal("F")) a X(j omega) + b Y(j omega)
 $
-- Time Shifiting:
+- Time Shifting:
 $
   x(t - t_0) arrow.l.r^limits(cal("F")) e^(-j omega t_0) X(j omega)
 $
@@ -464,11 +480,11 @@ and its Fourier transform,
 $
   Y(j omega) = cal("F"){y(t)} = integral_RR [ integral_RR x(tau) h(t - tau) "d"tau ] e^(-j omega t) "d"t = integral_RR x(tau) [integral_RR h(t - tau) e^(-j omega t) "d"t] "d" tau
 $
-by the time-shift property, the bracked term is simply
+by the time-shift property, the bracketed term is simply
 $
   integral_RR h(t - tau) e^(-j omega t) "d" t = e^(-j omega tau) H(j omega)
 $
-We the have
+We then have
 $
   Y(j omega) = integral_RR x(tau) e^(-j omega tau) H(j omega) "d"tau = H(j omega) integral_RR x(tau) e^(-j omega tau) "d"tau
 $
@@ -478,9 +494,12 @@ $
 $
 We then have
 #attention("Convolution Property")[
-  $
-    y(t) = h(t) star x(t) arrow.l.r^limits(cal("F")) Y (j omega) = H (j omega) X (j omega)
-  $
+  #eqalt(
+    "y of t equals h of t convolved with x of t, which Fourier-transforms to Y of j omega equal to H of j omega times X of j omega.",
+    $
+      y(t) = h(t) star x(t) arrow.l.r^limits(cal("F")) Y (j omega) = H (j omega) X (j omega)
+    $,
+  )
 ]
 
 // #example("Examples")[
@@ -660,11 +679,11 @@ $
 $
 From the linearity property, this becomes
 $
-  sum_(k = 0)^N a_k cal("F"){a_k ("d"^(k) y(t)) / ("d" t^k)} = sum_(k = 0)^M b_k cal("F"){b_k ("d"^(k) x(t)) / ("d" t^k)}
+  sum_(k = 0)^N a_k cal("F"){("d"^(k) y(t)) / ("d" t^k)} = sum_(k = 0)^M b_k cal("F"){("d"^(k) x(t)) / ("d" t^k)}
 $
 and from the differentiation property,
 $
-  sum_(k = 0)^N a_k (j omega)^k Y(j omega) = sum_(k = 0)^M b_k (j omega)^* X(j omega)
+  sum_(k = 0)^N a_k (j omega)^k Y(j omega) = sum_(k = 0)^M b_k (j omega)^k X(j omega)
 $
 or equivalently
 $

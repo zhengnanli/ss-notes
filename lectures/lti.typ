@@ -20,9 +20,12 @@ $
   x[n] = dots.c + x[-2] delta[n + 2] + x[-1] delta[n + 1] + x[0] delta[n] + x[1] delta[n - 1] + x[2] delta[n - 2] + dots.c
 $
 or compactly:
-$
-  x[n] = sum_(k = -infinity)^(infinity) x[k] delta[n - k]
-$ <sifting>
+#eqalt(
+  "x of n equals the sum over k from negative infinity to infinity of x of k times delta of n minus k.",
+  $
+    x[n] = sum_(k = -infinity)^(infinity) x[k] delta[n - k]
+  $,
+) <sifting>
 This equation is called the _sifting property_ of the discrete-time unit impulse.
 
 === Convolution Sum
@@ -41,7 +44,10 @@ That is, $h[n]$ is the output of the LTI system when $delta[n]$ is the input. Th
 
 #note("Convolution Sum")[
   The output $y[n]$ of a discrete-time LTI system is given by:
-  $ y[n] = sum_(k=-infinity)^(infinity) x[k] h[n-k] = x[n] star h[n] $
+  #eqalt(
+    "y of n equals the sum over k from negative infinity to infinity of x of k times h of n minus k, which equals x of n convolved with h of n.",
+    $ y[n] = sum_(k=-infinity)^(infinity) x[k] h[n-k] = x[n] star h[n] $,
+  )
   This is the convolution sum, often denoted by the $star$ symbol.
 ]
 
@@ -49,29 +55,32 @@ That is, $h[n]$ is the output of the LTI system when $delta[n]$ is the input. Th
 
 Another way of explaining the convolution sum is through the impulse response of LTI systems. The impulse response of LTI systems is defined as the output of the system when the input is an impulse, i.e.,
 
-#align(center)[
-  #diagram(
-    debug: false,
-    node-stroke: 0.1em,
-    mark-scale: 100%,
-    edge(
-      (-1, 0),
-      "r",
-      "-|>-",
-      $delta[n]$,
-      label-pos: -0.5,
-      label-side: center,
-    ),
-    edge(
-      (0, 0),
-      "r",
-      "-|>-",
-      $h[n]$,
-      label-pos: 1.6,
-      label-side: center,
-    ),
-    node((0, 0), $T{dot.c}$, width: 4em),
-  )]
+#altfig(
+  alt: "Block diagram of an LTI system. Input delta of n enters a block labeled T of dot, which outputs the impulse response h of n.",
+  align(center)[
+    #diagram(
+      debug: false,
+      node-stroke: 0.1em,
+      mark-scale: 100%,
+      edge(
+        (-1, 0),
+        "r",
+        "-|>-",
+        $delta[n]$,
+        label-pos: -0.5,
+        label-side: center,
+      ),
+      edge(
+        (0, 0),
+        "r",
+        "-|>-",
+        $h[n]$,
+        label-pos: 1.6,
+        label-side: center,
+      ),
+      node((0, 0), $T{dot.c}$, width: 4em),
+    )],
+)
 
 We now would like to examine the system response to an arbitrary input $x[n]$. Per @sifting, the output of the system can be written as
 $
@@ -105,7 +114,7 @@ To compute $y[n]$ for a specific value of $n$, we employ the "flip, slide, and s
 4. Sum all products: $y[n] = sum_(k=-infinity)^(infinity) x[k] h[n-k]$
 
 #example("Convolution Sum")[
-  Suppose we would like to compute the convolution between $x[n] = {1, 4, 2, 5, 7}$ and $h[n] = {3, 2, 5}$. Note that the time indices are not specified as of now. To calculate the convolution, we do something very similar to multiplicating two numbers, but we do not carry the number:
+  Suppose we would like to compute the convolution between $x[n] = {1, 4, 2, 5, 7}$ and $h[n] = {3, 2, 5}$. Note that the time indices are not specified as of now. To calculate the convolution, we do something very similar to multiplying two numbers, but we do not carry the number:
 
   #table(
     columns: (1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr),
@@ -137,67 +146,73 @@ To compute $y[n]$ for a specific value of $n$, we employ the "flip, slide, and s
   #let h1 = (0, 0, 0, 1, 1, 1, 0)
   #let x = (0, 0, 0.5, 2, 0, 0, 0)
   #let y = (0, 0, 0.5, 2.5, 2.5, 2, 0)
-  #align(center)[
-    #grid(
-      columns: (1fr, 1fr),
-      column-gutter: 2em,
-      [
-        #lq.diagram(
-          title: $h[n]$,
-          xlabel: $n$,
-          height: 2.5cm,
-          width: 4cm,
-          xlim: (-3, 6),
-          ylim: (-0.2, 3),
-          lq.stem(t, h),
-        )],
-      [
-        #lq.diagram(
-          title: $x[n]$,
-          xlabel: $n$,
-          height: 2.5cm,
-          width: 4cm,
-          xlim: (-3, 6),
-          ylim: (-0.2, 3),
-          lq.stem(t, x),
-        )],
-    )]
+  #altfig(
+    alt: "Two stem plots side by side. Left: h of n equals one at n equal to zero, one, and two, and zero elsewhere. Right: x of n equals one half at n equal to zero, two at n equal to one, and zero elsewhere.",
+    align(center)[
+      #grid(
+        columns: (1fr, 1fr),
+        column-gutter: 2em,
+        [
+          #lq.diagram(
+            title: $h[n]$,
+            xlabel: $n$,
+            height: 2.5cm,
+            width: 4cm,
+            xlim: (-3, 6),
+            ylim: (-0.2, 3),
+            lq.stem(t, h),
+          )],
+        [
+          #lq.diagram(
+            title: $x[n]$,
+            xlabel: $n$,
+            height: 2.5cm,
+            width: 4cm,
+            xlim: (-3, 6),
+            ylim: (-0.2, 3),
+            lq.stem(t, x),
+          )],
+      )],
+  )
 
-  #align(center)[
-    #grid(
-      columns: (1fr, 1fr, 1fr),
-      column-gutter: 2em,
-      [
-        #lq.diagram(
-          title: $0.5 h[n]$,
-          xlabel: $n$,
-          height: 2.5cm,
-          width: 4cm,
-          xlim: (-3, 6),
-          ylim: (-0.2, 3),
-          lq.stem(t, h.map(h => 0.5 * h)),
-        )],
-      [
-        #lq.diagram(
-          title: $2h[n-1]$,
-          xlabel: $n$,
-          height: 2.5cm,
-          width: 4cm,
-          xlim: (-3, 6),
-          ylim: (-0.2, 3),
-          lq.stem(t, h1.map(h1 => 2 * h1)),
-        )],
-      [
-        #lq.diagram(
-          title: $y[n]$,
-          xlabel: $n$,
-          height: 2.5cm,
-          width: 4cm,
-          xlim: (-3, 6),
-          ylim: (-0.2, 3),
-          lq.stem(t, y),
-        )],
-    )]
+  #altfig(
+    alt: "Three stem plots showing the convolution components. Left: zero point five h of n with height one half at n equal to zero, one, and two. Middle: two h of n minus one with height two at n equal to one, two, and three. Right: the sum y of n showing values one half, two and a half, two and a half, and two at n equal zero through three.",
+    align(center)[
+      #grid(
+        columns: (1fr, 1fr, 1fr),
+        column-gutter: 2em,
+        [
+          #lq.diagram(
+            title: $0.5 h[n]$,
+            xlabel: $n$,
+            height: 2.5cm,
+            width: 4cm,
+            xlim: (-3, 6),
+            ylim: (-0.2, 3),
+            lq.stem(t, h.map(h => 0.5 * h)),
+          )],
+        [
+          #lq.diagram(
+            title: $2h[n-1]$,
+            xlabel: $n$,
+            height: 2.5cm,
+            width: 4cm,
+            xlim: (-3, 6),
+            ylim: (-0.2, 3),
+            lq.stem(t, h1.map(h1 => 2 * h1)),
+          )],
+        [
+          #lq.diagram(
+            title: $y[n]$,
+            xlabel: $n$,
+            height: 2.5cm,
+            width: 4cm,
+            xlim: (-3, 6),
+            ylim: (-0.2, 3),
+            lq.stem(t, y),
+          )],
+      )],
+  )
 ]
 
 
@@ -208,31 +223,34 @@ To compute $y[n]$ for a specific value of $n$, we employ the "flip, slide, and s
   #let n = range(-5, 16)
   #let xlims = (-5.3, 16.3)
   #let ylims = (-0.2, 10)
-  #align(center)[
-    #grid(
-      columns: (1fr, 1fr),
-      column-gutter: 2em,
-      [
-        #lq.diagram(
-          title: $x[n]$,
-          xlabel: $n$,
-          xlim: xlims,
-          ylim: ylims,
-          height: 2cm,
-          lq.stem(n, n.map(n => if n < 0 or n > 4 { 0 } else { 1 })),
-        )],
-      [
-        #lq.diagram(
-          title: $h[n]$,
-          xlabel: $n$,
-          xlim: xlims,
-          ylim: ylims,
-          height: 2cm,
-          lq.stem(n, n.map(n => if n < 0 or n > 6 { 0 } else {
-            calc.pow(1.35, n)
-          })),
-        )],
-    )]
+  #altfig(
+    alt: "Two stem plots. Left: x of n is a rectangular pulse of height one for n from zero through four. Right: h of n is a growing geometric sequence alpha to the n with alpha greater than one, nonzero for n from zero through six.",
+    align(center)[
+      #grid(
+        columns: (1fr, 1fr),
+        column-gutter: 2em,
+        [
+          #lq.diagram(
+            title: $x[n]$,
+            xlabel: $n$,
+            xlim: xlims,
+            ylim: ylims,
+            height: 2cm,
+            lq.stem(n, n.map(n => if n < 0 or n > 4 { 0 } else { 1 })),
+          )],
+        [
+          #lq.diagram(
+            title: $h[n]$,
+            xlabel: $n$,
+            xlim: xlims,
+            ylim: ylims,
+            height: 2cm,
+            lq.stem(n, n.map(n => if n < 0 or n > 6 { 0 } else {
+              calc.pow(1.35, n)
+            })),
+          )],
+      )],
+  )
 
   - *Interval 1*: $n < 0$ or $n > 10$. There is no overlap between the nonzero portions of $x[k]$ and $h[n-k]$; therefore, $y[n] = 0$.
 
@@ -286,6 +304,7 @@ To compute $y[n]$ for a specific value of $n$, we employ the "flip, slide, and s
 
 #align(center)[
   #cdiagram(
+    alt: "Plot of a smooth continuous-time signal x of t overlaid with a red staircase approximation. Vertical dashed red lines mark the width Delta between two adjacent steps.",
     title: $x(t)$,
     xlabel: $t$,
     ylim: (-2, 2),
@@ -315,7 +334,10 @@ $
 $
 where $Delta$ is the rectangular width, and $x(k Delta) delta_Delta (t - k Delta)$ is the rectangular height. Through a limiting process from rectangular pulse approximations, any continuous-time signal can be expressed using the continuous-time sifting property, representing $x(t)$ as a weighted integral of shifted unit impulses:
 
-$ x(t) = integral_(-infinity)^(infinity) x(tau) delta(t - tau) "d"tau $
+#eqalt(
+  "x of t equals the integral from negative infinity to infinity of x of tau times delta of t minus tau, d tau.",
+  $ x(t) = integral_(-infinity)^(infinity) x(tau) delta(t - tau) "d"tau $,
+)
 
 === Convolution Integral Derivation
 
@@ -323,9 +345,12 @@ Analogous to the discrete-time system, for a continuous-time LTI system with imp
 
 #attention("Convolution Integral")[
   The output $y(t)$ of a continuous-time LTI system is given by:
-  $
-    y(t) = integral_(-infinity)^(infinity) x(tau) h(t - tau) "d"tau = x(t) star h(t)
-  $
+  #eqalt(
+    "y of t equals the integral from negative infinity to infinity of x of tau times h of t minus tau, d tau, which equals x of t convolved with h of t.",
+    $
+      y(t) = integral_(-infinity)^(infinity) x(tau) h(t - tau) "d"tau = x(t) star h(t)
+    $,
+  )
 
   This is the *convolution integral* or *superposition integral*.
 ]
@@ -420,7 +445,7 @@ The unit step response $s[n]$ or $s(t)$ is related to the impulse response by:
     y[3] & = x[3] - x[2] - y[2] = 0 - 0 - 2 = -2 \
     y[4] & = dots.c
   $
-  The impulse response is $h[n] = delta[n] + 2 (-1)^n u[n-1]$. The sum $sum_k |h[k]| = 1 + |2 sum_(n = 1)^infinity (-1)^n|$ is not bounded (diverge). // Later in this class, we will learn more about _z-transform_, and from there, the (BIBO) stability of such a system can be determined by the positions of their poles. _If all poles of the z-transform of the system are strictly within the unit circle, the said system is stable._
+  The impulse response is $h[n] = delta[n] + 2 (-1)^n u[n-1]$. The sum $sum_k |h[k]| = 1 + sum_(n = 1)^infinity |2 (-1)^n| = 1 + sum_(n=1)^infinity 2$ diverges, so the system is *not* BIBO stable. // Later in this class, we will learn more about _z-transform_, and from there, the (BIBO) stability of such a system can be determined by the positions of their poles. _If all poles of the z-transform of the system are strictly within the unit circle, the said system is stable._
   - To examine the linearity and time-invariance, we can use mathematical induction. For an signal $x[n]$ that starts at time zero,
   $
     y[0] & = x[0] \
@@ -436,7 +461,7 @@ The unit step response $s[n]$ or $s(t)$ is related to the impulse response by:
     y_1[m + 2] & = x[2] - x[1] - y_1[m+1] = x[2] - 2x[1] + 2x[0] \
     y_1[m + 3] & = ...
   $
-  or in other words, $y_1[n] = y[n - m], forall n >= m >= 0$. This establishes that every output of the system can be expressecd as a time-invariant linear combination of present and past samples. Therefore, it is a linear and time-invariant (LTI) system.
+  or in other words, $y_1[n] = y[n - m], forall n >= m >= 0$. This establishes that every output of the system can be expressed as a time-invariant linear combination of present and past samples. Therefore, it is a linear and time-invariant (LTI) system.
 ]
 
 
@@ -454,13 +479,19 @@ $
 
 #note("General Form - CT")[
   The general form of an LCCDE is:
-  $
-    sum_(i=0)^N a_i ("d"^i y(t))/("d"t^i) = sum_(j=0)^M b_j ("d"^j x(t))/("d"t^j), quad a_k, b_k in RR
-  $
+  #eqalt(
+    "Sum from i equals zero to N of a sub i times the i-th derivative of y of t equals sum from j equals zero to M of b sub j times the j-th derivative of x of t, with all coefficients real.",
+    $
+      sum_(i=0)^N a_i ("d"^i y(t))/("d"t^i) = sum_(j=0)^M b_j ("d"^j x(t))/("d"t^j), quad a_k, b_k in RR
+    $,
+  )
   or equivalently:
-  $
-    sum_(k = 0)^N a_k y^((k)) (t) = sum_(k = 0)^M b_k x^((k)) (t), quad a_k, b_k in RR
-  $
+  #eqalt(
+    "Sum from k equals zero to N of a sub k times the k-th derivative of y of t equals sum from k equals zero to M of b sub k times the k-th derivative of x of t.",
+    $
+      sum_(k = 0)^N a_k y^((k)) (t) = sum_(k = 0)^M b_k x^((k)) (t), quad a_k, b_k in RR
+    $,
+  )
   The order $N$ refers to the highest derivative of the output $y(t)$. For a causal LTI system: if $x(t) = 0$ for $t <= t_0$, then $y(t) = 0$ for $t <= t_0$. This condition is referred to as the *initial rest condition*.
   // This condition ensures the system is both LTI and causal.
 
@@ -470,7 +501,7 @@ $
   - Total solution: $y(t) = y_p (t) + y_h (t)$
 
   #set math.equation(numbering: none)
-  Now, let us the solution of:
+  Now, let us find the solution of:
   $
     ("d" y(t))/("d" t) + 2 y(t) = x(t)
   $
@@ -529,9 +560,12 @@ Similar to the continuous-time counterpart, discrete-time linear constant-coeffi
 
 #note("General Form - DT")[
   The general form for discrete-time LCCDE is:
-  $
-    sum_(k=0)^N a_k y[n-k] = sum_(k=0)^M b_k x[n-k], quad a_k, b_k in RR
-  $ <lccdedt>
+  #eqalt(
+    "Sum from k equals zero to N of a sub k times y of n minus k equals sum from k equals zero to M of b sub k times x of n minus k.",
+    $
+      sum_(k=0)^N a_k y[n-k] = sum_(k=0)^M b_k x[n-k], quad a_k, b_k in RR
+    $,
+  ) <lccdedt>
 
   This can be rearranged into recursive form:
   $
@@ -584,6 +618,7 @@ One key difference between the discrete-time and continuous-time versions of the
 
 The following diagrams represent addition:
 #figure(
+  alt: "Two equivalent adder block diagrams. Left: x sub one of n enters a plus node from the left and x sub two of n enters from the bottom; the output x sub one of n plus x sub two of n exits to the right. Right: the same summation drawn as a junction node with the two inputs and one output.",
   align(center)[
     #grid(
       columns: (1fr, 1fr),
@@ -655,6 +690,7 @@ The following diagrams represent addition:
 
 The following diagrams represent multiplication by a coefficient and a unit delay:
 #figure(
+  alt: "Two block diagrams. Left: a coefficient multiplier where input x of n is scaled by a, producing output a times x of n. Right: a unit delay block labeled D that maps x of n to x of n minus one.",
   align(center)[
     #grid(
       columns: (1fr, 1fr),
@@ -710,9 +746,14 @@ The following diagrams represent multiplication by a coefficient and a unit dela
 )
 
 Finally, the causal system described by the first-order difference equation:
-$ y[n] + a y[n-1] = b x[n] $
+#eqalt(
+  "y of n plus a times y of n minus one equals b times x of n.",
+  $ y[n] + a y[n-1] = b x[n] $,
+)
 has the following block diagram:
-#align(center)[
+#altfig(
+  alt: "Block diagram of the first-order discrete-time system. Input x of n is multiplied by b and feeds into a summing junction; the junction output goes to y of n and also through a unit delay D, whose output is scaled by minus a and fed back to the summer.",
+  align(center)[
   #diagram(
     debug: false,
     node-stroke: 0.1em,
@@ -740,12 +781,18 @@ has the following block diagram:
     node((0, 0), $+$),
     node((1, 1), $D$, width: 2em),
   )
-]
+],
+)
 
 Similarly, the continuous-time counterpart defined as:
-$ y(t) = -1/a ("d" y(t)) / ("d" t) + b/a x(t) $
+#eqalt(
+  "y of t equals negative one over a times the derivative of y of t with respect to t plus b over a times x of t.",
+  $ y(t) = -1/a ("d" y(t)) / ("d" t) + b/a x(t) $,
+)
 can be represented by the following block diagram:
-#align(center)[
+#altfig(
+  alt: "Block diagram of the first-order continuous-time system. Input x of t is scaled by b over a into a summer; the summer output is y of t and is also fed through a differentiator block D, whose output is scaled by negative one over a and returned to the summer.",
+  align(center)[
   #diagram(
     debug: false,
     node-stroke: 0.1em,
@@ -773,4 +820,5 @@ can be represented by the following block diagram:
     node((0, 0), $+$),
     node((1, 1), $D$, width: 2em),
   )
-]
+],
+)

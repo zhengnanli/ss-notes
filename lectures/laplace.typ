@@ -30,9 +30,12 @@ For $s$ imaginary (i.e., $s = j omega$), the integral in the above equation corr
 
 #definition("The Laplace Transform")[
   The Laplace Transform of a general signal $x(t)$ is defined as
-  $
-    X(s) = integral_RR x(t) e^(- s t) "d"t
-  $ <laplace>
+  #eqalt(
+    "Capital X of s equals the integral over all real t of x of t times e to the minus s t, d t.",
+    $
+      X(s) = integral_RR x(t) e^(- s t) "d"t
+    $,
+  ) <laplace>
   For convenience, we will sometimes denote the Laplace transform in operator form as $cal(L){x(t)}$, and denote the transform relationship between $x(t)$ and $X(s)$ as $x(t) limits(arrow.l.r)^(cal("L")) X(s)$. Note that when $s = j omega$, the Laplace transform becomes
   $
     X(j omega) = integral_RR x(t) e^(-j omega t) "d" t
@@ -51,7 +54,7 @@ For $s$ imaginary (i.e., $s = j omega$), the integral in the above equation corr
 
   The Laplace transform is
   $
-    X(s) = integral_RR e^(-a t) u (t) e^(-s t) "d" t = integral_0^infinity e^(-(s + a))"d" t
+    X(s) = integral_RR e^(-a t) u (t) e^(-s t) "d" t = integral_0^infinity e^(-(s + a) t)"d" t
   $
   or, with $s = sigma + j omega$,
   $
@@ -71,7 +74,7 @@ For $s$ imaginary (i.e., $s = j omega$), the integral in the above equation corr
   $
   Then,
   $
-    X(s) = - integral_RR e^(-a t) e^(-s t) u(-t) "d" t = - integral_(-infinity)^0 e^(-(s+a)) "d" t = 1/(s+a)
+    X(s) = - integral_RR e^(-a t) e^(-s t) u(-t) "d" t = - integral_(-infinity)^0 e^(-(s+a) t) "d" t = 1/(s+a)
   $
   For convergence in this example, we require that $Re{s + a} < 0$, or $Re{s} < -a$, that is
   $
@@ -101,9 +104,12 @@ In specifying the Laplace transform of a signal, both the *algebraic expression*
     e^(-(1+3j) t) u(t) & limits(arrow.r.l)^(cal(L)) 1 / (s + (1+3j)), & Re{s} > -1 \
   $
   For all three Laplace transforms to converge simultaneously, we must have $Re{s} > -1$. Consequently, the Laplace transform of $x(t)$ is
-  $
-    X(s) = 1/(s+2) + 1/2[1/(s + (1-3j))] + 1/2[1/(s + (1+3j))] = (2 s^2 + 5s + 12)/((s^2 + 2s + 10)(s + 2)), quad Re{s} > -1
-  $ <xs>
+  #eqalt(
+    "Capital X of s equals one over s plus two, plus one half times one over s plus the quantity one minus three j, plus one half times one over s plus the quantity one plus three j; which simplifies to two s squared plus five s plus twelve, all over the product of s squared plus two s plus ten and s plus two, valid for the real part of s greater than minus one.",
+    $
+      X(s) = 1/(s+2) + 1/2[1/(s + (1-3j))] + 1/2[1/(s + (1+3j))] = (2 s^2 + 5s + 12)/((s^2 + 2s + 10)(s + 2)), quad Re{s} > -1
+    $,
+  ) <xs>
 
   A convenient way to display the ROC is shown below. The shaded area is $Re{s} > -1$. Except for a scaling factor, the numerator and denominator polynomials in a rational Laplace transform can be specified by their roots. The roots of the numerator polynomial are commonly referred to as the _zeros_, denoted by $circle$ on the plot, and the roots of the denominator polynomial are referred to as the _poles_ of $X(s)$, marked by $times$.
 
@@ -112,37 +118,40 @@ In specifying the Laplace transform of a signal, both the *algebraic expression*
   #let poles-quadratic = quadratic(1, 2, 10)
   #let poles = (poles-quadratic.at(0) + (-2,), poles-quadratic.at(1) + (0,))
 
-  #align(center)[
-    #lq.diagram(
-      xlabel: $Re$,
-      ylabel: $Im$,
-      height: 4cm,
-      width: 5cm,
-      ylim: (-4, 4),
-      xlim: (-3, 1.5),
-      xaxis: (ticks: (-2, -3, -1, 0, 1), subticks: none),
-      yaxis: (ticks: (-3, -2, -1, 0, 1, 2, 3), subticks: none),
-      lq.scatter(zeros.at(0), zeros.at(1), mark: mark => place(
-        center + horizon,
-        text(mark.fill)[$circle$],
-      )),
-      lq.scatter(poles.at(0), poles.at(1), mark: mark => place(
-        center + horizon,
-        text(mark.fill)[$times$],
-      )),
-      // lq.scatter(poles.at(0), poles.at(1), mark: "x", size: 0.8em),
-      lq.place(-1, -0.5, align: center)[$-1$],
-      lq.place(-0.1, 1, align: center)[$1$],
-      lq.rect(
-        -1,
-        -5,
-        width: 3,
-        height: 10,
-        fill: olive.lighten(50%).transparentize(50%),
-      ),
-      lq.place(0.8, 3)[$Re{s} > -1$],
-    )
-  ]
+  #altfig(
+    alt: "Pole-zero plot of X(s) in the complex s-plane. Poles, marked with crosses, are at s equals minus two and at s equals minus one plus or minus three j. Zeros, marked with circles, are at the two roots of 2 s squared plus 5 s plus 12. The region of convergence is shaded to the right of the line Re of s equals minus one.",
+    align(center)[
+      #lq.diagram(
+        xlabel: $Re$,
+        ylabel: $Im$,
+        height: 4cm,
+        width: 5cm,
+        ylim: (-4, 4),
+        xlim: (-3, 1.5),
+        xaxis: (ticks: (-2, -3, -1, 0, 1), subticks: none),
+        yaxis: (ticks: (-3, -2, -1, 0, 1, 2, 3), subticks: none),
+        lq.scatter(zeros.at(0), zeros.at(1), mark: mark => place(
+          center + horizon,
+          text(mark.fill)[$circle$],
+        )),
+        lq.scatter(poles.at(0), poles.at(1), mark: mark => place(
+          center + horizon,
+          text(mark.fill)[$times$],
+        )),
+        // lq.scatter(poles.at(0), poles.at(1), mark: "x", size: 0.8em),
+        lq.place(-1, -0.5, align: center)[$-1$],
+        lq.place(-0.1, 1, align: center)[$1$],
+        lq.rect(
+          -1,
+          -5,
+          width: 3,
+          height: 10,
+          fill: olive.lighten(50%).transparentize(50%),
+        ),
+        lq.place(0.8, 3)[$Re{s} > -1$],
+      )
+    ],
+  )
 ]
 
 == The Inverse Laplace Transform
@@ -157,7 +166,7 @@ $
 $
 or, multiplying both sides by $e^(sigma t)$, we obtain
 $
-  x(t) = 1/(2 pi) integral_RR X(sigma + j omega) e^(sigma + j omega) "d" omega
+  x(t) = 1/(2 pi) integral_RR X(sigma + j omega) e^((sigma + j omega) t) "d" omega
 $
 That is, we can recover $x(t)$ from its Laplace transform evaluated for a set of values of $s = sigma + j omega$ in the ROC, with $sigma$ fixed and $omega$ varying from $-infinity$ to $+infinity$. By changing the variable of the integration, we have
 $
@@ -229,13 +238,15 @@ An LTI system is stable iff. the ROC of its system function $H(s)$ includes the 
   $
     H(s) = (s-1)/((s+1)(s-2))
   $
-  Since th ROC has not been specified, we know from our discussion in previous sections that there are several different ROCs and, consequently, several different system impulse responses that can be associated with the algebraic expression for $H(s)$ given above.
+  Since the ROC has not been specified, we know from our discussion in previous sections that there are several different ROCs and, consequently, several different system impulse responses that can be associated with the algebraic expression for $H(s)$ given above.
 
 
   #let zeros = ((1,), (0,))
   #let poles = quadratic(1, -1, -2)
 
-  #align(center)[
+  #altfig(
+    alt: "Three pole-zero plots of H(s) equals (s minus 1) divided by (s plus 1)(s minus 2), each showing the same poles at s equals minus one and s equals two and a zero at s equals one, but with three different choices of region of convergence. Panel (a) shades the right half plane to the right of the pole at s equals two, the causal but unstable choice. Panel (b) shades the vertical strip between the two poles, which is the only choice containing the j omega axis and is therefore the stable choice. Panel (c) shades the left half plane to the left of the pole at s equals minus one, which is anticausal and unstable.",
+    align(center)[
     #grid(
       columns: (1fr, 1fr, 1fr),
       column-gutter: 1em,
@@ -345,20 +356,21 @@ An LTI system is stable iff. the ROC of its system function $H(s)$ includes the 
         )
       ],
     )
-  ]
+    ],
+  )
 
   If the system is known to be _causal_, the ROC will be that indicated in the (a), with impulse response
   $
     h(t) = (2/3 e^(-t) + 1/3 e^(2 t)) u(t)
   $
-  Note that this particular system choice of ROC does not include the entire $j omega$-axis (within the ROC, $Re{s} = 0$ is not included), consequentily, the system is not stable.
+  Note that this particular system choice of ROC does not include the entire $j omega$-axis (within the ROC, $Re{s} = 0$ is not included), consequently, the system is not stable.
 
   On the other hand, if the system is known to be _stable_, the ROC is that given in (b), and the corresponding impulse response is
   $
     h(t) = 2/3 e^(-t) u(t) - 1/3 e^(2 t) u(-t)
   $
 
-  which is absolutely integrable, i.e., $integral_RR |h(t)| < infinity$. Finally, for the ROC in figure (c), the system is both anticausal and unstable, with
+  which is absolutely integrable, i.e., $integral_RR |h(t)| "d"t < infinity$. Finally, for the ROC in figure (c), the system is both anticausal and unstable, with
   $
     h(t) = -(2/3 e^(-t) + 1/3 e^(2 t)) u(-t)
   $
@@ -374,9 +386,12 @@ $
 $
 
 Applying the Laplace transform to both sides and using the linearity and differentiation properties repeatedly, we have
-$
-  (sum_(k = 0)^N a_k s^k) Y(s) = (sum_(k = 0)^M b_k s^k) X(s) <=> H(s) = (sum_(k = 0)^M b_k s^k) / (sum_(k = 0)^N a_k s^k)
-$ <laplace-lccde>
+#eqalt(
+  "The sum from k equals zero to N of a sub k times s to the k, multiplied by Y of s, equals the sum from k equals zero to M of b sub k times s to the k, multiplied by X of s; equivalently, H of s equals the numerator polynomial sum from k equals zero to M of b sub k s to the k, divided by the denominator polynomial sum from k equals zero to N of a sub k s to the k.",
+  $
+    (sum_(k = 0)^N a_k s^k) Y(s) = (sum_(k = 0)^M b_k s^k) X(s) <=> H(s) = (sum_(k = 0)^M b_k s^k) / (sum_(k = 0)^N a_k s^k)
+  $,
+) <laplace-lccde>
 
 Thus, the system function for a system specified by a differential equation is always rational, with zeros and poles at the solutions the following two equations, respectively:
 $
@@ -385,7 +400,9 @@ $
 
 #example("RLC Circuit and LCCDE")[
   1. An RLC circuit whose capacitor voltage and inductor current are initially zero constitutes an LTI system describable by a LCCDE.
-    #align(center)[
+    #altfig(
+      alt: "A series RLC circuit: voltage source v sub S of t on the left drives a loop containing, in order, a resistor R with voltage v sub R of t, an inductor L with voltage v sub L of t, and a capacitor C with voltage v sub C of t, the capacitor voltage being the output.",
+      align(center)[
       #zap.circuit({
         import zap: *
 
@@ -404,7 +421,8 @@ $
         draw.content((0.6, 0.5), $v_R (t)$, anchor: "west")
         draw.content((3, 0.7), $v_L (t)$, anchor: "north")
       })
-    ]
+      ],
+    )
     Suppose the input signal is the voltage measured around the voltage source, i.e., $x(t) = v_S (t)$, and the voltage of the capacitor is the output signal, i.e., $y(t) = v_C (t)$, we obtain
 
     $
@@ -423,13 +441,13 @@ $
     $
     Taking the Laplace transform of both $x(t)$ and $y(t)$ yields
     $
-      X(s) = 1/(s+3), Re{s} > 3; quad Y(s) = 1/((s+1)(s+2)), Re{s} > -1
+      X(s) = 1/(s+3), Re{s} > -3; quad Y(s) = 1/((s+1)(s+2)), Re{s} > -1
     $
     Hence,
     $
       H(s) = (Y(s))/(X(s)) = (s+3)/((s+1)(s+2)) = (s+3)/(s^2 + 3s + 2)
     $
-    Since the ROC of $Y(s)$ must include at least the intersections of the ROCs of $X(s)$ and $H(s)$. Examming the three possible choices of the ROC of $H(s)$ (i.e., $Re{s} < -2$, $-2 < Re{s} < -1$, and $Re{s} > -1$), we see that only the choice that is consistent with the ROCs of $X(s)$ and $Y(s)$ is $Re{s} > -1$. Since this is to the right of the rightmost pole of $H(s)$, we conclude that the system is causal. Besides, both poles of $H(s)$ have negative real parts, the system is stable. The LCCDE describing the system is given as, assuming initial rest,
+    Since the ROC of $Y(s)$ must include at least the intersection of the ROCs of $X(s)$ and $H(s)$, examining the three possible choices of the ROC of $H(s)$ (i.e., $Re{s} < -2$, $-2 < Re{s} < -1$, and $Re{s} > -1$), we see that only the choice that is consistent with the ROCs of $X(s)$ and $Y(s)$ is $Re{s} > -1$. Since this is to the right of the rightmost pole of $H(s)$, we conclude that the system is causal. Besides, both poles of $H(s)$ have negative real parts, the system is stable. The LCCDE describing the system is given as, assuming initial rest,
     $
       ("d"^2 y(t))/("d" t^2) + 3 ("d" y(t))/("d" t) + 2 y(t) = ("d" x(t))/("d" t) + 3 x(t)
     $

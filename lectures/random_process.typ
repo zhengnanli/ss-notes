@@ -13,7 +13,7 @@ $PP{A}$ is the probability of event $A$. The three axioms of probability states 
 - $PP{Omega} = 1$
 - $PP{A union B} = PP{A} + PP{B}$ if $A union B = emptyset$.
 
-Two events, the probability of event $A$ given event $B$ is $PP{A|B} = P{A} P{B|A}$. The total probability is $PP{A, B} = PP{A} PP{B|A}$. The formal definition of total probability is, for events ${A_i}$ that are mutually exclusive (disjoint) and exhaustive, viz., $union_i A_i = Omega$, we have
+For two events, the conditional probability of event $A$ given event $B$ is $PP{A|B} = PP{A, B} \/ PP{B}$. The joint probability satisfies the multiplication rule $PP{A, B} = PP{A} PP{B|A}$. The formal statement of the total probability law is: for events ${A_i}$ that are mutually exclusive (disjoint) and exhaustive, i.e., $union_i A_i = Omega$, we have
 $
   PP{B} = sum_i PP{A_i} PP{B|A_i}
 $
@@ -31,7 +31,7 @@ We list a few common distributions, continuous and discrete
 - Gaussian: $X ~ cal(N)(m, sigma^2)$. $f_X (x) = 1 / (sqrt(2 pi) sigma) exp (- (x - m)^2 / (2 sigma^2))$.
 - Exponential: $f_X (x) = lambda exp (-lambda x), x >= 0$.
 - Bernoulli: $P_X (1) = p, P_X (0) = 1 - p, f_X (x) = (1 - p) delta (x - 0) + p delta (x - 1)$.
-- Binomial: $X ~ cal(B) (p, n)$. $P_K (k) = vec(n, k) p^k (1 - p)^(n - k), k = 0, 1, dots.c, n$.
+- Binomial: $X ~ cal(B) (p, n)$. $P_X (k) = vec(n, k) p^k (1 - p)^(n - k), k = 0, 1, dots.c, n$.
 
 === Joint and conditional distributions
 - $F_(X|A) (x|A) = (PP{X <= x, A}) / (PP{A})$, $f_(X|A) (x|A) = ("d" F_(X|A) (x|A)) / ("d" x)$.
@@ -59,12 +59,12 @@ We list a few common distributions, continuous and discrete
 === Joint distributions
 - $F_(X Y) (x, y) = PP{X <= x, Y <= y}$, $f_(X Y) (x, y) = (partial^2 F_(X Y) (x, y))/(partial x partial y)$.
 - If $F_(X Y) (x, y) = F_X (x) F_Y (y)$, i.e., $f_(X Y) (x, y) = f_X (x) f_Y (y)$, we say that $X$ and $Y$ are independent.
-- $f_X (X) = integral_RR f_(X Y) (x, y) "d" y$ is the marginal distribution of $Y$.
+- $f_X (x) = integral_RR f_(X Y) (x, y) "d" y$ is the marginal distribution of $X$.
 - Joint Gaussian distribution:
 $
   f_(X Y) (x, y) = 1 / (2 pi sigma_X sigma_Y sqrt(1 - rho^2)) exp{-(1 / (1-rho^2)) [ (x - m_X)^2 / (2 sigma_X^2) - rho ((x - m_X) (y - m_Y)) / (sigma_X sigma_Y) + (y - m_Y)^2 / (2 sigma_Y^2)] }
 $
-where $rho$ is the correlation coefficient, and $|rho| < 1$. Let $bold(z) = vec(x, y), bold(m) = vec(m_X, m_Y)$, and $bold(C) = mat(sigma_X^2, rho sigma_x sigma_y; rho sigma_X sigma_Y, sigma_Y^2)$, we have
+where $rho$ is the correlation coefficient, and $|rho| < 1$. Let $bold(z) = vec(x, y), bold(m) = vec(m_X, m_Y)$, and $bold(C) = mat(sigma_X^2, rho sigma_X sigma_Y; rho sigma_X sigma_Y, sigma_Y^2)$, we have
 $
   f_(X Y) (x, y) = 1 / (2 pi sqrt(det bold(C))) exp{-1/2 (bold(z) - bold(m))^prime bold(C)^(-1) (bold(z) - bold(m))}
 $
@@ -139,7 +139,7 @@ $
 
 - Ergodicity for WSS process:
 $
-  lim_(T -> infinity) 1/(2 T) integral_(-T)^T X(t) "d"t = m_x \
+  lim_(T -> infinity) 1/(2 T) integral_(-T)^T X(t) "d"t = m_X \
   cal(E){|hat(m)_X - m_X|^2} = 1 / (2 T) integral_(-T)^T C_X (Delta t) [1 - (|Delta t|)/(2 T)] "d" Delta t
 $
 $X(t)$ is ergodic in the mean sense iff. $cal(E){|hat(m)_X - m_X|^2} -> 0$ as $T -> infinity$.
@@ -156,7 +156,7 @@ $
 $
 and the inverse process is defined via inverse Fourier transform as
 $
-  R_X (Delta t) = cal(F)^(-1){S_X (Delta t)} = integral_RR S_X (f) e^(j 2 pi f Delta t) "d" f
+  R_X (Delta t) = cal(F)^(-1){S_X (f)} = integral_RR S_X (f) e^(j 2 pi f Delta t) "d" f
 $
 
 A special case when $Delta t = 0$:
@@ -198,7 +198,7 @@ $
 The power spectral density of the output, $S_Y (f)$ is then
 $
   S_Y (f) = cal(F) {R_Y (tau)} &= integral_RR R_Y (tau) e^(-j 2 pi f tau) "d" tau \
-  &= integral_RR integral_RR integral_RR h(tau_1) h^*(tau_2) R_Y (tau + tau_2 - tau_1) e^(-j 2 pi f tau) "d" tau "d" tau_1 "d" tau_2 \
+  &= integral_RR integral_RR integral_RR h(tau_1) h^*(tau_2) R_X (tau + tau_2 - tau_1) e^(-j 2 pi f tau) "d" tau "d" tau_1 "d" tau_2 \
 $
 
 Letting $u = tau + tau_2 - tau_1$, we have

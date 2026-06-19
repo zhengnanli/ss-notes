@@ -69,17 +69,26 @@ $
 To summarize,
 #definition("Fourier Series for Continuous-Time Periodic Signal")[
   We can decompose a periodic signal $x(t)$ as the sum of complex exponentials:
-  $
-    x(t) = sum_(k = -infinity)^(infinity) a_k e^(j k omega_0 t) = sum_(k = -infinity)^(infinity) a_k e^(j k (2 pi)/T t)
-  $
+  #eqalt(
+    "x of t equals the sum over k from negative infinity to infinity of a sub k times e to the j k omega-zero t, which equals the sum of a sub k times e to the j k two pi over T times t.",
+    $
+      x(t) = sum_(k = -infinity)^(infinity) a_k e^(j k omega_0 t) = sum_(k = -infinity)^(infinity) a_k e^(j k (2 pi)/T t)
+    $,
+  )
   where
-  $
-    a_k = 1/T integral_T x(t) e^(-j k omega_0 t) "d"t = 1/T integral_T x(t) e^(-j k (2 pi)/T t) "d"t
-  $
+  #eqalt(
+    "a sub k equals one over T times the integral over one period of x of t times e to the negative j k omega-zero t, d t.",
+    $
+      a_k = 1/T integral_T x(t) e^(-j k omega_0 t) "d"t = 1/T integral_T x(t) e^(-j k (2 pi)/T t) "d"t
+    $,
+  )
   The set of coefficients ${a_k}_(k = -infinity)^(infinity)$ is referred to as the _Fourier series coefficients_. The coefficient $a_0$ is the DC component of the $x(t)$, and is given by
-  $
-    a_0 = 1/T integral_T x(t) "d" t
-  $
+  #eqalt(
+    "a sub zero equals one over T times the integral of x of t over one period.",
+    $
+      a_0 = 1/T integral_T x(t) "d" t
+    $,
+  )
 ]
 
 Two functions $phi_1 (t)$ and $phi_2 (t)$ are said to be _orthogonal_ over the interval $(a, b)$ if
@@ -127,6 +136,7 @@ In general, a set of conditions developed by Dirichlet guarantees that $x(t)$ _e
   #let x = lq.linspace(-1, 1, num: 500)
   #let triangle = x => 2 * calc.abs(2 * (2 * x - calc.floor(2 * x + 0.5))) - 1
   #cdiagram(
+    alt: "Periodic triangle wave x of t with peaks of one and troughs of negative one. A dashed red guideline indicates the peak at one and the quarter-period mark at one half.",
     title: $x(t)$,
     xlabel: $t$,
     ylim: (-1.5, 1.5),
@@ -165,6 +175,7 @@ In general, a set of conditions developed by Dirichlet guarantees that $x(t)$ _e
   #let x = lq.linspace(-6, 6, num: 1000)
   #let triangle = x => if (calc.rem(x + 9, 4)) < 2 { 2.5 } else { 0 }
   #cdiagram(
+    alt: "Periodic square wave x of t equal to one for the absolute value of t less than T sub one, and zero between T sub one and T over two. Dashed red lines mark the rising and falling edges at plus and minus T sub one.",
     title: $x(t)$,
     xlabel: $t$,
     ylim: (-0.5, 3.5),
@@ -220,7 +231,9 @@ In general, a set of conditions developed by Dirichlet guarantees that $x(t)$ _e
   }
 
 
-  #align(center)[
+  #altfig(
+    alt: "Six partial-sum approximations of the square wave for N equal to three, eight, eighteen, twenty-eight, fifty-five, and eighty. As N grows, the approximation tightens against the rectangular pulse, but a persistent overshoot near the discontinuities at plus and minus T sub one remains, illustrating the Gibbs phenomenon.",
+    align(center)[
     #grid(
       columns: (1fr, 1fr),
       column-gutter: 2em,
@@ -406,7 +419,8 @@ In general, a set of conditions developed by Dirichlet guarantees that $x(t)$ _e
           lq.place(T / 2, -0.3, align: center)[$T/2$],
           lq.place(-T / 2, -0.3, align: center)[$-T/2$],
         )],
-    )]
+    )],
+  )
 ]
 
 == Properties of Continuous-Time Fourier Series
@@ -415,7 +429,7 @@ In this section, we will use the notation
 $
   x(t) limits(arrow.l.r)^(cal("FS")) a_k
 $
-to denote the pariing of a periodic signal with its Fourier series coefficients.
+to denote the pairing of a periodic signal with its Fourier series coefficients.
 
 
 === Linearity
@@ -433,7 +447,7 @@ $
 $
 Letting $tau = t - t_0$ in the integral and noting that the new variable $tau$ will also range over an interval of duration $T$, we have
 $
-  1/T integral_T x(tau) e^(-j k omega_0 (tau + t_0)) "d"t = e^(-j k omega_0 t_0) 1/T integral_T x(tau) e^(-j k omega_0 tau) "d"tau = e^(-j k omega_0 t_0) a^k
+  1/T integral_T x(tau) e^(-j k omega_0 (tau + t_0)) "d"tau = e^(-j k omega_0 t_0) 1/T integral_T x(tau) e^(-j k omega_0 tau) "d"tau = e^(-j k omega_0 t_0) a_k
 $
 In short hand notation,
 $
@@ -562,13 +576,13 @@ All of these signals have fundamental frequencies that are multiples of $(2 pi) 
 $
   phi_(k) [n] = phi_(k + r N) [n]
 $
-That is, when $k$ is changed by any integer ($r$) multiple of $N$, the identical sequence is generated. this differs from the continuous-time in which the signals $phi_k (t)$ are different from one another.
+That is, when $k$ is changed by any integer ($r$) multiple of $N$, the identical sequence is generated. This differs from the continuous-time case, in which the signals $phi_k (t)$ are different from one another.
 
 We now wish to express the periodic DT sequence in terms of linear combinations of the sequence $phi_k [n]$. Such a linear combination has the form
 $
   x[n] = sum_k a_k phi_k [n] = sum_k a_k e^(j k omega_0 n) = sum_k a_k e^(j k (2 pi) / N n)
 $
-Since the sequence $phi_k [n]$ are distinct only over a range of $N$ successive values of $k$, thus, the summation only need ton inlucde terms over this range, beginning with any values of $k$. We denote this by expressing the limits of the summation as $k = chevron.l N chevron.r$, viz.,
+Since the sequences $phi_k [n]$ are distinct only over a range of $N$ successive values of $k$, the summation only needs to include terms over this range, beginning with any value of $k$. We denote this by expressing the limits of the summation as $k = chevron.l N chevron.r$, viz.,
 
 $
   x[n] = sum_(k = chevron.l N chevron.r) a_k e^(j k omega_0 n) = sum_(k = chevron.l N chevron.r) a_k e^(j k (2 pi)/ N n)
@@ -606,13 +620,19 @@ $
 
 #definition("Fourier Series for Discrete-Time Periodic Signals")[
   We can express the periodic discrete-time signal $x[n]$ as
-  $
-    x[n] = sum_(k = chevron.l N chevron.r) a_k e^(j k omega_0 n) = sum_(k = chevron.l N chevron.r) a_k e^(j k (2 pi)/ N n)
-  $
+  #eqalt(
+    "x of n equals the sum over k in one period of N of a sub k times e to the j k omega-zero n.",
+    $
+      x[n] = sum_(k = chevron.l N chevron.r) a_k e^(j k omega_0 n) = sum_(k = chevron.l N chevron.r) a_k e^(j k (2 pi)/ N n)
+    $,
+  )
   where
-  $
-    a_k = 1/N sum_(n = chevron.l N chevron.r) x[n] e^(-j k omega_0 n) = 1/N sum_(n = chevron.l N chevron.r) x[n] e^(-j k (2 pi)/N n)
-  $
+  #eqalt(
+    "a sub k equals one over N times the sum over n in one period of N of x of n times e to the negative j k omega-zero n.",
+    $
+      a_k = 1/N sum_(n = chevron.l N chevron.r) x[n] e^(-j k omega_0 n) = 1/N sum_(n = chevron.l N chevron.r) x[n] e^(-j k (2 pi)/N n)
+    $,
+  )
   The notation $n = chevron.l N chevron.r$ represents the variable $n$ varies over a range of $N$ successive integers, beginning with any value $k$. Ditto for $k$.
 ]
 
@@ -652,7 +672,9 @@ Let us also consider a periodic discrete-time square wave shown below.
 #let square_series = n => { if calc.abs(n) <= N1 { 1 } else { 0 } }
 #let k = lq.linspace(-15, 15, num: 31)
 
-#align(center)[
+#altfig(
+  alt: "Stem plot of a periodic discrete-time square wave. Each period of length N consists of stems of height one for n from minus N sub one to N sub one, and zero elsewhere. Three consecutive periods are shown.",
+  align(center)[
   #lq.diagram(
     title: $h[n]$,
     xlabel: $n$,
@@ -669,7 +691,8 @@ Let us also consider a periodic discrete-time square wave shown below.
     lq.place(-N1 * 2 - N, 0.5, align: center)[$dots.c$],
     lq.place(N1 * 2 + N, 0.5, align: center)[$dots.c$],
   )
-]
+],
+)
 
 The Fourier series is then
 $
@@ -698,7 +721,9 @@ Let us plot the sequence for different cases. In the following plots, we set $2 
 #let N1 = 2
 #let k = lq.linspace(-25, 25, num: 51)
 
-#align(center)[
+#altfig(
+  alt: "Four stem plots of Fourier series coefficients a sub k for N equal to ten, twenty, thirty, and forty, all with two N sub one plus one fixed at five. As N increases, the discrete coefficients sample a sinc-shaped envelope more densely while the peak amplitude decreases.",
+  align(center)[
 
   #grid(
     columns: (1fr, 1fr),
@@ -792,7 +817,8 @@ Let us plot the sequence for different cases. In the following plots, we set $2 
         lq.place(5, 0.5, align: center)[$N = #N$],
       )
     ],
-  )]
+  )],
+)
 
 In the continuous-time case, we observed the Gibbs phenomenon at the discontinuity, whereby, as the number of terms increased, the ripples in the partial sum became compressed toward the discontinuity, with the peak amplitude of the ripples remaining constant independently of the number of terms in the partial sum. Let us now consider the *analogous* sequence of partial sums for the discrete-time square wave, where, for convenience, we will assume that the period $N$ is odd:
 
@@ -831,7 +857,9 @@ Let us look at the approximation function $hat(x)_M$. In the following case $N =
   }
   sum
 }
-#align(center)[
+#altfig(
+  alt: "Four stem plots of the discrete-time partial-sum approximation x hat sub M of n for M equal to one, two, three, and four, with N equal to nine. As M grows, the stems converge toward the square-wave samples; once M equals four (which is N minus one over two), the approximation matches the original square wave exactly.",
+  align(center)[
   #grid(
     columns: (1fr, 1fr),
     column-gutter: 2em,
@@ -880,7 +908,8 @@ Let us look at the approximation function $hat(x)_M$. In the following case $N =
         lq.stem(k, xhat(M)),
         lq.place(4, 1, align: center)[$M = #M$],
       )],
-  )]
+  )],
+)
 
 We see that if $N$ is odd and we take $M = (N - 1)/2$, the sum includes exactly $N$ terms, consequently, from the synthesis equations, we have
 $
@@ -935,7 +964,7 @@ Similarly, if $N$ is even, and we let $hat(x)_M [n] = sum_(k = -M + 1)^M a_k e^(
 
       // Integration
       [Running Sum],
-      [$sum_(k = -infinity)^n x[k]$, finit & periodc only if $a_0 = 0$],
+      [$sum_(k = -infinity)^n x[k]$, finite & periodic only if $a_0 = 0$],
       [$1/(1 - e^(-j k (2 pi)/N)) a_k$],
 
       // Real Signal
@@ -970,7 +999,7 @@ Similarly, if $N$ is even, and we let $hat(x)_M [n] = sum_(k = -M + 1)^M a_k e^(
   - $sum_(n = 0)^5 x[n] = 2, sum_(n = 2)^7 (-1)^n x[n] = 1$.
   - $x[n]$ has the minimum power per period among the set of signals satisfying the preceding two conditions.
 
-  Let us detmine the sequence $x[n]$. We denote the Fourier series coefficients of $x[n]$ by $a_k$. Per definition,
+  Let us determine the sequence $x[n]$. We denote the Fourier series coefficients of $x[n]$ by $a_k$. Per definition,
   $
     a_k = 1/N sum_(n = chevron.l N chevron.r) x[n] e^(-j k omega_0 n) = 1/N sum_(n = chevron.l N chevron.r) x[n] e^(-j k (2 pi)/N n)
   $
@@ -1015,13 +1044,19 @@ is the $z$-transform. When $s$ or $z$ are general complex numbers, $H(s)$ and $H
 
 #definition("Frequency Response of an LTI System")[
   We define the _frequency response_ of a _continuous-time_ system is given by
-  $
-    H(j omega) = integral_RR h(t) e^(-j omega t) "d"t
-  $
+  #eqalt(
+    "H of j omega equals the integral over the real line of h of t times e to the negative j omega t, d t.",
+    $
+      H(j omega) = integral_RR h(t) e^(-j omega t) "d"t
+    $,
+  )
   where $h(t)$ is the impulse response of the said LTI system. In the _discrete-time_ case, the frequency response is given by
-  $
-    H(j omega) = sum_n h[n] e^(-j omega n)
-  $
+  #eqalt(
+    "H of j omega equals the sum over all n of h of n times e to the negative j omega n.",
+    $
+      H(j omega) = sum_n h[n] e^(-j omega n)
+    $,
+  )
 ]
 
 Now, suppose that the input is now
@@ -1112,24 +1147,27 @@ $
 ]
 
 #example("RC Circuit")[
-  An RLC circuit whose capacitor voltage is initially zero consistutudes an LTI system describable by a linear constant-coefficient differential equation (LCCDE). Consider the following series RLC circuit. Let the voltage source be the input signal $x(t)$, and let the voltage measured across the capacitor be the output signal $y(t)$.
+  An RLC circuit whose capacitor voltage is initially zero constitutes an LTI system describable by a linear constant-coefficient differential equation (LCCDE). Consider the following series RLC circuit. Let the voltage source be the input signal $x(t)$, and let the voltage measured across the capacitor be the output signal $y(t)$.
 
-  #align(center)[
-    #zap.circuit({
-      import zap: *
+  #altfig(
+    alt: "Series RC circuit schematic. A voltage source v sub S of t drives a resistor R in series with a capacitor C; the voltage across the resistor is v sub R of t and the voltage across the capacitor is v sub C of t.",
+    align(center)[
+      #zap.circuit({
+        import zap: *
 
-      vsource("V", (0, 0), variant: "pretty", rotate: 90deg)
-      resistor("R", (2, 1), variant: "ieee", label: $R$)
-      capacitor("C", (4, 0), variant: "ieee", rotate: 270deg, label: $C$)
+        vsource("V", (0, 0), variant: "pretty", rotate: 90deg)
+        resistor("R", (2, 1), variant: "ieee", label: $R$)
+        capacitor("C", (4, 0), variant: "ieee", rotate: 270deg, label: $C$)
 
-      wire((0, 0), (0, 1), "R.in")
-      wire("R.out", (4, 1), "C.in")
-      wire("C.out", (4, -1), (0, -1), "V.in")
+        wire((0, 0), (0, 1), "R.in")
+        wire("R.out", (4, 1), "C.in")
+        wire("C.out", (4, -1), (0, -1), "V.in")
 
-      draw.content((-1.5, 0), $v_S (t)$, anchor: "west")
-      draw.content((2.6, 0), $v_C (t)$, anchor: "west")
-      draw.content((2, 0.7), $v_R (t)$, anchor: "north")
-    })]
+        draw.content((-1.5, 0), $v_S (t)$, anchor: "west")
+        draw.content((2.6, 0), $v_C (t)$, anchor: "west")
+        draw.content((2, 0.7), $v_R (t)$, anchor: "north")
+      })],
+  )
 
   If we take the capacitor's voltage as the output, we have
   $
@@ -1163,6 +1201,7 @@ $
       [
         #let x = lq.linspace(-5, 5, num: 99)
         #cdiagram(
+          alt: "Magnitude response of H of j omega, a lowpass filter shape that peaks at one at omega equal zero and rolls off symmetrically toward zero as the absolute value of omega grows.",
           title: $|H(j omega)|$,
           xlabel: $omega$,
           width: 5cm,
@@ -1173,6 +1212,7 @@ $
       [
         #let x = lq.linspace(-5, 5, num: 99)
         #cdiagram(
+          alt: "Magnitude response of G of j omega, a highpass filter shape that is zero at omega equal zero and rises symmetrically toward one as the absolute value of omega grows.",
           title: $|G(j omega)|$,
           xlabel: $omega$,
           width: 5cm,

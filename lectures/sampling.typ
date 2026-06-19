@@ -28,6 +28,7 @@ Let us consider a system that consists of a periodic impulse train and a multipl
 #let yd = xd.map(x => f(x))
 #let stair-coarse = make-staircase(xd, yd)
 #figure(
+  alt: "Block diagram and three time-domain plots illustrating impulse-train sampling. Left: x of t and p of t enter a multiplier whose output is x sub p of t. Center-left: smooth continuous signal x of t. Center-right: periodic impulse train p of t. Right: the sampled signal x sub p of t with impulses scaled by x at the sample times, overlaid by the dashed original x of t.",
   align(center)[
     #grid(
       columns: (1fr, 1fr, 1fr, 1fr),
@@ -115,7 +116,9 @@ $
 
 That is, $X_p (j omega)$ is a periodic function of $omega$ consisting of a superposition of shifted replicas of $X(j omega)$, scaled by $1 / T$, as illustrated below,
 
-#align(center)[
+#altfig(
+  alt: "Two spectra side by side. Left: the original band-limited spectrum X of j omega, nonzero only between minus omega sub M and omega sub M. Right: the sampled spectrum X sub p of j omega, a periodic train of shifted copies of X of j omega spaced by omega sub s; dashed red lines mark the centers at plus and minus omega sub s and plus and minus two omega sub s.",
+  align(center)[
   #grid(
     columns: (1fr, 3fr),
     column-gutter: 2em,
@@ -211,28 +214,37 @@ That is, $X_p (j omega)$ is a periodic function of $omega$ consisting of a super
           paint: red,
         )),
       )],
-  )]
+  )],
+)
 
 As we can see from the illustrations above, to guarantee that there is no overlapping in the frequency domain, we have the following theorem
 #theorem("Sampling Theorem")[
   Let $x(t)$ be a band-limited signal with $X(j omega) = 0$ for $|omega| > omega_M$. Then, $x(t)$ is uniquely determined by its samples $x(n T), n = 0, plus.minus 1, plus.minus 2, dots.c$ if
-  $
-    omega_s > 2 omega_M
-  $
+  #eqalt(
+    "omega sub s is greater than two omega sub M.",
+    $
+      omega_s > 2 omega_M
+    $,
+  )
   where
-  $
-    omega_s = (2 pi) / T
-  $
-  Given these samples, we can reconstruct $x(t)$ by generating a periodic impulse train in which successive impulses have amplitudes that are successive sample values. This impulse train is then processed through an ideal lowpass filter with gain $T$ and cutoff frequency greater than $omega_M$ and less than $omega_s - omega_M$. The resulting output signal will exactly equal to $x(t)$.
+  #eqalt(
+    "omega sub s equals two pi over T.",
+    $
+      omega_s = (2 pi) / T
+    $,
+  )
+  Given these samples, we can reconstruct $x(t)$ by generating a periodic impulse train in which successive impulses have amplitudes that are successive sample values. This impulse train is then processed through an ideal lowpass filter with gain $T$ and cutoff frequency greater than $omega_M$ and less than $omega_s - omega_M$. The resulting output signal will exactly equal $x(t)$.
 
   The frequency $2 omega_M$, which, under the sampling theorem, must be exceeded by the sampling frequency, is commonly referred to as the _Nyquist rate_.
 ]
 
 == Reconstruction of a Signal from Its Samples using Interpolation
 
-To construct the signal from $X_p (j omega)$, all we need to do is to apply an ideal low pass filter with the cut off frequency $omega_c$ satisfies $omega_M < omega_c < (omega_s - omega_M)$ in the frequeny domain, as illustrated below.
+To reconstruct the signal from $X_p (j omega)$, all we need to do is to apply an ideal lowpass filter with cutoff frequency $omega_c$ satisfying $omega_M < omega_c < (omega_s - omega_M)$ in the frequency domain, as illustrated below.
 
-#align(center)[
+#altfig(
+  alt: "Two spectra. Left: the sampled spectrum X sub p of j omega showing periodic copies, with an orange rectangle marking the ideal lowpass filter passband from minus omega sub c to omega sub c. Right: the reconstructed spectrum X sub r of j omega, recovered as the central copy of X of j omega.",
+  align(center)[
   #grid(
     columns: (3fr, 1fr),
     column-gutter: 2em,
@@ -341,9 +353,10 @@ To construct the signal from $X_p (j omega)$, all we need to do is to apply an i
         lq.place(-3, -0.21, align: center)[$-omega_M$],
         lq.place(3, -0.21, align: center)[$omega_M$],
       )],
-  )]
+  )],
+)
 
-When applying a lowpass filter in the frequency domain, it is eqivalent to convolve the signal with a $"sinc"$ function in the time doamin, i.e.,
+When applying a lowpass filter in the frequency domain, it is equivalent to convolving the signal with a $"sinc"$ function in the time domain, i.e.,
 $
   x_r (t) = x_p (t) star h(t)
 $
@@ -382,6 +395,7 @@ $
 #let stair-coarse = make-staircase(xd, yd)
 
 #figure(
+  alt: "Two plots. Left: the original continuous signal x of t. Right: its reconstruction x sub r of t shown as the sum of dashed green sinc kernels, each centered at a sample time x sub p of t marked with a red cross, summing to the solid blue curve that matches x of t.",
   align(center)[
     #grid(
       columns: (1fr, 2fr),
@@ -491,6 +505,7 @@ $
 #let yd = xd.map(x => f(x))
 #let stair-coarse = make-staircase(xd, yd)
 #figure(
+  alt: "Block diagram and three discrete-time plots illustrating discrete-time sampling. Left: x of n and an impulse train p of n equal to the sum over k of delta of n minus k N enter a multiplier whose output is x sub p of n. Center-left: stem plot of x of n. Center-right: stem plot of p of n. Right: stem plot of x sub p of n, equal to x of n at multiples of N and zero elsewhere.",
   align(center)[
     #grid(
       columns: (1fr, 1fr, 1fr, 1fr),
@@ -520,7 +535,7 @@ $
             (0, 0),
             "r",
             "-|>-",
-            $x_p (t)$,
+            $x_p [n]$,
             label-pos: 2,
             label-side: center,
           ),

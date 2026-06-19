@@ -30,11 +30,31 @@
   it
 }
 
-#let cdiagram(..args) = {
+// Accessibility helpers ==============================================
+// Wrap any block of visual content so the tagged PDF exposes alt text.
+// With no caption the wrapper is visually invisible (no "Figure N", no
+// counter bump) but the PDF structure tree carries the alt string.
+#let altfig(body, alt: "", caption: none) = figure(
+  body,
+  alt: alt,
+  caption: caption,
+  kind: image,
+  supplement: if caption == none { none } else { auto },
+  numbering: if caption == none { none } else { "1" },
+)
+
+// Centered lilaq plot. Pass `alt:` to attach PDF alt text without
+// changing the visual layout.
+#let cdiagram(alt: none, ..args) = {
   let default-args = (width: 8cm, height: 4cm)
   let merged-args = default-args + args.named()
-  align(center, lq.diagram(..merged-args, ..args.pos()))
+  let body = align(center, lq.diagram(..merged-args, ..args.pos()))
+  if alt == none { body } else { altfig(alt: alt, body) }
 }
+
+// Wrap a block equation with alt text for tagged PDF.
+// Usage: #eqalt("Sum from k=0 to N of x[k].", $ sum_(k=0)^N x[k] $)
+#let eqalt(alt, body) = math.equation(block: true, alt: alt, body)
 
 // Template ============================================================
 
@@ -81,6 +101,8 @@
   git_version: none,
   // Auto fetch git info from sys.inputs
   auto_git: true,
+  // Document language (BCP-47 tag); used for PDF/UA accessibility.
+  lang: "en",
   // The lecture notes' content.
   body,
 ) = {
@@ -137,8 +159,8 @@
   // Set document metadatra
   set document(title: str_title, author: authors.map(author => author.name))
 
-  // Set the text and code font
-  set text(font: text_font, size: 10pt)
+  // Set the text and code font (lang drives PDF/UA tagging language)
+  set text(font: text_font, size: 10pt, lang: lang)
   show raw: set text(size: 10pt)
 
   // Make links blue and underlined. Disable for author list.
@@ -232,13 +254,17 @@
   )
 
   set text(10pt)
-  // Configure equation numbering and spacing.
-  // set math.equation(numbering: "(1.1)")
+
+  // Equation numbering: (topic.eq), reset to 1 at every level-1 heading.
   set math.equation(numbering: (..nums) => {
     let h = counter(heading.where(level: 1)).get().first()
     let eq = nums.pos().first()
     numbering("(1.1)", h, eq)
   })
+  show heading.where(level: 1): it => {
+    counter(math.equation).update(0)
+    it
+  }
   show math.equation: eq => {
     set block(spacing: 0.65em)
     eq
@@ -496,174 +522,39 @@
   )
 }
 
-// ==== Nice boxes using showybox and ctheorems packages ====
-//
-// | Environment | Accent Color         |
-// |-------------|----------------------|
-// | Definition  | olive                |
-// | Example     | maroon               |
-// | Note        | blue                 |
-// | Attention   | red / rgb("#DC143C") |
-// | Quote       | black                |
-// | Theorem     | navy                 |
-// | Proposition | maroon               |
-// | Hypothesis  | orange               |
+// Nice boxes using showybox and ctheorems packages =================
 
 #let boxnumbering = "1.1.1.1.1.1"
 #let boxcounting = "heading"
 
-#let definition = thmenv(
-  "Definition",
+// Factory: produce a thmenv-backed showybox environment. `title-light`
+// controls how much the title bar is lightened (hypothesis uses 10%
+// for a more saturated header; everything else uses 30%).
+#let _thmbox(envname, label, color, title-light: 30%) = thmenv(
+  envname,
   boxcounting,
   none,
-  (name, number, body, ..args) => {
-    showybox(
-      title: [*#name* #h(1fr) Definition #number],
-      frame: (
-        border-color: olive,
-        title-color: olive.lighten(30%),
-        body-color: olive.lighten(95%),
-        footer-color: olive.lighten(80%),
-      ),
-      ..args.named(),
-      body,
-    )
-  },
+  (name, number, body, ..args) => showybox(
+    title: [*#name* #h(1fr) #label #number],
+    frame: (
+      border-color: color,
+      title-color: color.lighten(title-light),
+      body-color: color.lighten(95%),
+      footer-color: color.lighten(80%),
+    ),
+    ..args.named(),
+    body,
+  ),
 ).with(numbering: boxnumbering)
 
-#let example = thmenv(
-  "example",
-  boxcounting,
-  none,
-  (name, number, body, ..args) => {
-    showybox(
-      title: [*#name* #h(1fr) Example #number],
-      frame: (
-        border-color: orange,
-        title-color: orange.lighten(30%),
-        body-color: orange.lighten(95%),
-        footer-color: orange.lighten(80%),
-      ),
-      ..args.named(),
-      body,
-    )
-  },
-).with(numbering: boxnumbering)
-
-#let note = thmenv(
-  "note",
-  boxcounting,
-  none,
-  (name, number, body, ..args) => {
-    showybox(
-      title: [*#name* #h(1fr) Note #number],
-      frame: (
-        border-color: blue,
-        title-color: blue.lighten(30%),
-        body-color: blue.lighten(95%),
-        footer-color: blue.lighten(80%),
-      ),
-      ..args.named(),
-      body,
-    )
-  },
-).with(numbering: boxnumbering)
-
-#let attention = thmenv(
-  "attention",
-  boxcounting,
-  none,
-  (name, number, body, ..args) => {
-    showybox(
-      title: [*#name* #h(1fr) Attention #number],
-      frame: (
-        border-color: rgb("#DC143C"),
-        title-color: rgb("#DC143C").lighten(30%),
-        body-color: rgb("#DC143C").lighten(95%),
-        footer-color: rgb("#DC143C").lighten(80%),
-      ),
-      ..args.named(),
-      body,
-    )
-  },
-).with(numbering: boxnumbering)
-
-#let quote = thmenv(
-  "quote",
-  boxcounting,
-  none,
-  (name, number, body, ..args) => {
-    showybox(
-      title: [*#name* #h(1fr) Quote #number],
-      frame: (
-        border-color: black,
-        title-color: black.lighten(30%),
-        body-color: black.lighten(95%),
-        footer-color: black.lighten(80%),
-      ),
-      ..args.named(),
-      body,
-    )
-  },
-).with(numbering: boxnumbering)
-
-#let theorem = thmenv(
-  "theorem",
-  boxcounting,
-  none,
-  (name, number, body, ..args) => {
-    showybox(
-      title: [*#name* #h(1fr) Theorem #number],
-      frame: (
-        border-color: navy,
-        title-color: navy.lighten(30%),
-        body-color: navy.lighten(95%),
-        footer-color: navy.lighten(80%),
-      ),
-      ..args.named(),
-      body,
-    )
-  },
-).with(numbering: boxnumbering)
-
-#let proposition = thmenv(
-  "Proposition",
-  boxcounting,
-  none,
-  (name, number, body, ..args) => {
-    showybox(
-      title: [*#name* #h(1fr) Proposition #number],
-      frame: (
-        border-color: maroon,
-        title-color: maroon.lighten(30%),
-        body-color: maroon.lighten(95%),
-        footer-color: maroon.lighten(80%),
-      ),
-      ..args.named(),
-      body,
-    )
-  },
-).with(numbering: boxnumbering)
-
-
-#let hypothesis = thmenv(
-  "hypothesis",
-  boxcounting,
-  none,
-  (name, number, body, ..args) => {
-    showybox(
-      title: [*#name* #h(1fr) Hypothesis #number],
-      frame: (
-        border-color: orange,
-        title-color: orange.lighten(10%),
-        body-color: orange.lighten(95%),
-        footer-color: orange.lighten(80%),
-      ),
-      ..args.named(),
-      body,
-    )
-  },
-).with(numbering: boxnumbering)
+#let definition  = _thmbox("Definition",  "Definition",  olive)
+#let example     = _thmbox("example",     "Example",     orange)
+#let note        = _thmbox("note",        "Note",        blue)
+#let attention   = _thmbox("attention",   "Attention",   rgb("#DC143C"))
+#let quote       = _thmbox("quote",       "Quote",       black)
+#let theorem     = _thmbox("theorem",     "Theorem",     navy)
+#let proposition = _thmbox("Proposition", "Proposition", maroon)
+#let hypothesis  = _thmbox("hypothesis",  "Hypothesis",  orange, title-light: 10%)
 
 #set figure.caption(separator: none)
 #show figure.caption: it => [

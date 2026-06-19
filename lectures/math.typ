@@ -19,7 +19,7 @@ $
 $
 Note that $(a + j b)(a - j b) = a^2 + b^2 = r^2$.
 
-The complex conjugate of $z$ is $z^* = a - j b = r e^(-j theta)$. We have $z z^* = |z|^2 = r^2$, $z + z* = 2 Re{z}$, $z / z^* = e^(j 2 theta)$, $z - z^* = j 2 Im{z}$.
+The complex conjugate of $z$ is $z^* = a - j b = r e^(-j theta)$. We have $z z^* = |z|^2 = r^2$, $z + z^* = 2 Re{z}$, $z / z^* = e^(j 2 theta)$, $z - z^* = j 2 Im{z}$.
 
 When it comes to powers, we have
 $
@@ -67,14 +67,14 @@ $
 $
   sin alpha sin beta &= 1/2 [cos (alpha - beta) - cos(alpha + beta)] \
   cos alpha cos beta &= 1/2 [cos (alpha - beta) + cos(alpha + beta)] \
-  sin alpha cos beta &= 1/2 [sin (alpha - beta) + cos(alpha + beta)]
+  sin alpha cos beta &= 1/2 [sin (alpha + beta) + sin(alpha - beta)]
 $
 
 3. Taylor series for $f(x)$ at $x = alpha$ is
 
-For a function $f: RR arrow.bar RR$ or $f : CC arrow.bar CC$, which is infinitely differentiable at some point $alpha$, the Taylor series of $f(alpha)$ is given by
+For a function $f: RR arrow.bar RR$ or $f : CC arrow.bar CC$, which is infinitely differentiable at some point $alpha$, the Taylor series of $f(x)$ about $alpha$ is given by
 $
-  f(alpha) = sum_(k = 0)^infinity (f^((k)) (alpha)) / k! (x - alpha)^k
+  f(x) = sum_(k = 0)^infinity (f^((k)) (alpha)) / k! (x - alpha)^k
 $
 where $f^((k))$ is the $k$-th derivative of $f(x)$.
 
