@@ -247,7 +247,7 @@
 
       if git_info != none {
         place(top + right, dx: -5pt, dy: 2pt)[
-          #text(size: 7pt, fill: accent_color.lighten(20%), font: "DejaVu Sans Mono")[#git_info]
+          #text(size: 7pt, fill: accent_color.lighten(10%), font: "DejaVu Sans Mono")[#git_info]
         ]
       }
     },
@@ -524,7 +524,7 @@
 
 // Nice boxes using showybox and ctheorems packages =================
 
-#let boxnumbering = "1.1.1.1.1.1"
+#let boxnumbering = "1.1"
 #let boxcounting = "heading"
 
 // Factory: produce a thmenv-backed showybox environment. `title-light`
@@ -533,7 +533,7 @@
 #let _thmbox(envname, label, color, title-light: 30%) = thmenv(
   envname,
   boxcounting,
-  none,
+  1,
   (name, number, body, ..args) => showybox(
     title: [*#name* #h(1fr) #label #number],
     frame: (
