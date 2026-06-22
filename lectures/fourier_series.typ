@@ -1155,7 +1155,7 @@ $
       #zap.circuit({
         import zap: *
 
-        vsource("V", (0, 0), variant: "pretty", rotate: 90deg)
+        vsource("V", (0, 0), rotate: 90deg)
         resistor("R", (2, 1), variant: "ieee", label: $R$)
         capacitor("C", (4, 0), variant: "ieee", rotate: 270deg, label: $C$)
 

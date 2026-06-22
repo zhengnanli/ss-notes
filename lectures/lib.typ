@@ -4,14 +4,14 @@
 
 #import "@preview/codelst:2.0.2": sourcecode
 #import "@preview/codly:1.3.0": codly, codly-init
-#import "@preview/codly-languages:0.1.8": codly-languages
+#import "@preview/codly-languages:0.1.10": codly-languages
 #import "@preview/ctheorems:1.1.3": thmenv, thmrules
 #import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
-#import "@preview/lilaq:0.5.0" as lq
+#import "@preview/lilaq:0.6.0" as lq
 #import "@preview/showybox:2.0.4": showybox
-#import "@preview/tiptoe:0.3.1"
+#import "@preview/tiptoe:0.4.0"
 #import "@preview/whalogen:0.3.0": ce
-#import "@preview/zap:0.4.0"
+#import "@preview/zap:0.5.0"
 
 // Plotting Styles ====================================================
 

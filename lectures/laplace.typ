@@ -406,7 +406,7 @@ $
       #zap.circuit({
         import zap: *
 
-        vsource("V", (0, 0), variant: "pretty", rotate: 90deg)
+        vsource("V", (0, 0), rotate: 90deg)
         resistor("R", (1, 1), variant: "ieee", label: $R$)
         inductor("L", (3, 1), variant: "ieee", label: $L$)
         capacitor("C", (5, 0), variant: "ieee", rotate: 270deg, label: $C$)
