@@ -22,7 +22,7 @@ $
 Random variables are a mapping of events into numbers (real), e.g., $xi in A <-> X in (a, b)$. The cumulative distribution function is defined as $F_X (x) = PP {X <= x}$.
 
 - For discrete random variables, the probability mass function is the probability of a specific outcome $x_i$, viz., $P_X (x_i) = PP {X = x_i}, i = 1, dots.c, N$. $sum_i P_X (x_i) = 1$. The cumulative distribution function is then defined as $F_X (k) = PP {X <= k} = sum_(i=1)^k P_X (i)$.
-- For continuous random variables, the probability density function is defined as $f_X (x) = ("d" F_X (x))/("d" x)$. In other words, $F_X (x) = integral_(-infinity)^x f_X (xi) "d" xi$ and $integral_(-infinity)^(infinity) f_X (x) "d" x = 1$.
+- For continuous random variables, the probability density function is defined as $f_X (x) = ("d"F_X (x))/("d"x)$. In other words, $F_X (x) = integral_(-infinity)^x f_X (xi) "d"xi$ and $integral_(-infinity)^(infinity) f_X (x) "d"x = 1$.
 
 === Common distribution
 We list a few common distributions, continuous and discrete
@@ -34,8 +34,8 @@ We list a few common distributions, continuous and discrete
 - Binomial: $X ~ cal(B) (p, n)$. $P_X (k) = vec(n, k) p^k (1 - p)^(n - k), k = 0, 1, dots.c, n$.
 
 === Joint and conditional distributions
-- $F_(X|A) (x|A) = (PP{X <= x, A}) / (PP{A})$, $f_(X|A) (x|A) = ("d" F_(X|A) (x|A)) / ("d" x)$.
-- $PP {A} = integral_RR f_X (x) PP{A|X=x} "d" x$
+- $F_(X|A) (x|A) = (PP{X <= x, A}) / (PP{A})$, $f_(X|A) (x|A) = ("d"F_(X|A) (x|A)) / ("d"x)$.
+- $PP {A} = integral_RR f_X (x) PP{A|X=x} "d"x$
 
 #example("Which signal source is transmitting?")[
   A signal $X$ is observed. We know that it comes from either from source $S_0$ or source $S_1$. The sources are independent, and each generates a realization of a Gaussian r.v. $X$ with same variance, but while $S_0$ has zero mean, and $S_1$ has a non-zero mean $m$.
@@ -59,7 +59,7 @@ We list a few common distributions, continuous and discrete
 === Joint distributions
 - $F_(X Y) (x, y) = PP{X <= x, Y <= y}$, $f_(X Y) (x, y) = (partial^2 F_(X Y) (x, y))/(partial x partial y)$.
 - If $F_(X Y) (x, y) = F_X (x) F_Y (y)$, i.e., $f_(X Y) (x, y) = f_X (x) f_Y (y)$, we say that $X$ and $Y$ are independent.
-- $f_X (x) = integral_RR f_(X Y) (x, y) "d" y$ is the marginal distribution of $X$.
+- $f_X (x) = integral_RR f_(X Y) (x, y) "d"y$ is the marginal distribution of $X$.
 - Joint Gaussian distribution:
 $
   f_(X Y) (x, y) = 1 / (2 pi sigma_X sigma_Y sqrt(1 - rho^2)) exp{-(1 / (1-rho^2)) [ (x - m_X)^2 / (2 sigma_X^2) - rho ((x - m_X) (y - m_Y)) / (sigma_X sigma_Y) + (y - m_Y)^2 / (2 sigma_Y^2)] }
@@ -71,8 +71,8 @@ $
 
 === Expectations and moments
 - $EE{X} = macron(X) = m_X$
-- For discrete $EE{X} = sum_i x_i P_X (x_i)$, and for continuous $EE{X} = integral_RR x f_X (x) "d" x$.
-- $EE{g(X)} = integral_RR g(x) f_X (x) "d" x$.
+- For discrete $EE{X} = sum_i x_i P_X (x_i)$, and for continuous $EE{X} = integral_RR x f_X (x) "d"x$.
+- $EE{g(X)} = integral_RR g(x) f_X (x) "d"x$.
 - Variance $sigma_X^2 = EE{|X - m_X|^2}$.
 
 
@@ -95,12 +95,12 @@ $
 
 We list a few instances of moments:
 
-- Mean: $m_x (t) = cal(E){ x(t) } = integral_(RR) x f_X (x; t) "d" x$
-- Auto-correlation: $R_X (t_1, t_2) = cal(E){ X(t_1) X^*(t_2) } = integral_RR x_1 x_2^* f_X (x_1, x_2; t_1, t_2) "d" x_1 "d" x_2$
+- Mean: $m_x (t) = cal(E){ x(t) } = integral_(RR) x f_X (x; t) "d"x$
+- Auto-correlation: $R_X (t_1, t_2) = cal(E){ X(t_1) X^*(t_2) } = integral_RR x_1 x_2^* f_X (x_1, x_2; t_1, t_2) "d"x_1 "d"x_2$
 - Auto-covariance:
 #set math.equation(numbering: none)
 $
-  C_X (t_1, t_2) = cal(E){ [X(t_1) - m_X (t_1)] [X(t_2) - m_X (t_2)]^* } = integral_RR [x_1 - m_X (t_1)] [x_2 - m_X (t_2)]^* f_X (x_1, x_2; t_1, t_2) "d" x_1 "d" x_2
+  C_X (t_1, t_2) = cal(E){ [X(t_1) - m_X (t_1)] [X(t_2) - m_X (t_2)]^* } = integral_RR [x_1 - m_X (t_1)] [x_2 - m_X (t_2)]^* f_X (x_1, x_2; t_1, t_2) "d"x_1 "d"x_2
 $
 - Relationship between $R_X (t_1, t_2)$ and $C_X (t_1, t_2)$
 $
@@ -140,7 +140,7 @@ $
 - Ergodicity for WSS process:
 $
   lim_(T -> infinity) 1/(2 T) integral_(-T)^T X(t) "d"t = m_X \
-  cal(E){|hat(m)_X - m_X|^2} = 1 / (2 T) integral_(-T)^T C_X (Delta t) [1 - (|Delta t|)/(2 T)] "d" Delta t
+  cal(E){|hat(m)_X - m_X|^2} = 1 / (2 T) integral_(-T)^T C_X (Delta t) [1 - (|Delta t|)/(2 T)] "d"Delta t
 $
 $X(t)$ is ergodic in the mean sense iff. $cal(E){|hat(m)_X - m_X|^2} -> 0$ as $T -> infinity$.
 
@@ -152,16 +152,16 @@ $
 $
 The corresponding power spectral density is defined as
 $
-  S_X (f) = cal(F){R_X (Delta t)} = integral_RR R_X (Delta t) e^(-j 2 pi f Delta t) "d" Delta t
+  S_X (f) = cal(F){R_X (Delta t)} = integral_RR R_X (Delta t) e^(-j 2 pi f Delta t) "d"Delta t
 $
 and the inverse process is defined via inverse Fourier transform as
 $
-  R_X (Delta t) = cal(F)^(-1){S_X (f)} = integral_RR S_X (f) e^(j 2 pi f Delta t) "d" f
+  R_X (Delta t) = cal(F)^(-1){S_X (f)} = integral_RR S_X (f) e^(j 2 pi f Delta t) "d"f
 $
 
 A special case when $Delta t = 0$:
 $
-  R_X (0) = cal(E) {|X^2 (t)|} = integral_RR S_X (f) "d" f
+  R_X (0) = cal(E) {|X^2 (t)|} = integral_RR S_X (f) "d"f
 $
 where the $cal(E) {|X^2 (t)|}$ is the power of the signal, and $S_X (f)$ is the power spectral _density_ (psd). A white process (white noise) is said to have $S_X (f) = S_X$, i.e., a constant power spectral density. In other words, $R_X (Delta t) = S_X delta (Delta t)$. Samples of a zero-mean white process, taken arbitrarily close together, are uncorrelated. If the process' distribution is further Gaussian, the samples are also independent.
 
@@ -169,48 +169,48 @@ where the $cal(E) {|X^2 (t)|}$ is the power of the signal, and $S_X (f)$ is the 
 
 Consider a linear time-invariant system that is characterized by its impulse response $h(t)$, or, equivalently, by its frequency response $H(f)$, where $h(t)$ and $H(f)$ are a Fourier transform pair. Let $x(t)$ be the input signal to the system and $y(t)$ denote the output signal. The output of the system may be expressed in terms of the convolution integral as
 $
-  y(t) = integral_RR h(tau) x(t - tau) "d" tau
+  y(t) = integral_RR h(tau) x(t - tau) "d"tau
 $
 
 Suppose that $x(t)$ is a sample function of a stationary stochastic process $X(t)$. Then the output $y(t)$ is a sample function of a stochastic process $Y(t)$. We wish to determine the mean and autocorrelation functions of the output.
 
 Since the convolution is a linear operation performed on the input signal $x(t)$, the expected value of the integral is equal to the integral of the expected value. Thus
 $
-  m_Y = cal(E) {Y(t)} = integral_RR cal(E){h(tau) X(t - tau)} "d" tau = integral_RR h(tau) cal(E){X(t - tau)} "d" tau
+  m_Y = cal(E) {Y(t)} = integral_RR cal(E){h(tau) X(t - tau)} "d"tau = integral_RR h(tau) cal(E){X(t - tau)} "d"tau
 $
 If the process $X(t)$ is also stationary, i.e., $cal(E) {X(t - tau)} = cal(E) {X(t)} = m_X$,
 $
-  m_Y = m_X integral_RR h(tau) "d" tau = m_X H(0)
+  m_Y = m_X integral_RR h(tau) "d"tau = m_X H(0)
 $
 
 The autocorrelation function of the output is
 $
-  R_(Y) (t_1, t_2) = cal(E) { Y(t_1) Y^*(t_2)} &= cal(E) { integral_RR h(tau_1) X(t_1 - tau_1) "d" tau_1 integral_RR h^*(tau_2) X^*(t_2 - tau_2) "d" tau_2 } \
-  &= integral_RR integral_RR h(tau_1) h^*(tau_2) cal(E){X(t_1 - tau_1) X^*(t_2 - tau_2)} "d" tau_1 "d" tau_2 \
-  &= integral_RR integral_RR h(tau_1) h^*(tau_2) R_X (t_1 - t_2 + tau_2 - tau_1) "d" tau_1 "d" tau_2
+  R_(Y) (t_1, t_2) = cal(E) { Y(t_1) Y^*(t_2)} &= cal(E) { integral_RR h(tau_1) X(t_1 - tau_1) "d"tau_1 integral_RR h^*(tau_2) X^*(t_2 - tau_2) "d"tau_2 } \
+  &= integral_RR integral_RR h(tau_1) h^*(tau_2) cal(E){X(t_1 - tau_1) X^*(t_2 - tau_2)} "d"tau_1 "d"tau_2 \
+  &= integral_RR integral_RR h(tau_1) h^*(tau_2) R_X (t_1 - t_2 + tau_2 - tau_1) "d"tau_1 "d"tau_2
 $
 
 If the process is further assumed wide sense stationary,
 $
-  R_Y (tau) = integral_RR integral_RR h(tau_1) h^* (tau_2) R_X (tau + tau_2 - tau_1) "d" tau_1 "d" tau_2
+  R_Y (tau) = integral_RR integral_RR h(tau_1) h^* (tau_2) R_X (tau + tau_2 - tau_1) "d"tau_1 "d"tau_2
 $
 
 The power spectral density of the output, $S_Y (f)$ is then
 $
-  S_Y (f) = cal(F) {R_Y (tau)} &= integral_RR R_Y (tau) e^(-j 2 pi f tau) "d" tau \
-  &= integral_RR integral_RR integral_RR h(tau_1) h^*(tau_2) R_X (tau + tau_2 - tau_1) e^(-j 2 pi f tau) "d" tau "d" tau_1 "d" tau_2 \
+  S_Y (f) = cal(F) {R_Y (tau)} &= integral_RR R_Y (tau) e^(-j 2 pi f tau) "d"tau \
+  &= integral_RR integral_RR integral_RR h(tau_1) h^*(tau_2) R_X (tau + tau_2 - tau_1) e^(-j 2 pi f tau) "d"tau "d"tau_1 "d"tau_2 \
 $
 
 Letting $u = tau + tau_2 - tau_1$, we have
 $
-  S_Y (f) &= integral_RR h(tau_1) e^(-j 2 pi f tau_1) "d" tau_1 dot.c integral_RR h^*(tau_2) e^(j 2 pi f tau_2) "d" tau_2 integral_RR R_X (u) e^(-j 2 pi f u) "d" u \
+  S_Y (f) &= integral_RR h(tau_1) e^(-j 2 pi f tau_1) "d"tau_1 dot.c integral_RR h^*(tau_2) e^(j 2 pi f tau_2) "d"tau_2 integral_RR R_X (u) e^(-j 2 pi f u) "d"u \
   &= H^*(f) H(f) S_X (f) = S_X (f) dot.c |H(f)|^2
 $
 
 #example("Random Process")[
   A random process $X(t)$ has zero mean and $R_X (t_1, t_2) = min(t_1, t_2)$. Consider a new process $Y(t) = e^t X(e^(-2 t))$. Suppose $Y(t)$ passes through a LTI system to yield an output $Z(t)$ according to
   $
-    "d"/("d" t) Z(t) + 2 Z(t) = "d" / ("d" t) Y(t) + Y(t)
+    "d"/("d"t) Z(t) + 2 Z(t) = "d" / ("d"t) Y(t) + Y(t)
   $
   Find $R_Z (tau)$.
 

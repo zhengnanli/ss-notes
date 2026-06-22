@@ -145,7 +145,7 @@ Finally, we have the following pair of equations:
   #eqalt(
     "x of n equals one over two pi times the integral over any two-pi-length interval of X of e to the j omega times e to the j omega n, d omega.",
     $
-      x[n] = 1 / (2 pi) integral_(2 pi) X(e^(j omega)) e^(j omega n) "d" omega
+      x[n] = 1 / (2 pi) integral_(2 pi) X(e^(j omega)) e^(j omega n) "d"omega
     $,
   )
   Note that since $X(e^(j omega)) e^(j omega n)$ is periodic with period $2 pi$, the interval of integration can be taken as _any_ interval of length $2 pi$.
@@ -327,11 +327,11 @@ We have seen four Fourier representations:
 
 - CT FS
 $
-  a_k = 1 / T integral_T x(t) e^(-j k omega_0 n) "d" t, quad x(t) = sum_(k = -infinity)^(infinity) a_k e^(j k omega_0 t)
+  a_k = 1 / T integral_T x(t) e^(-j k omega_0 n) "d"t, quad x(t) = sum_(k = -infinity)^(infinity) a_k e^(j k omega_0 t)
 $
 - CT FT
 $
-  X(j omega) = integral_RR x(t) e^(-j omega t) "d" t, quad x(t) = 1 / (2 pi) integral_RR X(j omega) e^(j omega t) "d" omega
+  X(j omega) = integral_RR x(t) e^(-j omega t) "d"t, quad x(t) = 1 / (2 pi) integral_RR X(j omega) e^(j omega t) "d"omega
 $
 - DT FS
 $
@@ -339,7 +339,7 @@ $
 $
 - DT FT
 $
-  X(e^(j omega)) = sum_(n = -infinity)^(infinity) x[n] e^(-j omega n), quad x[n] = 1 / (2pi) integral_(2pi) X(e^(j omega)) e^(j omega n) "d" omega
+  X(e^(j omega)) = sum_(n = -infinity)^(infinity) x[n] e^(-j omega n), quad x[n] = 1 / (2pi) integral_(2pi) X(e^(j omega)) e^(j omega n) "d"omega
 $
 
 The key duality principles are

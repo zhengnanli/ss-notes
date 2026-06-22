@@ -85,10 +85,10 @@ $
 
 5. Some integrals
 $
-  integral_0^infinity x^n e^(-a x) "d" x = n! / (a^(n+1)), a > 0
+  integral_0^infinity x^n e^(-a x) "d"x = n! / (a^(n+1)), a > 0
 $
 $
-  integral_0^infinity e^(-a x^2) "d" x = 1/2 sqrt(pi / a), a > 0
+  integral_0^infinity e^(-a x^2) "d"x = 1/2 sqrt(pi / a), a > 0
 $
 $
   integral_0^infinity x e^(-a x^2) "d"x = 1 / (2a), a > 0

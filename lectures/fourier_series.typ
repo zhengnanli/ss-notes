@@ -14,7 +14,7 @@ It is advantageous to study LTI system by representing signals as linear combina
 A signal for which the system output is a (possibly complex) constant times the input is referred to an _eigenfunction_ of the system, and the amplitude factor is referred to as the system's _eigenvalue_. Now, we would like to show that in a continuous-time system system, the input $e^(s t)$ is an eigenfunction. From previous lectures, we know that the output of the system is linked to the input via the convolution integral:
 
 $
-  y(t) = integral_RR h(tau) x(t - tau) "d" tau = integral_RR h(tau) e^(s (t - tau)) "d" tau = e^(s t) integral_RR h(tau) e^(-s tau) "d" tau = H(s) e^(s t)
+  y(t) = integral_RR h(tau) x(t - tau) "d"tau = integral_RR h(tau) e^(s (t - tau)) "d"tau = e^(s t) integral_RR h(tau) e^(-s tau) "d"tau = H(s) e^(s t)
 $
 
 Hence, complex exponentials are eigenfunctions of LTI systems. Similarly, in the discrete-time case, it is trivial to show that $z^n$ is also the eigenfunction of the discrete-time LTI systems.
@@ -51,19 +51,19 @@ $
 $
 multiplying both sides by $e^(-j n omega_0 t)$ and integrating both sides from $0$ to $T = (2 pi) / omega_0$, we have
 $
-  integral_0^T x(t) e^(-j n omega_0 t) = integral_0^T sum_(k = -infinity)^(infinity) a_k e^(j k omega_0 t) e^(-j n omega_0 t) "d" t = sum_(k=-infinity)^(infinity) a_k [ integral_0^T e^(j (k - n) omega_0 t) "d" t]
+  integral_0^T x(t) e^(-j n omega_0 t) = integral_0^T sum_(k = -infinity)^(infinity) a_k e^(j k omega_0 t) e^(-j n omega_0 t) "d"t = sum_(k=-infinity)^(infinity) a_k [ integral_0^T e^(j (k - n) omega_0 t) "d"t]
 $ <intxt>
 If we closely examine the last part of @intxt, we have
 $
-  integral_0^T e^(j (k-n) omega_0 t) "d" t = cases(T\, &quad k = n, 0\, &quad k != n)
+  integral_0^T e^(j (k-n) omega_0 t) "d"t = cases(T\, &quad k = n, 0\, &quad k != n)
 $
 and consequently, the right side of @intxt reduces to
 $
-  a_n = 1/T integral_0^T x(t) e^(-j n omega_0 t) "d" t
+  a_n = 1/T integral_0^T x(t) e^(-j n omega_0 t) "d"t
 $
 because when $k = n$, the integral equals to $T$. Since the signal is periodic, we denote the integration over _any_ length $T$,
 $
-  a_n = 1/T integral_T x(t) e^(-j n omega_0 t) "d" t
+  a_n = 1/T integral_T x(t) e^(-j n omega_0 t) "d"t
 $
 
 To summarize,
@@ -86,18 +86,18 @@ To summarize,
   #eqalt(
     "a sub zero equals one over T times the integral of x of t over one period.",
     $
-      a_0 = 1/T integral_T x(t) "d" t
+      a_0 = 1/T integral_T x(t) "d"t
     $,
   )
 ]
 
 Two functions $phi_1 (t)$ and $phi_2 (t)$ are said to be _orthogonal_ over the interval $(a, b)$ if
 $
-  integral_a^b phi_1 (t) phi_2^* (t) "d" t = 0
+  integral_a^b phi_1 (t) phi_2^* (t) "d"t = 0
 $
 If in addition
 $
-  integral_a^b |phi_1 (t)|^2 "d" t = integral_a^b |phi_2 (t)|^2 "d" t = 1
+  integral_a^b |phi_1 (t)|^2 "d"t = integral_a^b |phi_2 (t)|^2 "d"t = 1
 $
 The functions are said to be _normalized_, and hence are called _orthonormal_. A set of such functions ${phi_i (t)}, i = 0, plus.minus 1, plus.minus 2, dots.c$ is called orthonormal set if each pair of functions in the set is orthonormal.
 
@@ -111,12 +111,12 @@ $
 $
 A criterion for measuring the "quality" of the approximation is the energy in the error signal, i.e.,
 $
-  E_N (t) = integral_a^b |e_N (t)|^2 "d" t
+  E_N (t) = integral_a^b |e_N (t)|^2 "d"t
 $
 
 Let $phi_n (t) = e^(j n omega_0 t)$ and choose any interval of length $T = (2 pi) / omega_0$. The $a_i$ that minimize $E_N (t)$ are
 $
-  a_i = 1 / T integral_R x(t) e^(-j i omega_0 t) "d" t
+  a_i = 1 / T integral_R x(t) e^(-j i omega_0 t) "d"t
 $
 
 == Convergence of the Fourier Series
@@ -443,7 +443,7 @@ $
 
 When a time shift is applied to a periodic signal $x(t)$, the period $T$ is preserved. The Fourier series coefficients $b_k$ of the resulting signal $y(t) = x(t - t_0)$ may be expressed as
 $
-  b_k = 1/T integral_T x(t - t_0) e^(-j k omega_0 t) "d" t
+  b_k = 1/T integral_T x(t - t_0) e^(-j k omega_0 t) "d"t
 $
 Letting $tau = t - t_0$ in the integral and noting that the new variable $tau$ will also range over an interval of duration $T$, we have
 $
@@ -1023,12 +1023,12 @@ $
 $
 is the input of a continuous-time LTI system, then the output is given by
 $
-  y(t) &= integral_RR h(tau) x (t - tau) "d" tau = integral_RR h(tau) e^(s (t - tau)) "d" tau = integral_RR h(tau) e^(s t) e^(-s tau) "d" tau \
-  &= e^(s t) integral_RR h(tau) e^(-s tau) "d" tau equiv e^(s t) H(s)
+  y(t) &= integral_RR h(tau) x (t - tau) "d"tau = integral_RR h(tau) e^(s (t - tau)) "d"tau = integral_RR h(tau) e^(s t) e^(-s tau) "d"tau \
+  &= e^(s t) integral_RR h(tau) e^(-s tau) "d"tau equiv e^(s t) H(s)
 $
 where
 $
-  H(s) = integral_RR h(tau) e^(-s tau) "d" tau
+  H(s) = integral_RR h(tau) e^(-s tau) "d"tau
 $
 is the Laplace transform.
 
@@ -1065,7 +1065,7 @@ $
 $
 The output of the LTI system is then
 $
-  y(t) &= integral_RR h(tau) x(t - tau) "d" tau = integral_RR h(tau) sum_k a_k e^(s_k (t - tau)) = sum_k a_k [integral_RR h(tau) e^(- s_k tau)] e^(s_k t) \ &= sum_k a_k H(s_k) e^(s_k t) = sum_k a_k H(j k omega_0) e^(j k omega_0 t)
+  y(t) &= integral_RR h(tau) x(t - tau) "d"tau = integral_RR h(tau) sum_k a_k e^(s_k (t - tau)) = sum_k a_k [integral_RR h(tau) e^(- s_k tau)] e^(s_k t) \ &= sum_k a_k H(s_k) e^(s_k t) = sum_k a_k H(j k omega_0) e^(j k omega_0 t)
 $
 Similarly, if the input to a discrete-time LTI system is now
 $
@@ -1089,7 +1089,7 @@ $
 
   To calculate the Fourier series coefficients of the output $y(t)$, we first compute the frequency response
   $
-    H(j omega) = integral_RR h(tau) e^(-j omega tau) "d" tau = integral_0^infinity e^(-tau ) e^(-j omega tau) "d" tau = -1/(1+j omega) e^(-tau - j omega tau) lr(|, size: #200%)_(0)^(infinity) = 1 / (1 + j omega)
+    H(j omega) = integral_RR h(tau) e^(-j omega tau) "d"tau = integral_0^infinity e^(-tau ) e^(-j omega tau) "d"tau = -1/(1+j omega) e^(-tau - j omega tau) lr(|, size: #200%)_(0)^(infinity) = 1 / (1 + j omega)
   $
   Therefore, according to
   $
@@ -1171,12 +1171,12 @@ $
 
   If we take the capacitor's voltage as the output, we have
   $
-    R C ("d" v_C (t)) / ("d" t) + v_C (t) = v_S (t)
+    R C ("d"v_C (t)) / ("d"t) + v_C (t) = v_S (t)
   $
 
   Assuming initial rest, the system described by the above LCCDE is LTI. In order to determine its frequency response $H(j omega)$, we note that, by definition, with input voltage $v_S (t) = e^(j omega t)$, we must have the output voltage $v_C (t) = H(j omega) e^(j omega t)$. If we substitute these expressions into the above LCCDE, we obtain
   $
-    R C "d"/("d" t) [H(j omega) e^(j omega t)] + H(j omega) e^(j omega t) = e^(j omega t)
+    R C "d"/("d"t) [H(j omega) e^(j omega t)] + H(j omega) e^(j omega t) = e^(j omega t)
   $
   It directly follows that
   $
@@ -1186,7 +1186,7 @@ $
 
   If we choose the voltage across the resistor $v_R (t)$ as the output, the LCCDE is then
   $
-    R C ("d" v_R (t))/("d" t) + v_R (t) = R C ("d" v_S (t))/("d" t)
+    R C ("d"v_R (t))/("d"t) + v_R (t) = R C ("d"v_S (t))/("d"t)
   $
 
   The transfer function (frequency response) is then obtained by substituting $v_S (t) = e^(j omega t)$ and we obtain $v_R (t) = G(j omega) e^(j omega t)$, viz.,

@@ -47,7 +47,7 @@ We begin by defining signal energy and power. The signal energy is defined as
 and the signal power is defined as
 #eqalt(
   "Signal power P_infinity is defined as the limit as T goes to infinity of one over 2T times the integral from -T to T of the squared magnitude of x(t).",
-  $ P_infinity eq.delta lim_(T arrow infinity) 1/(2T) integral_(-T)^(T) |x(t)|^2 "d" t $,
+  $ P_infinity eq.delta lim_(T arrow infinity) 1/(2T) integral_(-T)^(T) |x(t)|^2 "d"t $,
 )
 for some time interval $T$.
 
@@ -354,7 +354,7 @@ and
 The $"sa"(t)$ is shown below. It is easy to show that
 #eqalt(
   "Integral of sa(t) over all real t equals pi.",
-  $ integral_(-infinity)^(infinity) "sa"(t) "d" t = pi $,
+  $ integral_(-infinity)^(infinity) "sa"(t) "d"t = pi $,
 )
 
 #let x = lq.linspace(-20, 20, num: 420)
@@ -503,14 +503,14 @@ The continuous-time _unit impulse function_ $delta(t)$ is related to the unit st
 
 #eqalt(
   "Running-integral relation: u of t equals the integral from minus infinity up to t of delta of tau d tau.",
-  $ u(t) = integral_(-infinity)^t delta(tau) "d" tau $,
+  $ u(t) = integral_(-infinity)^t delta(tau) "d"tau $,
 )
 
 In other words, the continuous-time unit impulse response can be thought of as the _first derivative_ of the continuous-time unit step, i.e.,
 
 #eqalt(
   "Impulse as derivative: delta of t equals the derivative of u of t with respect to t.",
-  $ delta(t) = ("d"u(t)) / ("d" t) $,
+  $ delta(t) = ("d"u(t)) / ("d"t) $,
 )
 
 If we consider an approximation to the unit step $u_Delta (t)$, which rises from the value 0 to the value 1 in a short time interval of length $Delta$. The unit step, of course, changes values instantaneously and thus can be thought of as an idealization of $u_Delta (t)$ for $Delta$ so short that its duration does not matter for any practical purpose. Formally, $u(t)$ is the limit of $u_Delta (t)$ as $Delta arrow 0$. This relationship is shown below.

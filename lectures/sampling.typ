@@ -583,7 +583,7 @@ $
 $
 in the frequency domain,
 $
-  X_p (e^(j omega)) = 1 / (2 pi) integral_(2 pi) P(e^(j theta)) X(e^(j(omega - theta))) "d" theta
+  X_p (e^(j omega)) = 1 / (2 pi) integral_(2 pi) P(e^(j theta)) X(e^(j(omega - theta))) "d"theta
 $
 
 The Fourier transform of the sampling sequence $p[n]$ is

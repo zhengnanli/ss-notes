@@ -201,7 +201,7 @@ $
 $ <aktildex>
 and $omega_0 = (2 pi) / T$. Since $tilde(x) (t) arrow x(t)$ for $|t| < T / 2$, and $x(t)$ = 0 outside this interval, we can rewrite @aktildex as
 $
-  a_k = 1/T integral_(-T/2)^(T/2) tilde(x)(t) e^(-j k omega_0 t) "d" t = 1/T integral_RR x(t) e^(-j k omega_0 t) "d" t
+  a_k = 1/T integral_(-T/2)^(T/2) tilde(x)(t) e^(-j k omega_0 t) "d"t = 1/T integral_RR x(t) e^(-j k omega_0 t) "d"t
 $
 Therefore, defining the envelope $X(j omega)$ of $T a_k$ as
 $
@@ -217,7 +217,7 @@ $
 $
 As $T arrow infinity$, $omega_0 arrow 0$, $tilde(x) (t) arrow x(t)$, and consequently,
 $
-  x(t) = lim_(omega_0 arrow 0) 1 / (2 pi) sum_(k = -infinity)^(infinity) X(j k omega_0) e^(j k omega_0 t) omega_0 = 1 / (2 pi ) integral_RR X(j omega) e^(j omega t) "d" omega
+  x(t) = lim_(omega_0 arrow 0) 1 / (2 pi) sum_(k = -infinity)^(infinity) X(j k omega_0) e^(j k omega_0 t) omega_0 = 1 / (2 pi ) integral_RR X(j omega) e^(j omega t) "d"omega
 $
 
 The process of $omega_0 arrow 0$ is depicted below. As $omega_0 arrow 0$, the summation converges to the integral of $X(j omega) e^(j omega t)$.
@@ -280,7 +280,7 @@ We define the Fourier transform pair as follows.
   #eqalt(
     "x of t equals one over two pi times the integral from negative infinity to infinity of X of j omega times e to the j omega t, d omega.",
     $
-      x(t) = 1/(2 pi) integral_(-infinity)^(infinity) X(j omega) e^(j omega t) "d" omega
+      x(t) = 1/(2 pi) integral_(-infinity)^(infinity) X(j omega) e^(j omega t) "d"omega
     $,
   )
 ]
@@ -324,7 +324,7 @@ Similar to the Fourier series, there is a set of conditions which are sufficient
   $
   The Fourier transform is
   $
-    X(j omega) = integral_(-infinity)^(infinity) e^(-a|t|) e^(-j omega t) "d" t = integral_(-infinity)^0 e^(a t) e^(-j omega t) "d"t + integral_0^infinity e^(- a t) e^(-j omega t) "d" t = (2a) / (a^2 + omega^2)
+    X(j omega) = integral_(-infinity)^(infinity) e^(-a|t|) e^(-j omega t) "d"t = integral_(-infinity)^0 e^(a t) e^(-j omega t) "d"t + integral_0^infinity e^(- a t) e^(-j omega t) "d"t = (2a) / (a^2 + omega^2)
   $
 
   Let us now determine the Fourier transform of the unit impulse
@@ -424,7 +424,7 @@ $
 $
 - Differentiation and Integration
 $
-  ("d" x(t))/("d" t) arrow.l.r^limits(cal("F")) j omega X(j omega)
+  ("d"x(t))/("d"t) arrow.l.r^limits(cal("F")) j omega X(j omega)
 $
 $
   integral_(-infinity)^t x(tau) "d"tau arrow.l.r^limits(cal("F")) 1/(j omega) X(j omega) + pi X(0) delta(omega)
@@ -439,7 +439,7 @@ $
 $
 - Parseval's
 $
-  integral_RR |x(t)|^2 "d"t = 1/(2 pi) integral_RR |X(j omega)|^2 "d" omega
+  integral_RR |x(t)|^2 "d"t = 1/(2 pi) integral_RR |X(j omega)|^2 "d"omega
 $
 
 == The Convolution Property
@@ -447,7 +447,7 @@ $
 We start by looking at the inverse Fourier transform,
 
 $
-  x(t) = 1/(2 pi) integral_RR X(j omega) e^(j omega t) "d" omega = lim_(omega_0 arrow 0) 1/(2 pi) sum_(k = -infinity)^infinity X(j k omega_0) e^(j k omega_0 t) omega_0
+  x(t) = 1/(2 pi) integral_RR X(j omega) e^(j omega t) "d"omega = lim_(omega_0 arrow 0) 1/(2 pi) sum_(k = -infinity)^infinity X(j k omega_0) e^(j k omega_0 t) omega_0
 $
 The response of a linear system with impulse response $h(t)$ to a complex exponential $e^(j k omega_0 t)$ is $H(j k omega_0) e^(j k omega_0 t)$ (i.e., the eigenfunction), where
 $
@@ -465,7 +465,7 @@ $
 $
 We also know that the Fourier transform of $y(t)$ is $Y(j omega)$:
 $
-  y(t) = 1 / (2 pi) integral_RR Y(j omega) e^(j omega t) "d" t
+  y(t) = 1 / (2 pi) integral_RR Y(j omega) e^(j omega t) "d"t
 $
 We can then identify that
 $
@@ -478,11 +478,11 @@ $
 $
 and its Fourier transform,
 $
-  Y(j omega) = cal("F"){y(t)} = integral_RR [ integral_RR x(tau) h(t - tau) "d"tau ] e^(-j omega t) "d"t = integral_RR x(tau) [integral_RR h(t - tau) e^(-j omega t) "d"t] "d" tau
+  Y(j omega) = cal("F"){y(t)} = integral_RR [ integral_RR x(tau) h(t - tau) "d"tau ] e^(-j omega t) "d"t = integral_RR x(tau) [integral_RR h(t - tau) e^(-j omega t) "d"t] "d"tau
 $
 by the time-shift property, the bracketed term is simply
 $
-  integral_RR h(t - tau) e^(-j omega t) "d" t = e^(-j omega tau) H(j omega)
+  integral_RR h(t - tau) e^(-j omega t) "d"t = e^(-j omega tau) H(j omega)
 $
 We then have
 $
@@ -665,7 +665,7 @@ We then have
 
 We consider the following continuous-time LTI systems
 $
-  sum_(k = 0)^N a_k ("d"^(k) y(t)) / ("d" t^k) = sum_(k = 0)^M b_k ("d"^(k) x(t)) / ("d" t^k)
+  sum_(k = 0)^N a_k ("d"^(k) y(t)) / ("d"t^k) = sum_(k = 0)^M b_k ("d"^(k) x(t)) / ("d"t^k)
 $
 
 From the convolution property, we have
@@ -675,11 +675,11 @@ $
 
 Let us perform the Fourier transform to both sides
 $
-  cal("F"){sum_(k = 0)^N a_k ("d"^(k) y(t)) / ("d" t^k)} = cal("F"){sum_(k = 0)^M b_k ("d"^(k) x(t)) / ("d" t^k)}
+  cal("F"){sum_(k = 0)^N a_k ("d"^(k) y(t)) / ("d"t^k)} = cal("F"){sum_(k = 0)^M b_k ("d"^(k) x(t)) / ("d"t^k)}
 $
 From the linearity property, this becomes
 $
-  sum_(k = 0)^N a_k cal("F"){("d"^(k) y(t)) / ("d" t^k)} = sum_(k = 0)^M b_k cal("F"){("d"^(k) x(t)) / ("d" t^k)}
+  sum_(k = 0)^N a_k cal("F"){("d"^(k) y(t)) / ("d"t^k)} = sum_(k = 0)^M b_k cal("F"){("d"^(k) x(t)) / ("d"t^k)}
 $
 and from the differentiation property,
 $
@@ -698,7 +698,7 @@ $
   #set math.equation(numbering: none)
   Consider a stable LTI system that is characterized by the differential equation
   $
-    ("d"^2 y(t)) / ("d" t^2) + 4 ("d" y(t)) / ("d" t) + 3 y(t) = ("d" x(t))/("d" t) + 2 x(t) 
+    ("d"^2 y(t)) / ("d"t^2) + 4 ("d"y(t)) / ("d"t) + 3 y(t) = ("d"x(t))/("d"t) + 2 x(t) 
   $
   The frequency response is simply
   $

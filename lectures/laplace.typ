@@ -23,7 +23,7 @@ $
 $
 where
 $
-  H(s) = integral_RR h(t) e^(- s t) "d" t
+  H(s) = integral_RR h(t) e^(- s t) "d"t
 $
 
 For $s$ imaginary (i.e., $s = j omega$), the integral in the above equation corresponds to Fourier transform of $h(t)$. For general values of the complex variable $s$, it is referred to as the _Laplace transform_.
@@ -38,7 +38,7 @@ For $s$ imaginary (i.e., $s = j omega$), the integral in the above equation corr
   ) <laplace>
   For convenience, we will sometimes denote the Laplace transform in operator form as $cal(L){x(t)}$, and denote the transform relationship between $x(t)$ and $X(s)$ as $x(t) limits(arrow.l.r)^(cal("L")) X(s)$. Note that when $s = j omega$, the Laplace transform becomes
   $
-    X(j omega) = integral_RR x(t) e^(-j omega t) "d" t
+    X(j omega) = integral_RR x(t) e^(-j omega t) "d"t
   $
   which corresponds to the Fourier transform of $x(t)$, i.e.,
   $
@@ -49,12 +49,12 @@ For $s$ imaginary (i.e., $s = j omega$), the integral in the above equation corr
 #example("Laplace Transform and Fourier Transform")[
   Let the signal $x(t) = e^(-a t) u(t)$. The Fourier transform $X(j omega)$ converge for $a > 0$, and is given by
   $
-    X(j omega) = integral_RR e^(-a t) u(t) e^(-j omega t) "d" t = integral_0^infinity e^(-a t) e^(-j omega t) "d" t = 1 / (j omega + a), quad a > 0
+    X(j omega) = integral_RR e^(-a t) u(t) e^(-j omega t) "d"t = integral_0^infinity e^(-a t) e^(-j omega t) "d"t = 1 / (j omega + a), quad a > 0
   $
 
   The Laplace transform is
   $
-    X(s) = integral_RR e^(-a t) u (t) e^(-s t) "d" t = integral_0^infinity e^(-(s + a) t)"d" t
+    X(s) = integral_RR e^(-a t) u (t) e^(-s t) "d"t = integral_0^infinity e^(-(s + a) t)"d"t
   $
   or, with $s = sigma + j omega$,
   $
@@ -74,7 +74,7 @@ For $s$ imaginary (i.e., $s = j omega$), the integral in the above equation corr
   $
   Then,
   $
-    X(s) = - integral_RR e^(-a t) e^(-s t) u(-t) "d" t = - integral_(-infinity)^0 e^(-(s+a) t) "d" t = 1/(s+a)
+    X(s) = - integral_RR e^(-a t) e^(-s t) u(-t) "d"t = - integral_(-infinity)^0 e^(-(s+a) t) "d"t = 1/(s+a)
   $
   For convergence in this example, we require that $Re{s + a} < 0$, or $Re{s} < -a$, that is
   $
@@ -95,7 +95,7 @@ In specifying the Laplace transform of a signal, both the *algebraic expression*
   $
   and the Laplace transform of $x(t)$ then can be expressed as
   $
-    X(s) = integral_RR e^(-2 t) u(t) e^(-s t) "d" t + 1/2 integral_RR [e^(-(1-3j)t) u(t)+ e^(-(1+3j) t)] u(t) e^(-s t) "d" t
+    X(s) = integral_RR e^(-2 t) u(t) e^(-s t) "d"t + 1/2 integral_RR [e^(-(1-3j)t) u(t)+ e^(-(1+3j) t)] u(t) e^(-s t) "d"t
   $
   It follows that
   $
@@ -158,19 +158,19 @@ In specifying the Laplace transform of a signal, both the *algebraic expression*
 
 In the previous section, we discussed the interpretation of the Laplace transform of a signal as the Fourier transform of an exponentially weighted version of the signal: that is, with $s$ expressed as $s = sigma + j omega$, the Laplace transform of a signal $x(t)$ is
 $
-  X(sigma + j omega) = cal(F){x(t) e^(-sigma t)} = integral_RR x(t) e^(-sigma t) e^(-j omega t) "d" t
+  X(sigma + j omega) = cal(F){x(t) e^(-sigma t)} = integral_RR x(t) e^(-sigma t) e^(-j omega t) "d"t
 $
 for values of $s = sigma + j omega$ in the ROC. We can invert this relationship using the inverse Fourier transform. We have
 $
-  x(t) e^(-sigma t) = cal(F)^(-1){X(sigma + j omega)} = 1/(2 pi) integral_RR X(sigma + j omega) e^(j omega t) "d" omega
+  x(t) e^(-sigma t) = cal(F)^(-1){X(sigma + j omega)} = 1/(2 pi) integral_RR X(sigma + j omega) e^(j omega t) "d"omega
 $
 or, multiplying both sides by $e^(sigma t)$, we obtain
 $
-  x(t) = 1/(2 pi) integral_RR X(sigma + j omega) e^((sigma + j omega) t) "d" omega
+  x(t) = 1/(2 pi) integral_RR X(sigma + j omega) e^((sigma + j omega) t) "d"omega
 $
 That is, we can recover $x(t)$ from its Laplace transform evaluated for a set of values of $s = sigma + j omega$ in the ROC, with $sigma$ fixed and $omega$ varying from $-infinity$ to $+infinity$. By changing the variable of the integration, we have
 $
-  x(t) = 1/(2 pi j) integral_(sigma - j infinity)^(sigma + j infinity) X(s) e^(s t) "d" s
+  x(t) = 1/(2 pi j) integral_(sigma - j infinity)^(sigma + j infinity) X(s) e^(s t) "d"s
 $
 
 #example("Inverse Laplace Transform")[
@@ -382,7 +382,7 @@ For one particular and very important class of systems, stability can be charact
 
 Consider a general LCCDE of the form
 $
-  sum_(k = 0)^N a_k ("d"^k y(t))/("d" t^k) = sum_(k = 0)^M b_k ("d"^k x(t))/("d" t^k)
+  sum_(k = 0)^N a_k ("d"^k y(t))/("d"t^k) = sum_(k = 0)^M b_k ("d"^k x(t))/("d"t^k)
 $
 
 Applying the Laplace transform to both sides and using the linearity and differentiation properties repeatedly, we have
@@ -426,7 +426,7 @@ $
     Suppose the input signal is the voltage measured around the voltage source, i.e., $x(t) = v_S (t)$, and the voltage of the capacitor is the output signal, i.e., $y(t) = v_C (t)$, we obtain
 
     $
-      R C ("d" y(t))/("d" t) + L C ("d"^2 y(t))/("d" t^2) + y(t) = x(t)
+      R C ("d"y(t))/("d"t) + L C ("d"^2 y(t))/("d"t^2) + y(t) = x(t)
     $
 
     Applying @laplace-lccde, we obtain
@@ -449,7 +449,7 @@ $
     $
     Since the ROC of $Y(s)$ must include at least the intersection of the ROCs of $X(s)$ and $H(s)$, examining the three possible choices of the ROC of $H(s)$ (i.e., $Re{s} < -2$, $-2 < Re{s} < -1$, and $Re{s} > -1$), we see that only the choice that is consistent with the ROCs of $X(s)$ and $Y(s)$ is $Re{s} > -1$. Since this is to the right of the rightmost pole of $H(s)$, we conclude that the system is causal. Besides, both poles of $H(s)$ have negative real parts, the system is stable. The LCCDE describing the system is given as, assuming initial rest,
     $
-      ("d"^2 y(t))/("d" t^2) + 3 ("d" y(t))/("d" t) + 2 y(t) = ("d" x(t))/("d" t) + 3 x(t)
+      ("d"^2 y(t))/("d"t^2) + 3 ("d"y(t))/("d"t) + 2 y(t) = ("d"x(t))/("d"t) + 3 x(t)
     $
 ]
 

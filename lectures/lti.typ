@@ -503,7 +503,7 @@ $
   #set math.equation(numbering: none)
   Now, let us find the solution of:
   $
-    ("d" y(t))/("d" t) + 2 y(t) = x(t)
+    ("d"y(t))/("d"t) + 2 y(t) = x(t)
   $
   when the input signal is:
   $
@@ -515,7 +515,7 @@ $
   $
   where $y_p (t)$ satisfies $x(t)$ and $y_h(t)$ is a solution of the homogeneous differential equation:
   $
-    ("d" y(t)) / ("d" t) + 2 y(t) = 0
+    ("d"y(t)) / ("d"t) + 2 y(t) = 0
   $
 
   *Particular solution*
@@ -787,7 +787,7 @@ has the following block diagram:
 Similarly, the continuous-time counterpart defined as:
 #eqalt(
   "y of t equals negative one over a times the derivative of y of t with respect to t plus b over a times x of t.",
-  $ y(t) = -1/a ("d" y(t)) / ("d" t) + b/a x(t) $,
+  $ y(t) = -1/a ("d"y(t)) / ("d"t) + b/a x(t) $,
 )
 can be represented by the following block diagram:
 #altfig(
