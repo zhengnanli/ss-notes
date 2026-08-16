@@ -6,18 +6,18 @@
 
 == The Response of LTI Systems to Complex Exponentials
 
-It is advantageous to study LTI system by representing signals as linear combinations of basic signals that possess the following two properties
+It is advantageous to study LTI systems by representing signals as linear combinations of basic signals that possess the following two properties
 
 - The set of basic signals can be used to construct a broad and useful class of signals
 - The response of an LTI system to each signal should be simple enough in structure to provide us with a convenient representation for the response of the system to any signal constructed as a linear combination of the basic signals.
 
-A signal for which the system output is a (possibly complex) constant times the input is referred to an _eigenfunction_ of the system, and the amplitude factor is referred to as the system's _eigenvalue_. Now, we would like to show that in a continuous-time system system, the input $e^(s t)$ is an eigenfunction. From previous lectures, we know that the output of the system is linked to the input via the convolution integral:
+A signal for which the system output is a (possibly complex) constant times the input is referred to as an _eigenfunction_ of the system, and the amplitude factor is referred to as the system's _eigenvalue_. Now, we would like to show that in a continuous-time system, the input $e^(s t)$ is an eigenfunction. From previous lectures, we know that the output of the system is linked to the input via the convolution integral:
 
 $
   y(t) = integral_RR h(tau) x(t - tau) "d"tau = integral_RR h(tau) e^(s (t - tau)) "d"tau = e^(s t) integral_RR h(tau) e^(-s tau) "d"tau = H(s) e^(s t)
 $
 
-Hence, complex exponentials are eigenfunctions of LTI systems. Similarly, in the discrete-time case, it is trivial to show that $z^n$ is also the eigenfunction of the discrete-time LTI systems.
+Hence, complex exponentials are eigenfunctions of LTI systems. Similarly, in the discrete-time case, it is straightforward to show that $z^n$ is an eigenfunction of discrete-time LTI systems.
 
 Suppose we can decompose the signal into linear combinations of complex exponentials, e.g.,
 $
@@ -41,7 +41,7 @@ and the output will be
 $
   y(t) = sum_k a_k H(s_k) e^(s_k t)
 $
-Similarly for discrete-time case.
+The discrete-time case follows in the same way.
 
 == Fourier Series Representation of Continuous-Time Periodic Signals
 
@@ -49,19 +49,19 @@ Suppose we would like to express a periodic signal using the sum of exponentials
 $
   x(t) = sum_(k = -infinity)^(infinity) a_k e^(j k omega_0 t) = sum_(k = -infinity)^(infinity) a_k e^(j k (2 pi) / T t)
 $
-multiplying both sides by $e^(-j n omega_0 t)$ and integrating both sides from $0$ to $T = (2 pi) / omega_0$, we have
+Multiplying both sides by $e^(-j n omega_0 t)$ and integrating both sides from $0$ to $T = (2 pi) / omega_0$, we have
 $
-  integral_0^T x(t) e^(-j n omega_0 t) = integral_0^T sum_(k = -infinity)^(infinity) a_k e^(j k omega_0 t) e^(-j n omega_0 t) "d"t = sum_(k=-infinity)^(infinity) a_k [ integral_0^T e^(j (k - n) omega_0 t) "d"t]
+  integral_0^T x(t) e^(-j n omega_0 t) "d"t = integral_0^T sum_(k = -infinity)^(infinity) a_k e^(j k omega_0 t) e^(-j n omega_0 t) "d"t = sum_(k=-infinity)^(infinity) a_k [ integral_0^T e^(j (k - n) omega_0 t) "d"t]
 $ <intxt>
 If we closely examine the last part of @intxt, we have
 $
   integral_0^T e^(j (k-n) omega_0 t) "d"t = cases(T\, &quad k = n, 0\, &quad k != n)
 $
-and consequently, the right side of @intxt reduces to
+so every term of the sum except $k = n$ vanishes, and the right side of @intxt reduces to $T a_n$. Therefore
 $
   a_n = 1/T integral_0^T x(t) e^(-j n omega_0 t) "d"t
 $
-because when $k = n$, the integral equals to $T$. Since the signal is periodic, we denote the integration over _any_ length $T$,
+Since the signal is periodic, the integral may be taken over _any_ interval of length $T$,
 $
   a_n = 1/T integral_T x(t) e^(-j n omega_0 t) "d"t
 $
@@ -99,7 +99,7 @@ If in addition
 $
   integral_a^b |phi_1 (t)|^2 "d"t = integral_a^b |phi_2 (t)|^2 "d"t = 1
 $
-The functions are said to be _normalized_, and hence are called _orthonormal_. A set of such functions ${phi_i (t)}, i = 0, plus.minus 1, plus.minus 2, dots.c$ is called orthonormal set if each pair of functions in the set is orthonormal.
+then the functions are said to be _normalized_, and hence are called _orthonormal_. A set of such functions ${phi_i (t)}, i = 0, plus.minus 1, plus.minus 2, dots.c$ is called an orthonormal set if every distinct pair in the set is orthogonal and every member has unit energy.
 
 Let $x(t)$ be a given signal. Consider the following approximations of $x(t)$ over the interval $a <= t <= b$:
 $
@@ -111,12 +111,12 @@ $
 $
 A criterion for measuring the "quality" of the approximation is the energy in the error signal, i.e.,
 $
-  E_N (t) = integral_a^b |e_N (t)|^2 "d"t
+  E_N = integral_a^b |e_N (t)|^2 "d"t
 $
 
-Let $phi_n (t) = e^(j n omega_0 t)$ and choose any interval of length $T = (2 pi) / omega_0$. The $a_i$ that minimize $E_N (t)$ are
+Let $phi_n (t) = e^(j n omega_0 t)$ and choose any interval of length $T = (2 pi) / omega_0$. The $a_i$ that minimize $E_N$ are
 $
-  a_i = 1 / T integral_R x(t) e^(-j i omega_0 t) "d"t
+  a_i = 1 / T integral_T x(t) e^(-j i omega_0 t) "d"t
 $
 
 == Convergence of the Fourier Series
@@ -125,41 +125,50 @@ In general, a set of conditions developed by Dirichlet guarantees that $x(t)$ _e
 
 // #note("Dirichlet Conditions")[
 1. Over any period, $x(t)$ must be _absolutely integrable_, i.e., $integral_T |x(t)| "d"t < infinity$
-2. In any finite interval of time, $x(t)$ is of bounded variation; that is there are no more than a finite number of maxima and minima during any single period of the signal.
+2. In any finite interval of time, $x(t)$ is of bounded variation; that is, there are no more than a finite number of maxima and minima during any single period of the signal.
 3. In any finite interval of time, there are only a finite number of discontinuities. Furthermore, each of these discontinuities is finite.
 // ]
 
 #example("Fourier Series for Triangle Function")[
   #set math.equation(numbering: none)
-  Find the Fourier series for the following (periodic) triangle function:
+  Find the Fourier series for the periodic triangle function of @fig-triangle.
 
-  #let x = lq.linspace(-1, 1, num: 500)
-  #let triangle = x => 2 * calc.abs(2 * (2 * x - calc.floor(2 * x + 0.5))) - 1
+  The period is $T = 1$, so the wave falls linearly from $1$ at $t = -1 \/ 2$ to
+  $-1$ at $t = 0$ and rises back to $1$ at $t = 1 \/ 2$.
+
+  #let x = lq.linspace(-1.5, 1.5, num: 601)
+  // One period of the wave described by the integrals below: -1 at t = 0 and
+  // +1 at t = +/- 1/2, repeating with period T = 1.
+  #let triangle = t => 4 * calc.abs(t - calc.round(t)) - 1
   #cdiagram(
-    alt: "Periodic triangle wave x of t with peaks of one and troughs of negative one. A dashed red guideline indicates the peak at one and the quarter-period mark at one half.",
+    alt: "Periodic triangle wave x of t of period one, equal to negative one at every integer t and to one at every half-integer t. Dashed gray guidelines mark the peak of height one at t equal to one half.",
+    caption: [
+      The periodic triangle wave whose Fourier series is computed below, drawn
+      over three periods.
+    ],
     title: $x(t)$,
     xlabel: $t$,
     ylim: (-1.5, 1.5),
     height: 2cm,
     width: 8cm,
     lq.plot(x, x.map(x => triangle(x)), mark: none),
-    lq.place(0.25, -0.4, align: center)[$1/2$],
-    lq.place(-0.05, 1, align: center)[$1$],
-    lq.place(1, 0.5, align: center)[$dots.c$],
-    lq.place(-1, 0.5, align: center)[$dots.c$],
-    lq.plot((0.25, 0), (1, 1), mark: none, stroke: (
+    lq.place(0.5, -0.45, align: center, plabel[$1/2$]),
+    lq.place(-0.08, 1, align: center, plabel[$1$]),
+    lq.place(1.45, 0.4, align: center)[$dots.c$],
+    lq.place(-1.45, 0.4, align: center)[$dots.c$],
+    lq.plot((0.5, 0), (1, 1), mark: none, stroke: (
       dash: "dashed",
-      paint: red,
+      paint: c-muted,
     )),
-    lq.plot((0.25, 0.25), (1, 0), mark: none, stroke: (
+    lq.plot((0.5, 0.5), (1, 0), mark: none, stroke: (
       dash: "dashed",
-      paint: red,
+      paint: c-muted,
     )),
-  )
+  ) <fig-triangle>
 
-  All we need to do is to calculate the Fourier series coefficients:
+  All we need to do is to calculate the Fourier series coefficients, with $T = 1$ and $omega_0 = 2 pi$:
   $
-    a_k = 1/T integral_T x(t) e^(-j k 2 pi t) = integral_(-1/2)^0 (-4 t - 1) e^(-j k 2 pi t) "d"t + integral_0^(1/2) (4 t - 1) e^(-j k 2 pi t) "d"t = dots.c
+    a_k = 1/T integral_T x(t) e^(-j k 2 pi t) "d"t = integral_(-1/2)^0 (-4 t - 1) e^(-j k 2 pi t) "d"t + integral_0^(1/2) (4 t - 1) e^(-j k 2 pi t) "d"t = dots.c
   $
 
 ]
@@ -167,20 +176,24 @@ In general, a set of conditions developed by Dirichlet guarantees that $x(t)$ _e
 
 #example("Visualization of the Gibbs Phenomenon")[
   #set math.equation(numbering: none)
-  Let us look at the Fourier series of a periodic square wave, sketched below, and defined over one period as
+  Let us look at the Fourier series of the periodic square wave in @fig-square-wave, defined over one period as
   $
     x(t) = cases(1\, &quad |t| < T_1, 0\, &quad T_1 < |t| < T/2)
   $
 
   #let x = lq.linspace(-6, 6, num: 1000)
-  #let triangle = x => if (calc.rem(x + 9, 4)) < 2 { 2.5 } else { 0 }
+  #let square = x => if (calc.rem(x + 9, 4)) < 2 { 2.5 } else { 0 }
   #cdiagram(
-    alt: "Periodic square wave x of t equal to one for the absolute value of t less than T sub one, and zero between T sub one and T over two. Dashed red lines mark the rising and falling edges at plus and minus T sub one.",
+    alt: "Periodic square wave x of t equal to one for the absolute value of t less than T sub one, and zero between T sub one and T over two. Dashed gray lines mark the half-period points at plus and minus T over two.",
+    caption: [
+      The periodic square wave: one on $|t| < T_1$ and zero out to $|t| = T\/2$,
+      repeating with period $T$.
+    ],
     title: $x(t)$,
     xlabel: $t$,
     ylim: (-0.5, 3.5),
     height: 2.5cm,
-    lq.plot(x, x.map(x => triangle(x)), mark: none),
+    lq.plot(x, x.map(x => square(x)), mark: none),
     lq.place(-1.45, 2.5, align: center)[$1$],
     lq.place(1, -0.5, align: center)[$T_1$],
     lq.place(-1.2, -0.5, align: center)[$-T_1$],
@@ -188,13 +201,19 @@ In general, a set of conditions developed by Dirichlet guarantees that $x(t)$ _e
     lq.place(-2.3, -0.5, align: center)[$-T/2$],
     lq.place(5.8, 1.5, align: center)[$dots.c$],
     lq.place(-5.8, 1.5, align: center)[$dots.c$],
-    lq.plot((2, 2), (0, 3), mark: none, stroke: (dash: "dashed", paint: red)),
-    lq.plot((-2, -2), (0, 3), mark: none, stroke: (dash: "dashed", paint: red)),
-  )
+    lq.plot((2, 2), (0, 3), mark: none, stroke: (
+      dash: "dashed",
+      paint: c-muted,
+    )),
+    lq.plot((-2, -2), (0, 3), mark: none, stroke: (
+      dash: "dashed",
+      paint: c-muted,
+    )),
+  ) <fig-square-wave>
 
   The Fourier series coefficients are
   $
-    a_k = 1/T integral_(-T_1)^(T_1) e^(-j k omega_0 k) "d"t = -1/(j k omega_0 T) e^(-j k omega_0 t) lr(|, size: #200%)_(-T_1)^(T_1) = (sin (k omega_0 T_1)) / (k pi), quad k != 0
+    a_k = 1/T integral_(-T_1)^(T_1) e^(-j k omega_0 t) "d"t = -1/(j k omega_0 T) e^(-j k omega_0 t) lr(|, size: #200%)_(-T_1)^(T_1) = (sin (k omega_0 T_1)) / (k pi), quad k != 0
   $
   where $omega_0 = (2 pi) / T$. When $k = 0$, $a_0 = (2 T_1) / T$. Let us look at the approximation $hat(x)_N (t)$:
   $
@@ -204,11 +223,7 @@ In general, a set of conditions developed by Dirichlet guarantees that $x(t)$ _e
   #let T = 1
   #let T1 = 0.3 * T
   #let omega0 = 2 * calc.pi / T
-  #let a = k => if k == 0 {
-    2 * T1 / T
-  } else {
-    calc.sin(2 * calc.pi * k * T1 / T) / (k * calc.pi)
-  }
+  #let a = k => ct-square-ak(k, period: T, half-width: T1)
 
   #let square_series = N => {
     let x = lq.linspace(-T / 2, T / 2, num: 501)
@@ -231,195 +246,51 @@ In general, a set of conditions developed by Dirichlet guarantees that $x(t)$ _e
   }
 
 
+  #let gibbs-panel = N => {
+    let (xx, sum) = square_series(N)
+    lq.diagram(
+      title: $hat(x)_N (t)$,
+      xlabel: $t$,
+      ylim: (-0.4, 1.4),
+      xlim: (-0.6, 0.6),
+      xaxis: (ticks: (-0.5, 0, 0.5), subticks: none),
+      height: 2cm,
+      width: 7cm,
+      lq.plot(xx, sum, mark: none),
+      lq.plot((T1, T1), (0, 1), mark: none, stroke: (
+        dash: "dashed",
+        paint: c-muted,
+      )),
+      lq.plot((-T1, -T1), (0, 1), mark: none, stroke: (
+        dash: "dashed",
+        paint: c-muted,
+      )),
+      lq.plot((-T1, T1), (1, 1), mark: none, stroke: (
+        dash: "dashed",
+        paint: c-muted,
+      )),
+      lq.place(0.5, 1.3, align: center, plabel[$N = #N$]),
+      lq.place(T1, -0.3, align: center, plabel[$T_1$]),
+      lq.place(-T1, -0.3, align: center, plabel[$-T_1$]),
+      lq.place(T / 2, -0.3, align: center, plabel[$T/2$]),
+      lq.place(-T / 2, -0.3, align: center, plabel[$-T/2$]),
+    )
+  }
+
   #altfig(
     alt: "Six partial-sum approximations of the square wave for N equal to three, eight, eighteen, twenty-eight, fifty-five, and eighty. As N grows, the approximation tightens against the rectangular pulse, but a persistent overshoot near the discontinuities at plus and minus T sub one remains, illustrating the Gibbs phenomenon.",
+    caption: [
+      Partial sums $hat(x)_N (t)$ of the square wave for $N = 3, 8, 18, 28, 55,$
+      and $80$. The ripples crowd toward the two discontinuities as $N$ grows,
+      but their peak overshoot does not shrink: this is the Gibbs phenomenon.
+    ],
     align(center)[
-    #grid(
-      columns: (1fr, 1fr),
-      column-gutter: 2em,
-      [
-        #let N = 3
-        #let (xx, sum) = square_series(N)
-        #lq.diagram(
-          title: $hat(x)_N (t)$,
-          xlabel: $t$,
-          ylim: (-0.4, 1.4),
-          xlim: (-0.6, 0.6),
-          xaxis: (ticks: (-1, 0, 1), subticks: none),
-          height: 2cm,
-          width: 7cm,
-          lq.plot(xx, sum, mark: none),
-          lq.plot((T1, T1), (0, 1), mark: none, stroke: (
-            dash: "dashed",
-            paint: red,
-          )),
-          lq.plot((-T1, -T1), (0, 1), mark: none, stroke: (
-            dash: "dashed",
-            paint: red,
-          )),
-          lq.plot((-T1, T1), (1, 1), mark: none, stroke: (
-            dash: "dashed",
-            paint: red,
-          )),
-          lq.place(0.5, 1.3, align: center)[$N = #N$],
-          lq.place(T1, -0.3, align: center)[$T_1$],
-          lq.place(-T1, -0.3, align: center)[$-T_1$],
-          lq.place(T / 2, -0.3, align: center)[$T/2$],
-          lq.place(-T / 2, -0.3, align: center)[$-T/2$],
-        )],
-      [
-        #let N = 8
-        #let (xx, sum) = square_series(N)
-        #lq.diagram(
-          title: $hat(x)_N (t)$,
-          xlabel: $t$,
-          ylim: (-0.4, 1.4),
-          xlim: (-0.6, 0.6),
-          xaxis: (ticks: (-1, 0, 1), subticks: none),
-          height: 2cm,
-          width: 7cm,
-          lq.plot(xx, sum, mark: none),
-          lq.plot((T1, T1), (0, 1), mark: none, stroke: (
-            dash: "dashed",
-            paint: red,
-          )),
-          lq.plot((-T1, -T1), (0, 1), mark: none, stroke: (
-            dash: "dashed",
-            paint: red,
-          )),
-          lq.plot((-T1, T1), (1, 1), mark: none, stroke: (
-            dash: "dashed",
-            paint: red,
-          )),
-          lq.place(0.5, 1.3, align: center)[$N = #N$],
-          lq.place(T1, -0.3, align: center)[$T_1$],
-          lq.place(-T1, -0.3, align: center)[$-T_1$],
-          lq.place(T / 2, -0.3, align: center)[$T/2$],
-          lq.place(-T / 2, -0.3, align: center)[$-T/2$],
-        )],
-
-      [
-        #let N = 18
-        #let (xx, sum) = square_series(N)
-        #lq.diagram(
-          title: $hat(x)_N (t)$,
-          xlabel: $t$,
-          ylim: (-0.4, 1.4),
-          xlim: (-0.6, 0.6),
-          xaxis: (ticks: (-1, 0, 1), subticks: none),
-          height: 2cm,
-          width: 7cm,
-          lq.plot(xx, sum, mark: none),
-          lq.plot((T1, T1), (0, 1), mark: none, stroke: (
-            dash: "dashed",
-            paint: red,
-          )),
-          lq.plot((-T1, -T1), (0, 1), mark: none, stroke: (
-            dash: "dashed",
-            paint: red,
-          )),
-          lq.plot((-T1, T1), (1, 1), mark: none, stroke: (
-            dash: "dashed",
-            paint: red,
-          )),
-          lq.place(0.5, 1.3, align: center)[$N = #N$],
-          lq.place(T1, -0.3, align: center)[$T_1$],
-          lq.place(-T1, -0.3, align: center)[$-T_1$],
-          lq.place(T / 2, -0.3, align: center)[$T/2$],
-          lq.place(-T / 2, -0.3, align: center)[$-T/2$],
-        )],
-      [
-        #let N = 28
-        #let (xx, sum) = square_series(N)
-        #lq.diagram(
-          title: $hat(x)_N (t)$,
-          xlabel: $t$,
-          ylim: (-0.4, 1.4),
-          xlim: (-0.6, 0.6),
-          xaxis: (ticks: (-1, 0, 1), subticks: none),
-          height: 2cm,
-          width: 7cm,
-          lq.plot(xx, sum, mark: none),
-          lq.plot((T1, T1), (0, 1), mark: none, stroke: (
-            dash: "dashed",
-            paint: red,
-          )),
-          lq.plot((-T1, -T1), (0, 1), mark: none, stroke: (
-            dash: "dashed",
-            paint: red,
-          )),
-          lq.plot((-T1, T1), (1, 1), mark: none, stroke: (
-            dash: "dashed",
-            paint: red,
-          )),
-          lq.place(0.5, 1.3, align: center)[$N = #N$],
-          lq.place(T1, -0.3, align: center)[$T_1$],
-          lq.place(-T1, -0.3, align: center)[$-T_1$],
-          lq.place(T / 2, -0.3, align: center)[$T/2$],
-          lq.place(-T / 2, -0.3, align: center)[$-T/2$],
-        )],
-
-      [
-        #let N = 55
-        #let (xx, sum) = square_series(N)
-        #lq.diagram(
-          title: $hat(x)_N (t)$,
-          xlabel: $t$,
-          ylim: (-0.4, 1.4),
-          xlim: (-0.6, 0.6),
-          xaxis: (ticks: (-1, 0, 1), subticks: none),
-          height: 2cm,
-          width: 7cm,
-          lq.plot(xx, sum, mark: none),
-          lq.plot((T1, T1), (0, 1), mark: none, stroke: (
-            dash: "dashed",
-            paint: red,
-          )),
-          lq.plot((-T1, -T1), (0, 1), mark: none, stroke: (
-            dash: "dashed",
-            paint: red,
-          )),
-          lq.plot((-T1, T1), (1, 1), mark: none, stroke: (
-            dash: "dashed",
-            paint: red,
-          )),
-          lq.place(0.5, 1.3, align: center)[$N = #N$],
-          lq.place(T1, -0.3, align: center)[$T_1$],
-          lq.place(-T1, -0.3, align: center)[$-T_1$],
-          lq.place(T / 2, -0.3, align: center)[$T/2$],
-          lq.place(-T / 2, -0.3, align: center)[$-T/2$],
-        )],
-      [
-        #let N = 80
-        #let (xx, sum) = square_series(N)
-        #lq.diagram(
-          title: $hat(x)_N (t)$,
-          xlabel: $t$,
-          ylim: (-0.4, 1.4),
-          xlim: (-0.6, 0.6),
-          xaxis: (ticks: (-1, 0, 1), subticks: none),
-          height: 2cm,
-          width: 7cm,
-          lq.plot(xx, sum, mark: none),
-          lq.plot((T1, T1), (0, 1), mark: none, stroke: (
-            dash: "dashed",
-            paint: red,
-          )),
-          lq.plot((-T1, -T1), (0, 1), mark: none, stroke: (
-            dash: "dashed",
-            paint: red,
-          )),
-          lq.plot((-T1, T1), (1, 1), mark: none, stroke: (
-            dash: "dashed",
-            paint: red,
-          )),
-          lq.place(0.5, 1.3, align: center)[$N = #N$],
-          lq.place(T1, -0.3, align: center)[$T_1$],
-          lq.place(-T1, -0.3, align: center)[$-T_1$],
-          lq.place(T / 2, -0.3, align: center)[$T/2$],
-          lq.place(-T / 2, -0.3, align: center)[$-T/2$],
-        )],
-    )],
+      #grid(
+        columns: (1fr, 1fr),
+        column-gutter: 2em,
+        row-gutter: 0.5em,
+        ..(3, 8, 18, 28, 55, 80).map(gibbs-panel),
+      )],
   )
 ]
 
@@ -427,16 +298,16 @@ In general, a set of conditions developed by Dirichlet guarantees that $x(t)$ _e
 
 In this section, we will use the notation
 $
-  x(t) limits(arrow.l.r)^(cal("FS")) a_k
+  x(t) #fspair a_k
 $
 to denote the pairing of a periodic signal with its Fourier series coefficients.
 
 
 === Linearity
 
-Suppose $x(t) limits(arrow.l.r)^(cal("FS")) a_k$ and $y(t) limits(arrow.l.r)^(cal("FS")) b_k$, we have
+Suppose $x(t) #fspair a_k$ and $y(t) #fspair b_k$, we have
 $
-  z(t) = A x(t) + B y(t) limits(arrow.l.r)^(cal("FS")) c_k = A a_k + B b_k
+  z(t) = A x(t) + B y(t) #fspair c_k = A a_k + B b_k
 $
 
 === Time Shifting
@@ -451,7 +322,7 @@ $
 $
 In short hand notation,
 $
-  x(t - t_0) limits(arrow.l.r)^(cal("FS")) e^(-j k omega_0 t_0) a_k
+  x(t - t_0) #fspair e^(-j k omega_0 t_0) a_k
 $
 
 === Time Reversal
@@ -461,41 +332,41 @@ $
   y(t) = x(-t) = sum_(k = -infinity)^(infinity) a_k e^(-j k 2 pi t / T) = sum_(m = -infinity)^(infinity) a_(-m) e^(j m 2 pi t / T), quad k = -m
 $
 
-That is, if $x(t) limits(arrow.l.r)^(cal("FS")) a_k$, we have $x(-t) limits(arrow.l.r)^(cal("FS")) a_(-k)$.
+That is, if $x(t) #fspair a_k$, we have $x(-t) #fspair a_(-k)$.
 
 === Time Scaling
 
 In this case,
 $
-  x(alpha t) = sum_(k = -infinity)^infinity a_k e^(j k (alpha w_0) t)
+  x(alpha t) = sum_(k = -infinity)^infinity a_k e^(j k (alpha omega_0) t)
 $
 While the Fourier coefficients have not changed, the Fourier series representation has changed because of the change in the fundamental frequency.
 
 === Multiplication
 
 $
-  x(t) y(t) limits(arrow.l.r)^(cal("FS")) h_k = sum_(l = -infinity)^infinity a_l b_(k - l)
+  x(t) y(t) #fspair h_k = sum_(l = -infinity)^infinity a_l b_(k - l)
 $
-Observe that the sum on the right-hand side may be interpreted as the discrete-time convolution of the sequence representing the Fourier coefficients of $x(t)$ and the sequence representing the Fourier coefficients of $y(t)$. In the later section, we will learn more about the fact the time domain multiplication implies frequency domain convolution, and time domain convolution implies frequency domain multiplication.
+Observe that the sum on the right-hand side may be interpreted as the discrete-time convolution of the sequence representing the Fourier coefficients of $x(t)$ and the sequence representing the Fourier coefficients of $y(t)$. In a later section, we will learn more about the fact that multiplication in the time domain implies convolution in the frequency domain, and that convolution in the time domain implies multiplication in the frequency domain.
 
 === Conjugation
 
 Taking the complex conjugate of a periodic signal $x(t)$ has the effect of complex conjugation and time-reversal on the corresponding Fourier series coefficients. That is, if
 $
-  x(t) limits(arrow.l.r)^(cal("FS")) a_k
+  x(t) #fspair a_k
 $
 then
 $
-  x^*(t) limits(arrow.l.r)^(cal("FS")) a_(-k)^*
+  x^*(t) #fspair a_(-k)^*
 $
 
 === Parseval's Relation
 
-The Parseval's relation for continuous-time periodic signals is
+Parseval's relation for continuous-time periodic signals is
 $
   1/T integral_T |x(t)|^2 "d"t = sum_(k = -infinity)^infinity |a_k|^2
 $
-The Parseval's relation reveals that the average power in one domain equals the average power in another domain.
+It states that the average power of the signal over one period equals the sum of the powers $|a_k|^2$ carried by its individual harmonics.
 
 We summarize the properties below in a table.
 
@@ -539,25 +410,23 @@ We summarize the properties below in a table.
       [$sum_(i = -infinity)^infinity a_i b_(k-i)$],
 
       // Differentiation
-      [Differentiation], [$dif / (dif t) x(t)$], [$j k omega_0 a_k$],
+      [Differentiation], [$"d" / ("d"t) x(t)$], [$j k omega_0 a_k$],
 
       // Integration
       [Integration],
-      [$integral_(-infinity)^t x(tau) dif tau$],
-      [$a_k / (j k omega_0)$ for $k != 0$; $a_0$ undefined],
-
-      // Real Signal
-      [Real Signal], [$x(t) = x^*(t)$], [$a_k = a^*_(-k)$],
+      [$integral_(-infinity)^t x(tau) "d"tau$],
+      [$a_k / (j k omega_0)$, finite and periodic only if $a_0 = 0$],
 
       // Symmetry
       [Conjugate Symm. for Real Signals], [$x(t)$ real], [$a_k = a_(-k)^*$],
-      [Real & Even], [$x(t)$], [$a_k$ real and even],
-      [Real & Odd], [$x(t)$], [$a_k$ imaginary and odd],
+      [Real & Even], [$x(t)$ real and even], [$a_k$ real and even],
+      [Real & Odd], [$x(t)$ real and odd], [$a_k$ imaginary and odd],
 
       // Parseval's Theorem
       [Parseval's Theorem],
-      [$1/T integral_T |x(t)|^2 dif t = sum_(k=-infinity)^infinity |a_k|^2$],
-      // [$sum_(k=-infinity)^infinity |a_k|^2$],
+      table.cell(colspan: 2)[
+        $1/T integral_T |x(t)|^2 "d"t = sum_(k=-infinity)^infinity |a_k|^2$
+      ],
     )]
 ]
 
@@ -588,9 +457,9 @@ $
   x[n] = sum_(k = chevron.l N chevron.r) a_k e^(j k omega_0 n) = sum_(k = chevron.l N chevron.r) a_k e^(j k (2 pi)/ N n)
 $
 
-If we examine the sum of the $phi_k [n]$,
+If we examine the sum of the $phi_k [n]$ over one period,
 $
-  sum_(n = chevron.l N chevron.r) phi_k [n] = sum_(n = chevron.l N chevron.r) e^(j k (2 pi)/N n) = cases(N\, quad k = 0\, plus.minus 1\, plus.minus 2\, dots.c, 0\, quad "otherwise")
+  sum_(n = chevron.l N chevron.r) phi_k [n] = sum_(n = chevron.l N chevron.r) e^(j k (2 pi)/N n) = cases(N\, quad k = 0\, plus.minus N\, plus.minus 2 N\, dots.c, 0\, quad "otherwise")
 $
 
 Similar to the continuous-time counterpart, we consider the Fourier series representation, i.e.,
@@ -600,18 +469,14 @@ $
 
 Multiplying both sides with $e^(-j r (2 pi)/N n)$ and summing over $N$ terms, we obtain
 $
-  sum_(k = chevron.l N chevron.r) x[n] e^(-j r (2 pi)/N n) = sum_(n = chevron.l N chevron.r) sum_(k = chevron.l N chevron.r) a_k e^(j (k-r) (2 pi)/N n) = sum_(k = chevron.l N chevron.r) a_k sum_(n = chevron.l N chevron.r) e^(j (k - r) (2 pi) / N n)
+  sum_(n = chevron.l N chevron.r) x[n] e^(-j r (2 pi)/N n) = sum_(n = chevron.l N chevron.r) sum_(k = chevron.l N chevron.r) a_k e^(j (k-r) (2 pi)/N n) = sum_(k = chevron.l N chevron.r) a_k sum_(n = chevron.l N chevron.r) e^(j (k - r) (2 pi) / N n)
 $ <dtfs>
 
-We know that
-$
-  sum_(n = chevron.l N chevron.r) e^(j (k - r) (2 pi)/N n)
-$
-
-Hence,
+From the sum computed above, with $k - r$ in place of $k$,
 $
   sum_(n = chevron.l N chevron.r) e^(j (k - r) (2 pi) / N n) = cases(N\, quad k = r, 0\, quad "otherwise")
 $
+since $k$ and $r$ both range over one period and can therefore differ by a multiple of $N$ only if they are equal.
 
 The right side of @dtfs reduces to $N a_r$. And we have,
 $
@@ -633,7 +498,7 @@ $
       a_k = 1/N sum_(n = chevron.l N chevron.r) x[n] e^(-j k omega_0 n) = 1/N sum_(n = chevron.l N chevron.r) x[n] e^(-j k (2 pi)/N n)
     $,
   )
-  The notation $n = chevron.l N chevron.r$ represents the variable $n$ varies over a range of $N$ successive integers, beginning with any value $k$. Ditto for $k$.
+  The notation $n = chevron.l N chevron.r$ indicates that the variable $n$ varies over a range of $N$ successive integers, beginning at any value one likes. The same applies to $k$.
 ]
 
 #example("Discrete-time Periodic Signal Fourier Series")[
@@ -657,15 +522,15 @@ $
   $
   This signal is periodic with period $N$, and we can expand $x[n]$ using Euler's relation,
   $
-    x[n] &= 1 + 1/(2j) (e^(j (2 pi)/N n) - e^(-j (2 pi)/N n)) + 3/2 (e^(j (2 pi)/N n) + e^(-j (2 pi)/N n)) + 1/2 (e^(j (4 pi n)/N + pi/2) + e^(-j (4 pi n)/N + pi/2)) \
-    &= 1 + (3/2 + 1/(2j)) e^(j (2 pi)/N n) + (3/2 - 1/(2j)) e^(-j (2 pi)/N n) + (1/2 e^(j pi / 2)) e^(j 2 (2 pi / N) n) + (1/2 e^(-j pi/2)) e^(-j 2 (2 pi)/N n)
+    x[n] &= 1 + 1/(2j) (e^(j (2 pi)/N n) - e^(-j (2 pi)/N n)) + 3/2 (e^(j (2 pi)/N n) + e^(-j (2 pi)/N n)) + 1/2 (e^(j ((4 pi n)/N + pi/2)) + e^(-j ((4 pi n)/N + pi/2))) \
+    &= 1 + (3/2 + 1/(2j)) e^(j (2 pi)/N n) + (3/2 - 1/(2j)) e^(-j (2 pi)/N n) + (1/2 e^(j pi / 2)) e^(j 2 (2 pi)/N n) + (1/2 e^(-j pi/2)) e^(-j 2 (2 pi)/N n)
   $
   Hence, the coefficients for this example are
   $
-    a_0 = 1, quad a_1 = 3/2 + 1/(2j), quad a_(-1) = 3/2 - 1/(2j), quad a_2 = 1/2 j, quad a_(-2) = -1/2 j
+    a_0 = 1, quad a_1 = 3/2 + 1/(2j), quad a_(-1) = 3/2 - 1/(2j), quad a_2 = j/2, quad a_(-2) = -j/2
   $
 ]
-Let us also consider a periodic discrete-time square wave shown below.
+Let us also consider the periodic discrete-time square wave of @fig-dt-square.
 
 #let N1 = 2
 #let N = 7
@@ -674,9 +539,13 @@ Let us also consider a periodic discrete-time square wave shown below.
 
 #altfig(
   alt: "Stem plot of a periodic discrete-time square wave. Each period of length N consists of stems of height one for n from minus N sub one to N sub one, and zero elsewhere. Three consecutive periods are shown.",
+  caption: [
+    The discrete-time periodic square wave, one on $|n| <= N_1$ within each
+    period of length $N$, drawn here with $N_1 = 2$ and $N = 7$.
+  ],
   align(center)[
   #lq.diagram(
-    title: $h[n]$,
+    title: $x[n]$,
     xlabel: $n$,
     height: 2.5cm,
     width: 10cm,
@@ -684,140 +553,60 @@ Let us also consider a periodic discrete-time square wave shown below.
     lq.stem(k, k.map(k => square_series(k))),
     lq.stem(k, k.map(k => square_series(k - N))),
     lq.stem(k, k.map(k => square_series(k + N))),
-    lq.place(N, -0.3, align: center)[$N$],
-    lq.place(-N, -0.3, align: center)[$-N$],
-    lq.place(N1, -0.3, align: center)[$N_1$],
-    lq.place(-N1, -0.3, align: center)[$-N_1$],
+    lq.place(N, -0.3, align: center, plabel[$N$]),
+    lq.place(-N, -0.3, align: center, plabel[$-N$]),
+    lq.place(N1, -0.3, align: center, plabel[$N_1$]),
+    lq.place(-N1, -0.3, align: center, plabel[$-N_1$]),
     lq.place(-N1 * 2 - N, 0.5, align: center)[$dots.c$],
     lq.place(N1 * 2 + N, 0.5, align: center)[$dots.c$],
   )
 ],
-)
+) <fig-dt-square>
 
 The Fourier series is then
 $
-  a_k = 1 / N sum_(k = chevron.l N chevron.r) x[n] e^(-j k omega_0 n) = 1 / N sum_(k = -N_1)^(N_1) e^(-j k (2 pi)/N n)
+  a_k = 1 / N sum_(n = chevron.l N chevron.r) x[n] e^(-j k omega_0 n) = 1 / N sum_(n = -N_1)^(N_1) e^(-j k (2 pi)/N n)
 $
 Letting $m = n + N_1$, we have
 $
   a_k &= 1/N sum_(m = 0)^(2 N_1) e^(-j k (2 pi)/N (m - N_1)) = 1/N e^(j k (2 pi)/N N_1) sum_(m = 0)^(2 N_1) e^(-j k (2 pi) / N m) \
   &= 1/N e^(j k (2 pi)/N N_1) ( (1 - e^(-j k 2 pi (2 N_1 + 1)/N)) / (1 - e^(-j k (2 pi) / N))) = 1/N (sin [2 pi k (N_1 + 1/2) / N]) / (sin((pi k)/ N)), quad k != 0, plus.minus N, plus.minus 2 N, dots.c
 $
+and, where the quotient above is $0 \/ 0$,
 $
   a_k = (2 N_1 + 1) / N, quad k = 0, plus.minus N, plus.minus 2 N, dots.c
 $
 
-We now know that the Fourier series coefficients are
-
-$
-  a_k = 1/N (sin [2 pi k (N_1 + 1/2) / N]) / (sin((pi k)/ N)), quad k != 0, plus.minus N, plus.minus 2 N, dots.c
-$
-and
-$
-  a_0 = (2 N_1 + 1) / N, quad k = 0
-$
-
-Let us plot the sequence for different cases. In the following plots, we set $2 N_1 + 1 = 5$,
+Let us plot the sequence for different cases. In the following plots, we hold the pulse width fixed at $2 N_1 + 1 = 5$ and increase the period $N$.
 #let N1 = 2
 #let k = lq.linspace(-25, 25, num: 51)
 
+// One panel per period N, with the pulse width 2 N1 + 1 held fixed, so the
+// four plots differ only in the quantity the text says they differ in.
+#let ak-panel = N => lq.diagram(
+  title: $a_k$,
+  xlabel: $k$,
+  height: 2cm,
+  width: 7cm,
+  ylim: (-0.2, 0.7),
+  lq.stem(k, k.map(k => dt-square-ak(k, N: N, N1: N1))),
+  lq.place(5, 0.5, align: center, plabel[$N = #N$]),
+)
+
 #altfig(
   alt: "Four stem plots of Fourier series coefficients a sub k for N equal to ten, twenty, thirty, and forty, all with two N sub one plus one fixed at five. As N increases, the discrete coefficients sample a sinc-shaped envelope more densely while the peak amplitude decreases.",
+  caption: [
+    Coefficients $a_k$ for $N = 10, 20, 30,$ and $40$, with the pulse width held
+    at $2 N_1 + 1 = 5$. Lengthening the period samples the same envelope more
+    densely and scales every coefficient down by $1\/N$.
+  ],
   align(center)[
-
-  #grid(
-    columns: (1fr, 1fr),
-    column-gutter: 2em,
-    [
-      #let N = 10
-      #let fs_square = k => {
-        if k == 0 { (2 * N1 + 1) / N } else {
-          (
-            1
-              / N
-              * calc.sin(2 * calc.pi * k * (N1 + 0.5) / N)
-              / calc.sin(calc.pi * k / N)
-          )
-        }
-      }
-      #lq.diagram(
-        title: $a_k$,
-        xlabel: $k$,
-        height: 2cm,
-        width: 7cm,
-        ylim: (-0.2, 0.7),
-        lq.stem(k, k.map(k => fs_square(k))),
-        lq.place(5, 0.5, align: center)[$N = #N$],
-      )
-    ],
-    [
-      #let N = 20
-      #let fs_square = k => {
-        if k == 0 { (2 * N1 + 1) / N } else {
-          (
-            1
-              / N
-              * calc.sin(2 * calc.pi * k * (N1 + 0.5) / N)
-              / calc.sin(calc.pi * k / N)
-          )
-        }
-      }
-      #lq.diagram(
-        title: $a_k$,
-        xlabel: $k$,
-        height: 2cm,
-        width: 7cm,
-        ylim: (-0.2, 0.7),
-        lq.stem(k, k.map(k => fs_square(k))),
-        lq.place(5, 0.5, align: center)[$N = #N$],
-      )
-    ],
-
-    [
-      #let N = 30
-      #let fs_square = k => {
-        if k == 0 { (2 * N1 + 1) / N } else {
-          (
-            1
-              / N
-              * calc.sin(2 * calc.pi * k * (N1 + 0.5) / N)
-              / calc.sin(calc.pi * k / N)
-          )
-        }
-      }
-      #lq.diagram(
-        title: $a_k$,
-        xlabel: $k$,
-        height: 2cm,
-        width: 7cm,
-        ylim: (-0.2, 0.7),
-        lq.stem(k, k.map(k => fs_square(k))),
-        lq.place(5, 0.5, align: center)[$N = #N$],
-      )
-    ],
-    [
-      #let N = 40
-      #let fs_square = k => {
-        if k == 0 { (2 * N1 + 1) / N } else {
-          (
-            1
-              / N
-              * calc.sin(2 * calc.pi * k * (N1 + 0.5) / N)
-              / calc.sin(calc.pi * k / N)
-          )
-        }
-      }
-      #lq.diagram(
-        title: $a_k$,
-        xlabel: $k$,
-        height: 2cm,
-        width: 7cm,
-        ylim: (-0.2, 0.7),
-        lq.stem(k, k.map(k => fs_square(k))),
-        lq.place(5, 0.5, align: center)[$N = #N$],
-      )
-    ],
-  )],
+    #grid(
+      columns: (1fr, 1fr),
+      column-gutter: 2em,
+      row-gutter: 0.5em,
+      ..(10, 20, 30, 40).map(ak-panel),
+    )],
 )
 
 In the continuous-time case, we observed the Gibbs phenomenon at the discontinuity, whereby, as the number of terms increased, the ripples in the partial sum became compressed toward the discontinuity, with the peak amplitude of the ripples remaining constant independently of the number of terms in the partial sum. Let us now consider the *analogous* sequence of partial sums for the discrete-time square wave, where, for convenience, we will assume that the period $N$ is odd:
@@ -826,90 +615,51 @@ $
   hat(x)_M [n] = sum_(k = -M)^(M) a_k e^(j k (2 pi)/N n)
 $
 
-Let us look at the approximation function $hat(x)_M$. In the following case $N = 9$, and $2 N_1 + 1 = 5$.
+@fig-dt-partial-sums plots the approximation $hat(x)_M [n]$ for $N = 9$ and $2 N_1 + 1 = 5$.
 
 #let N = 9
 #let N1 = 2
 #let k = lq.linspace(-20, 20, num: 41)
-#let fs_square = k => {
-  if k == 0 { (2 * N1 + 1) / N } else {
-    (
-      1
-        / N
-        * calc.sin(2 * calc.pi * k * (N1 + 0.5) / N)
-        / calc.sin(calc.pi * k / N)
+// The partial sum is x-hat_M[n] = sum_(k = -M)^M a_k e^(j k 2 pi n / N). The
+// coefficients are real and even, so pairing k with -k turns each pair into
+// 2 a_k cos(2 pi k n / N) and leaves a_0 standing alone. Dropping either factor
+// of two halves the whole curve, which is what made an earlier version of this
+// figure disagree with the claim below that x-hat_M = x once M = (N - 1) / 2.
+#let xhat = M => k.map(n => {
+  let total = dt-square-ak(0, N: N, N1: N1)
+  for m in range(1, M + 1) {
+    total += 2 * dt-square-ak(m, N: N, N1: N1) * calc.cos(
+      2 * calc.pi * m * n / N,
     )
   }
-}
-#let xhat = M => {
-  let sum = ()
+  total
+})
 
-  for i in range(k.len()) {
-    sum.push(0.0)
-  }
+#let xhat-panel = M => lq.diagram(
+  title: $hat(x)_M [n]$,
+  xlabel: $n$,
+  height: 2.5cm,
+  width: 7cm,
+  ylim: (-0.2, 1.3),
+  lq.stem(k, xhat(M)),
+  lq.place(4, 1, align: center, plabel[$M = #M$]),
+)
 
-  for i in range(k.len()) {
-    sum.at(i) += fs_square(0) / 2
-
-    for m in range(1, M + 1) {
-      sum.at(i) += fs_square(m) * calc.cos(m * calc.pi * 2 / N * k.at(i))
-    }
-  }
-  sum
-}
 #altfig(
   alt: "Four stem plots of the discrete-time partial-sum approximation x hat sub M of n for M equal to one, two, three, and four, with N equal to nine. As M grows, the stems converge toward the square-wave samples; once M equals four (which is N minus one over two), the approximation matches the original square wave exactly.",
+  caption: [
+    Partial sums $hat(x)_M [n]$ for $M = 1, 2, 3, 4$ with $N = 9$. Unlike the
+    continuous-time case there is no Gibbs overshoot: at $M = (N-1)\/2 = 4$ the
+    sum has $N$ terms and reproduces $x[n]$ exactly.
+  ],
   align(center)[
-  #grid(
-    columns: (1fr, 1fr),
-    column-gutter: 2em,
-    [
-      #let M = 1
-      #lq.diagram(
-        title: $hat(x)_M [n]$,
-        xlabel: $n$,
-        height: 2.5cm,
-        width: 7cm,
-        ylim: (-0.2, 1.3),
-        lq.stem(k, xhat(M)),
-        lq.place(4, 1, align: center)[$M = #M$],
-      )],
-    [
-      #let M = 2
-      #lq.diagram(
-        title: $hat(x)_M [n]$,
-        xlabel: $n$,
-        height: 2.5cm,
-        width: 7cm,
-        ylim: (-0.2, 1.3),
-        lq.stem(k, xhat(M)),
-        lq.place(4, 1, align: center)[$M = #M$],
-      )],
-
-    [
-      #let M = 3
-      #lq.diagram(
-        title: $hat(x)_M [n]$,
-        xlabel: $n$,
-        height: 2.5cm,
-        width: 7cm,
-        ylim: (-0.2, 1.3),
-        lq.stem(k, xhat(M)),
-        lq.place(4, 1, align: center)[$M = #M$],
-      )],
-    [
-      #let M = 4
-      #lq.diagram(
-        title: $hat(x)_M [n]$,
-        xlabel: $n$,
-        height: 2.5cm,
-        width: 7cm,
-        ylim: (-0.2, 1.3),
-        lq.stem(k, xhat(M)),
-        lq.place(4, 1, align: center)[$M = #M$],
-      )],
-  )],
-)
+    #grid(
+      columns: (1fr, 1fr),
+      column-gutter: 2em,
+      row-gutter: 0.5em,
+      ..(1, 2, 3, 4).map(xhat-panel),
+    )],
+) <fig-dt-partial-sums>
 
 We see that if $N$ is odd and we take $M = (N - 1)/2$, the sum includes exactly $N$ terms, consequently, from the synthesis equations, we have
 $
@@ -964,16 +714,13 @@ Similarly, if $N$ is even, and we let $hat(x)_M [n] = sum_(k = -M + 1)^M a_k e^(
 
       // Integration
       [Running Sum],
-      [$sum_(k = -infinity)^n x[k]$, finite & periodic only if $a_0 = 0$],
+      [$sum_(r = -infinity)^n x[r]$, finite and periodic only if $a_0 = 0$],
       [$1/(1 - e^(-j k (2 pi)/N)) a_k$],
 
-      // Real Signal
-      [Real Signal], [$x[n] = x^*[n]$], [$a_k = a^*_(-k)$],
-
       // Symmetry
-      // [Conjugate Symm. for Real Signals], [$x(t)$ real], [$a_k = a_(-k)^*$],
-      [Real & Even], [$x[n]$], [$a_k$ real and even],
-      [Real & Odd], [$x[n]$], [$a_k$ imaginary and odd],
+      [Conjugate Symm. for Real Signals], [$x[n]$ real], [$a_k = a^*_(-k)$],
+      [Real & Even], [$x[n]$ real and even], [$a_k$ real and even],
+      [Real & Odd], [$x[n]$ real and odd], [$a_k$ imaginary and odd],
 
       // Even-Odd Decomposition of Real Signals
       [Even-Odd Decomposition],
@@ -986,8 +733,9 @@ Similarly, if $N$ is even, and we let $hat(x)_M [n] = sum_(k = -M + 1)^M a_k e^(
 
       // Parseval's Theorem
       [Parseval's Theorem],
-      [$1/N sum_(n = chevron.l N chevron.r) |x[n]|^2 = sum_(k = chevron.l N chevron.r) |a_k|^2$],
-      // [$sum_(k=-infinity)^infinity |a_k|^2$],
+      table.cell(colspan: 2)[
+        $1/N sum_(n = chevron.l N chevron.r) |x[n]|^2 = sum_(k = chevron.l N chevron.r) |a_k|^2$
+      ],
     )]
 ]
 
@@ -1003,15 +751,15 @@ Similarly, if $N$ is even, and we let $hat(x)_M [n] = sum_(k = -M + 1)^M a_k e^(
   $
     a_k = 1/N sum_(n = chevron.l N chevron.r) x[n] e^(-j k omega_0 n) = 1/N sum_(n = chevron.l N chevron.r) x[n] e^(-j k (2 pi)/N n)
   $
-  From fact 2, we conclude that $a_0 = 1/6 sum_(n=0)^5 x[n] = 1/6 sum_(n=10)^(15) x[n] = 1/3$. Noting that $(-1)^n = e^(-j pi n)$, therefore, we can _treat_ fact 2 also as a Fourier series, i.e.,
+  Both sums in fact 2 run over one full period, so either may be read as a Fourier series coefficient. The first gives $a_0 = 1/6 sum_(n=0)^5 x[n] = 1/3$ directly. For the second, note that $(-1)^n = e^(-j pi n)$ and that $pi = 3 dot (2 pi) \/ 6$, so
   $
-    sum_(n = 2)^7 (-1)^n x[n] = sum_(n = chevron.l N chevron.r) e^(-j pi n) x[n] = sum_(n = chevron.l 6 chevron.r) x[n] e^(-j k (2 pi)/6 3 n) = N dot a_3 = 1
+    sum_(n = 2)^7 (-1)^n x[n] = sum_(n = chevron.l 6 chevron.r) x[n] e^(-j 3 (2 pi)/6 n) = N dot a_3 = 1
   $
-  Hence, $a_3 = 1/6$. From Parseval's relation, the average power is
+  Hence, $a_3 = 1/6$. From Parseval's relation, the average power per period is
   $
-    P = sum_(n = chevron.l N chevron.r) |x[n]|^2 = sum_(k = chevron.l N chevron.r) |a_k|^2
+    P = 1/N sum_(n = chevron.l N chevron.r) |x[n]|^2 = sum_(k = chevron.l N chevron.r) |a_k|^2
   $
-  We have already found $a_0$ and $a_3$, so with $a_1 = a_2 = a_4 = a_5 = 0$, it is the only way that the total power is minimized. Finally, we have $x[n] = a_0 + a_3 e^(-j pi n) = 1/3 + (1/6) (-1)^n$.
+  The two facts fix $a_0$ and $a_3$ and say nothing about the remaining four coefficients, each of which only adds to the sum on the right. The power is therefore smallest when $a_1 = a_2 = a_4 = a_5 = 0$, and $x[n] = a_0 + a_3 e^(-j pi n) = 1/3 + (1/6) (-1)^n$.
 ]
 
 
@@ -1040,21 +788,21 @@ where
 $
   H(z) = sum_k h[k] z^(-k)
 $
-is the $z$-transform. When $s$ or $z$ are general complex numbers, $H(s)$ and $H(z)$ are referred to as the *system functions* of the corresponding system. The system function of the form $s = j omega$, i.e., $H(j omega)$ viewed ats a function of $omega$, is referred to as the _frequency response_ of the system.
+is the $z$-transform. When $s$ or $z$ are general complex numbers, $H(s)$ and $H(z)$ are referred to as the *system functions* of the corresponding system. The system function restricted to $s = j omega$, i.e., $H(j omega)$ viewed as a function of $omega$, is referred to as the _frequency response_ of the system.
 
 #definition("Frequency Response of an LTI System")[
-  We define the _frequency response_ of a _continuous-time_ system is given by
+  The _frequency response_ of a _continuous-time_ system is given by
   #eqalt(
     "H of j omega equals the integral over the real line of h of t times e to the negative j omega t, d t.",
     $
       H(j omega) = integral_RR h(t) e^(-j omega t) "d"t
     $,
   )
-  where $h(t)$ is the impulse response of the said LTI system. In the _discrete-time_ case, the frequency response is given by
+  where $h(t)$ is the impulse response of the said LTI system. In the _discrete-time_ case, the frequency response is written $H(e^(j omega))$, since the system function $H(z)$ is evaluated on the unit circle $z = e^(j omega)$ rather than on an imaginary axis:
   #eqalt(
-    "H of j omega equals the sum over all n of h of n times e to the negative j omega n.",
+    "H of e to the j omega equals the sum over all n of h of n times e to the negative j omega n.",
     $
-      H(j omega) = sum_n h[n] e^(-j omega n)
+      H(e^(j omega)) = sum_n h[n] e^(-j omega n)
     $,
   )
 ]
@@ -1065,11 +813,11 @@ $
 $
 The output of the LTI system is then
 $
-  y(t) &= integral_RR h(tau) x(t - tau) "d"tau = integral_RR h(tau) sum_k a_k e^(s_k (t - tau)) = sum_k a_k [integral_RR h(tau) e^(- s_k tau)] e^(s_k t) \ &= sum_k a_k H(s_k) e^(s_k t) = sum_k a_k H(j k omega_0) e^(j k omega_0 t)
+  y(t) &= integral_RR h(tau) x(t - tau) "d"tau = integral_RR h(tau) sum_k a_k e^(s_k (t - tau)) "d"tau = sum_k a_k [integral_RR h(tau) e^(- s_k tau) "d"tau] e^(s_k t) \ &= sum_k a_k H(s_k) e^(s_k t) = sum_k a_k H(j k omega_0) e^(j k omega_0 t)
 $
 Similarly, if the input to a discrete-time LTI system is now
 $
-  x[n] = sum_k a_k z_k^n = sum_k a_k e^(j omega_0 n)
+  x[n] = sum_k a_k z_k^n = sum_k a_k e^(j k omega_0 n)
 $
 The output is
 $
@@ -1100,7 +848,7 @@ $
     y(t) = sum_(k=-3)^(3) a_k H(j k 2 pi) e^(j k 2 pi t)
   $
 
-  Further, since both the input and the impulse response are real-valued signal, the output $y(t)$ must also be real-valued. This can be verified that $a_k^* H^*(j k 2 pi) = a_(-k) H(-j k 2 pi)$.
+  Further, since both the input and the impulse response are real-valued signals, the output $y(t)$ must also be real-valued. One can verify this by checking that $a_k^* H^*(j k 2 pi) = a_(-k) H(-j k 2 pi)$, so the terms at $k$ and $-k$ are complex conjugates and their sum is real.
 
 
 ]
@@ -1115,7 +863,7 @@ $
   $
     y[n] - a y[n-1] = x[n]
   $
-  From the eigenfunction property of the complex exponentials, we know that if $x[n] = e^(j omega n)$, then $y[n] = H(e^(j omega)) e^(j omega n)$, where $H(e^(j omega))$ is the frequency responses of the system. We obtain
+  From the eigenfunction property of the complex exponentials, we know that if $x[n] = e^(j omega n)$, then $y[n] = H(e^(j omega)) e^(j omega n)$, where $H(e^(j omega))$ is the frequency response of the system. We obtain
   $
     H(e^(j omega)) e^(j omega n) - a H(e^(j omega)) e^(j omega (n-1)) = e^(j omega n)
   $
@@ -1132,7 +880,7 @@ $
     s[n] = (1 - a^(n + 1)) / (1 - a) u[n]
   $
 
-  If we would like to know the transfer function of a _moving-average filter_, which is of the form
+  Consider next the transfer function of a _moving-average filter_, which is of the form
   $
     y[n] = 1/3 (x[n-1] + x[n] + x[n+1])
   $
@@ -1147,10 +895,14 @@ $
 ]
 
 #example("RC Circuit")[
-  An RLC circuit whose capacitor voltage is initially zero constitutes an LTI system describable by a linear constant-coefficient differential equation (LCCDE). Consider the following series RLC circuit. Let the voltage source be the input signal $x(t)$, and let the voltage measured across the capacitor be the output signal $y(t)$.
+  An RC circuit whose capacitor voltage is initially zero constitutes an LTI system describable by a linear constant-coefficient differential equation (LCCDE). Consider the following series RC circuit, driven by the source voltage $v_S (t)$, with $v_R (t)$ across the resistor and $v_C (t)$ across the capacitor.
 
   #altfig(
     alt: "Series RC circuit schematic. A voltage source v sub S of t drives a resistor R in series with a capacitor C; the voltage across the resistor is v sub R of t and the voltage across the capacitor is v sub C of t.",
+    caption: [
+      The series RC circuit. Taking $v_C (t)$ as the output gives a lowpass
+      filter; taking $v_R (t)$ gives a highpass one.
+    ],
     align(center)[
       #zap.circuit({
         import zap: *
@@ -1182,7 +934,7 @@ $
   $
     H(j omega) = 1 / (1 + R C j omega)
   $
-  The $|H (j omega)|$ decreases with an increasing $|omega|$. Thus, this simple RC filter with $v_C (t)$ as the output is a lowpass filter.
+  The magnitude $|H (j omega)|$ decreases as $|omega|$ increases. Thus, this simple RC filter with $v_C (t)$ as the output is a lowpass filter.
 
   If we choose the voltage across the resistor $v_R (t)$ as the output, the LCCDE is then
   $
@@ -1193,26 +945,29 @@ $
   $
     G (j omega) = (j omega R C) / (1 + j omega R C)
   $
-  We can see that the amplitude $|G(j omega)|$ increases with increasing $|omega|$, hence a highpass filter.
-  #align(center)[
-    #grid(
-      columns: (1fr, 1fr),
-      column-gutter: 2em,
-      [
-        #let x = lq.linspace(-5, 5, num: 99)
-        #cdiagram(
-          alt: "Magnitude response of H of j omega, a lowpass filter shape that peaks at one at omega equal zero and rolls off symmetrically toward zero as the absolute value of omega grows.",
+  We can see that the magnitude $|G(j omega)|$ increases as $|omega|$ increases, hence a highpass filter. The two magnitude responses are plotted in @fig-rc-responses.
+
+  #let x = lq.linspace(-5, 5, num: 99)
+  #altfig(
+    alt: "Two magnitude responses. Left: H of j omega, a lowpass shape that peaks at one at omega equal zero and rolls off symmetrically toward zero as the absolute value of omega grows. Right: G of j omega, a highpass shape that is zero at omega equal zero and rises symmetrically toward one.",
+    caption: [
+      Magnitude responses of the same RC circuit, with $R C = 1$: lowpass when
+      the capacitor voltage is the output (left), highpass when the resistor
+      voltage is (right).
+    ],
+    align(center)[
+      #grid(
+        columns: (1fr, 1fr),
+        column-gutter: 2em,
+        cdiagram(
           title: $|H(j omega)|$,
           xlabel: $omega$,
           width: 5cm,
           height: 3cm,
           ylim: (-0.2, 1.2),
           lq.plot(x, x.map(x => 1 / (calc.sqrt(1 + x * x))), mark: none),
-        )],
-      [
-        #let x = lq.linspace(-5, 5, num: 99)
-        #cdiagram(
-          alt: "Magnitude response of G of j omega, a highpass filter shape that is zero at omega equal zero and rises symmetrically toward one as the absolute value of omega grows.",
+        ),
+        cdiagram(
           title: $|G(j omega)|$,
           xlabel: $omega$,
           width: 5cm,
@@ -1223,8 +978,9 @@ $
             x.map(x => calc.abs(x) / (calc.sqrt(1 + x * x))),
             mark: none,
           ),
-        )],
-    )]
+        ),
+      )],
+  ) <fig-rc-responses>
 ]
 
 

@@ -4,100 +4,70 @@
 #show: lq.theme.schoolbook
 #show: schoolbook-style
 
-Similar to the development of the continuous-time Fourier transform, we start by considering a general sequence $x[n]$ that is of finite duration, i.e., for some integers $N_1$ and $N_2$, $x[n] = 0$ outside the range $-N_1 <= n <= N_2$. A signal of this type is illustrated in the figure below. From this aperiodic signal, we construct a periodic sequence $tilde(x) [n]$ for which $x[n]$ is one period. As we choose the period $N$ to be large, $tilde(x) [n]$ is identical to $x[n]$ over a longer interval, i.e., $N -> infinity$, $tilde(x) [n] = x[n]$.
+Similar to the development of the continuous-time Fourier transform, we start by considering a general sequence $x[n]$ that is of finite duration, i.e., for some integers $N_1$ and $N_2$, $x[n] = 0$ outside the range $-N_1 <= n <= N_2$. A signal of this type is illustrated in the figure below. From this aperiodic signal, we construct a periodic sequence $tilde(x) [n]$ for which $x[n]$ is one period. As we choose the period $N$ to be larger, $tilde(x) [n]$ agrees with $x[n]$ over a longer interval, and as $N -> infinity$, $tilde(x) [n] = x[n]$ for every $n$.
+
+// A discrete-time signal is drawn on the integers, so the stems here are at
+// integer n, not on a fine grid. The support is exactly -N1 .. N2 with
+// N1 = N2 = 3, so with N = 7 the shifted copies tile without overlapping.
+#let N1 = 3
+#let N2 = 3
+#let N = 7
+#let seq = n => if n < -N1 or n > N2 { 0.0 } else {
+  1.5 * calc.exp(-calc.pow(n + 1, 2) / 2) + 0.8 * calc.exp(
+    -calc.pow(n - 1, 2) / 4,
+  )
+}
 
 #altfig(
-  alt: "Two stem plots. Left: an aperiodic discrete-time sequence x of n, nonzero only on the interval from minus N sub one to N sub two. Right: its periodic extension tilde x of n, formed by repeating the sequence every N samples; the central period is shown in blue and adjacent copies in green, with dashed red lines at plus and minus N and plus and minus two N.",
+  alt: "Two stem plots. Left: an aperiodic discrete-time sequence x of n, nonzero only on the interval from minus N sub one to N sub two. Right: its periodic extension tilde x of n, formed by repeating the sequence every N samples; the central period is shown in the accent color and adjacent copies in green, with dashed gray lines at plus and minus N and plus and minus two N.",
+  caption: [
+    A finite-duration sequence $x[n]$ (left) and the periodic $tilde(x)[n]$ built
+    by repeating it every $N$ samples (right), with $N_1 = N_2 = 3$ and $N = 7$
+    so the copies just touch without overlapping.
+  ],
   align(center)[
   #grid(
     columns: (1fr, 3fr),
     column-gutter: 2em,
     [
-      #let x = lq.linspace(-6, 6, num: 61)
+      #let n = range(-6, 7)
       #cdiagram(
         title: $x[n]$,
-        xlabel: $t$,
+        xlabel: $n$,
         width: 5cm,
         height: 3cm,
-        lq.stem(
-          x,
-          x.map(x => (
-            1.5 * calc.exp(-(x + 1.0) * (x + 1.0) / 0.3)
-              + 0.8 * calc.exp(-(x - 0.5) * (x - 0.5) / 0.7)
-          )),
-        ),
-        lq.place(-3, -0.21, align: center)[$-N_1$],
-        lq.place(3, -0.21, align: center)[$N_2$],
+        ylim: (-0.15, 2.1),
+        lq.stem(n, n.map(seq)),
+        lq.place(-N1, -0.28, align: center, plabel[$-N_1$]),
+        lq.place(N2, -0.28, align: center, plabel[$N_2$]),
       )],
     [
-      #let x = lq.linspace(-18, 18, num: 202)
+      #let n = range(-18, 19)
       #cdiagram(
         title: $tilde(x)[n]$,
-        xlabel: $t$,
+        xlabel: $n$,
         width: 10cm,
         height: 3cm,
-        lq.stem(
-          x,
-          x.map(x => (
-            1.5 * calc.exp(-(x + 1.0) * (x + 1.0) / 0.3)
-              + 0.8 * calc.exp(-(x - 0.5) * (x - 0.5) / 0.7)
-          )),
-        ),
-        lq.stem(
-          x,
-          x.map(x => (
-            1.5 * calc.exp(-((x - 7) + 1.0) * ((x - 7) + 1.0) / 0.3)
-              + 0.8 * calc.exp(-((x - 7) - 0.5) * ((x - 7) - 0.5) / 0.7)
-          )),
-          color: green,
-        ),
-        lq.stem(
-          x,
-          x.map(x => (
-            1.5 * calc.exp(-((x + 7) + 1.0) * ((x + 7) + 1.0) / 0.3)
-              + 0.8 * calc.exp(-((x + 7) - 0.5) * ((x + 7) - 0.5) / 0.7)
-          )),
-          color: green,
-        ),
-        lq.stem(
-          x,
-          x.map(x => (
-            1.5 * calc.exp(-((x + 14) + 1.0) * ((x + 14) + 1.0) / 0.3)
-              + 0.8 * calc.exp(-((x + 14) - 0.5) * ((x + 14) - 0.5) / 0.7)
-          )),
-          color: green,
-        ),
-        lq.stem(
-          x,
-          x.map(x => (
-            1.5 * calc.exp(-((x - 14) + 1.0) * ((x - 14) + 1.0) / 0.3)
-              + 0.8 * calc.exp(-((x - 14) - 0.5) * ((x - 14) - 0.5) / 0.7)
-          )),
-          color: green,
-        ),
-        lq.place(-3, -0.21, align: center)[$-N_1$],
-        lq.place(3, -0.21, align: center)[$N_2$],
-        lq.place(7, -0.21, align: center)[$N$],
-        lq.place(-7, -0.21, align: center)[$-N$],
-        lq.place(14, -0.21, align: center)[$2N$],
-        lq.place(-14, -0.21, align: center)[$-2N$],
-        lq.place(-18, 0.7, align: center)[$dots.c$],
-        lq.place(18, 0.7, align: center)[$dots.c$],
-        lq.plot((7, 7), (0, 1), mark: none, stroke: (
-          dash: "dashed",
-          paint: red,
+        ylim: (-0.15, 2.1),
+        lq.stem(n, n.map(seq)),
+        ..(-2, -1, 1, 2).map(r => lq.stem(
+          n,
+          n.map(m => seq(m - r * N)),
+          color: c-green,
         )),
-        lq.plot((-7, -7), (0, 1), mark: none, stroke: (
-          dash: "dashed",
-          paint: red,
-        )),
-        lq.plot((14, 14), (0, 1), mark: none, stroke: (
-          dash: "dashed",
-          paint: red,
-        )),
-        lq.plot((-14, -14), (0, 1), mark: none, stroke: (
-          dash: "dashed",
-          paint: red,
+        lq.place(-N1, -0.28, align: center, plabel[$-N_1$]),
+        lq.place(N2, -0.28, align: center, plabel[$N_2$]),
+        lq.place(N, -0.28, align: center, plabel[$N$]),
+        lq.place(-N, -0.28, align: center, plabel[$-N$]),
+        lq.place(2 * N, -0.28, align: center, plabel[$2N$]),
+        lq.place(-2 * N, -0.28, align: center, plabel[$-2N$]),
+        lq.place(-18, 1.2, align: center)[$dots.c$],
+        lq.place(18, 1.2, align: center)[$dots.c$],
+        ..(-2, -1, 1, 2).map(r => lq.plot(
+          (r * N, r * N),
+          (0, 1.8),
+          mark: none,
+          stroke: (dash: "dashed", paint: c-muted),
         )),
       )],
   )],
@@ -157,7 +127,7 @@ Finally, we have the following pair of equations:
   $
     h[n] = alpha^n u[n], quad |alpha| < 1
   $
-  and the suppose the input to this system is
+  and suppose the input to this system is
   $
     x[n] = beta^n u[n], quad |beta| < 1
   $
@@ -177,7 +147,7 @@ Finally, we have the following pair of equations:
   $
     Y(e^(j omega)) = A / (1 - alpha e^(-j omega)) + B / (1 - beta e^(-j omega))
   $
-  Solving for $A$ and $B$, we have
+  Solving for $A$ and $B$ gives $A = alpha \/ (alpha - beta)$ and $B = -beta \/ (alpha - beta)$, so
   $
     y[n] = A alpha^n u[n] + B beta^n u[n] = alpha / (alpha - beta) alpha^n u[n] - beta / (alpha - beta) beta^n u[n]
   $
@@ -190,7 +160,7 @@ Finally, we have the following pair of equations:
     columns: 3,
     align: center + horizon,
     stroke: 0.5pt,
-    [*Property*], [*Discrete-Time Signal*], [*DTFT*],
+    table.header([*Property*], [*Discrete-Time Signal*], [*DTFT*]),
 
     [Linearity], [$a x[n] + b y[n]$], [$a X(e^(j omega)) + b Y(e^(j omega))$],
 
@@ -205,20 +175,20 @@ Finally, we have the following pair of equations:
     [Time Reversal], [$x[-n]$], [$X(e^(-j omega))$],
 
     [Time Scaling (Upsampling)],
-    [$x[n slash k]$ if $n = k ell$, $ell in NN$, else 0],
+    [$x[n slash k]$ if $n = k ell$, $ell in ZZ$, else 0],
     [$X(e^(j k omega))$],
 
     [Time Scaling (Downsampling)],
     [$x[n M]$],
     [$1/M sum_(k=0)^(M-1) X(e^(j(omega + 2 pi k)/M))$],
 
-    [Convolution], [$x[n] * y[n]$], [$X(e^(j omega)) Y(e^(j omega))$],
+    [Convolution], [$x[n] star y[n]$], [$X(e^(j omega)) Y(e^(j omega))$],
 
     [Multiplication],
     [$x[n] y[n]$],
-    [$1/(2pi) integral_(2pi) X(e^(j theta)) Y(e^(j(omega - theta))) d theta$],
+    [$1/(2pi) integral_(2pi) X(e^(j theta)) Y(e^(j(omega - theta))) "d"theta$],
 
-    [Differentiation in Frequency], [$n x[n]$], [$j d/d omega X(e^(j omega))$],
+    [Differentiation in Frequency], [$n x[n]$], [$j "d"/("d"omega) X(e^(j omega))$],
 
     [First Difference],
     [$x[n] - x[n-1]$],
@@ -242,7 +212,7 @@ Finally, we have the following pair of equations:
 
     [Parseval's Theorem],
     [$sum_(n=-infinity)^(infinity) |x[n]|^2$],
-    [$1/(2pi) integral_(-pi)^(pi) |X(e^(j omega))|^2 d omega$],
+    [$1/(2pi) integral_(-pi)^(pi) |X(e^(j omega))|^2 "d"omega$],
 
     [Periodicity], [$x[n]$], [$X(e^(j omega)) = X(e^(j(omega + 2pi)))$],
 
@@ -257,13 +227,17 @@ Finally, we have the following pair of equations:
     columns: 3,
     align: center + horizon,
     stroke: 0.5pt,
-    [*Discrete-Time Signal*], [*DTFT*], [*FS Coefficients (if periodic)*],
+    table.header(
+      [*Discrete-Time Signal*],
+      [*DTFT*],
+      [*FS Coefficients (if periodic)*],
+    ),
 
     [$delta[n]$], [$1$], [N/A],
 
     [$1$],
     [$2pi sum_(k=-infinity)^(infinity) delta(omega - 2pi k)$],
-    [$a_k = 1/N$ for all $k$],
+    [$a_0 = 1$, $a_k = 0$ otherwise],
 
     [$e^(j omega_0 n)$],
     [$2pi sum_(k=-infinity)^(infinity) delta(omega - omega_0 - 2pi k)$],
@@ -275,7 +249,7 @@ Finally, we have the following pair of equations:
 
     [$sin(omega_0 n)$],
     [$j pi sum_(k=-infinity)^(infinity) [delta(omega + omega_0 - 2pi k) - delta(omega - omega_0 - 2pi k)]$],
-    [$a_(plus.minus k_0) = plus.minus j/2$, others = 0],
+    [$a_(k_0) = -j/2$, $a_(-k_0) = j/2$, others = 0],
 
     [$u[n]$],
     [$1/(1 - e^(-j omega)) + pi sum_(k=-infinity)^(infinity) delta(omega - 2pi k)$],
@@ -305,16 +279,12 @@ Finally, we have the following pair of equations:
     [$(2pi)/N sum_(k=-infinity)^(infinity) (sin(pi k N_1/N))/(sin(pi k/N)) delta(omega - (2 pi k)/N)$],
     [$a_k = (sin(pi k N_1/N))/(N sin(pi k/N))$ for $k != 0$, $a_0 = N_1/N$],
 
-    [$(omega_c/pi) (sin(omega_c n))/(omega_c n)$],
-    [Ideal lowpass: $cases(1 "if" |omega| <= omega_c, 0 "if" omega_c < |omega| <= pi)$],
-    [N/A],
-
     [$(-1)^n$],
     [$2pi sum_(k=-infinity)^(infinity) delta(omega - pi - 2pi k)$],
     [$a_k = delta[k - N/2]$ for even $N$],
 
-    [$r^n cos(omega_0 n + phi) u[n]$, $|r| < 1$],
-    [$(1 - r cos(phi) e^(-j omega))/(1 - 2r cos(omega_0) e^(-j omega) + r^2 e^(-2j omega))$],
+    [$r^n cos(omega_0 n) u[n]$, $|r| < 1$],
+    [$(1 - r cos(omega_0) e^(-j omega))/(1 - 2r cos(omega_0) e^(-j omega) + r^2 e^(-2j omega))$],
     [N/A],
   )
 ]
@@ -327,7 +297,7 @@ We have seen four Fourier representations:
 
 - CT FS
 $
-  a_k = 1 / T integral_T x(t) e^(-j k omega_0 n) "d"t, quad x(t) = sum_(k = -infinity)^(infinity) a_k e^(j k omega_0 t)
+  a_k = 1 / T integral_T x(t) e^(-j k omega_0 t) "d"t, quad x(t) = sum_(k = -infinity)^(infinity) a_k e^(j k omega_0 t)
 $
 - CT FT
 $
@@ -335,16 +305,14 @@ $
 $
 - DT FS
 $
-  a_k = 1 / N sum_(k = chevron.l N chevron.r) x[n] e^(-j k (2 pi)/N n), quad x[n] = sum_(k = chevron.l N chevron.r) a_k e^(j k (2pi)/N n)
+  a_k = 1 / N sum_(n = chevron.l N chevron.r) x[n] e^(-j k (2 pi)/N n), quad x[n] = sum_(k = chevron.l N chevron.r) a_k e^(j k (2pi)/N n)
 $
 - DT FT
 $
   X(e^(j omega)) = sum_(n = -infinity)^(infinity) x[n] e^(-j omega n), quad x[n] = 1 / (2pi) integral_(2pi) X(e^(j omega)) e^(j omega n) "d"omega
 $
 
-The key duality principles are
-- Periodicity in one domain $<->$ Discreteness in the other domain
-- Discreteness in one domain $<->$ Periodicity in the other domain
+The key duality principle is that periodicity in one domain corresponds to discreteness in the other. A periodic signal has a discrete spectrum, a discrete signal has a periodic spectrum, and a signal that is both periodic and discrete, as in the DT Fourier series, has a spectrum that is both.
 
 == Systems Characterized by Linear Constant-Coefficient Difference Equations
 
@@ -370,7 +338,7 @@ $
   $
   The frequency response is
   $
-    H(e^(j omega)) = 1 / (1 - 3/4 e^(-j omega) + 1/8 e^(-j 2 omega))
+    H(e^(j omega)) = 2 / (1 - 3/4 e^(-j omega) + 1/8 e^(-j 2 omega))
   $
   Again, it can be expanded as
   $
@@ -383,7 +351,7 @@ $
 ]
 
 
-== Discrete Fourier Transform (NOT DTFT)
+== The Discrete Fourier Transform
 
 Discrete Fourier Transform (DFT) is defined for finite length sequences by considering their periodic extension (sometimes with zero-padding). Let $x[n]$ be a finite-length sequence such that $x[n] = 0$ if $n in.not [0, N-1]$. The DFT is defined as
 $
@@ -396,21 +364,22 @@ $
   x[n] = 1/N sum_(k = 0)^(N - 1) X[k] W_N^(-k n), quad n = 0, 1, dots.c, N - 1
 $
 
-Suppose we are given the _samples_ of a signal $bold(x)$, $bold(upright(x)) = vec(x(0)& x(1) & dots.c & x(N-1), delim: "[")^top$, we would like to get the DTFT of it, $bold(upright(X)) = vec(X(0)&X(1)&dots.c&X(N-1), delim: "[")^top$. We can do so by matrix multiplications 
+Suppose we are given the _samples_ of a signal, $bold(x) = vec(x[0]& x[1] & dots.c & x[N-1], delim: "[")^top$, and we would like the DFT of it, $bold(X) = vec(X[0]&X[1]&dots.c&X[N-1], delim: "[")^top$. We can obtain it by a matrix multiplication,
 
-$ bold(X) = bold(W x), bold(x) = 1/N bold(W)^prime bold(X) $
+$ bold(X) = bold(W) bold(x), quad bold(x) = 1/N bold(W)^H bold(X) $
 
-where $w_N = e^(-j (2 pi) / N)$ and
+where $bold(W)^H$ is the conjugate transpose and
 $
-  bold(W) = mat(1, 1, dots.h, 1; 1, w_N, dots.h, w_N^(N-1); dots.h, dots.h, dots.down, dots.v; 1, w_N^(N-1), dots.h, w_N^((N-1)(N-1)); delim:"[")
+  bold(W) = mat(1, 1, dots.h, 1; 1, W_N, dots.h, W_N^(N-1); dots.h, dots.h, dots.down, dots.v; 1, W_N^(N-1), dots.h, W_N^((N-1)(N-1)); delim:"[")
 $
 
-Note that $1/sqrt(N) bold(W)$ is unitary (orthogonal): $(1/sqrt(N) bold(W))^(-1) = 1/sqrt(N) bold(W)^prime$.
+Note that $1/sqrt(N) bold(W)$ is unitary: $(1/sqrt(N) bold(W))^(-1) = 1/sqrt(N) bold(W)^H$.
 
 For example, a four-point discrete Fourier transform is simply
 $
-  mat(X(0); X(1); X(2); X(3); delim:"[") = 1/4 mat(1, 1, 1, 1;1, -j, -1, j; 1, -1, 1, -1; 1, j, -1, -j; delim:"[") mat(x(0); x(1); x(2); x(3); delim:"[")
+  mat(X[0]; X[1]; X[2]; X[3]; delim:"[") = mat(1, 1, 1, 1;1, -j, -1, j; 1, -1, 1, -1; 1, j, -1, -j; delim:"[") mat(x[0]; x[1]; x[2]; x[3]; delim:"[")
 $
+since $W_4 = e^(-j pi \/ 2) = -j$.
 
 The fast Fourier transform uses divide-and-conquer, reducing the number of multiplications from $cal("O")(N^2)$ to $cal("O")(N log N)$. Can you use DFT to calculate IDFT?
 
@@ -418,4 +387,4 @@ We can say that when comparing DFT with DTFT,
 $
   X[k] = X(e^(j omega)) lr(|, size: #200%)_(omega = (2 pi k) / N) = X(e^(j (2 pi) / N k))
 $
-In other words, DFT values are samples from DTFT. To construct DTFT from DFT, we can convolve the DFT values with a `sinc` function (corresponds to multiplication with a finite length rectangular pulse in DT domain).
+In other words, the DFT values are samples of the DTFT. To recover the DTFT between those samples, we interpolate the DFT values with a Dirichlet kernel, which is the transform of the finite-length rectangular window that truncated the sequence in the first place.

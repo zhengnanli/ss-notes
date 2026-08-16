@@ -8,17 +8,53 @@ We developed a representation of periodic signals as linear combinations of comp
 $
   a_k = (2 sin (k omega_0 T_1)) / (k omega_0 T)
 $
-where $omega_0 = (2 pi) / T$. Below, we plot both the time domain signal, and the Fourier series. Note that $T_1 < T_2$.
+where $omega_0 = (2 pi) / T$. Below, we plot the time domain signal on the left and, on the other two panels, the scaled coefficients $T a_k$ against $omega = k omega_0$ for two periods $T_a < T_b$, holding the pulse half-width $T_1$ fixed. The dashed curve is the envelope $2 sin(omega T_1) \/ omega$, which does not depend on $T$: lengthening the period leaves the envelope alone and packs the samples more densely along it.
+
+#let T1 = 1.0
+#let envelope-w = lq.linspace(-10, 10, num: 501)
+// T a_k = 2 sin(k omega_0 T1) / (k omega_0), i.e. the envelope sampled at
+// omega = k omega_0. Both panels evaluate the same envelope, so the only thing
+// that changes between them is the sample spacing, which is the point.
+#let envelope = w => 2 * T1 * sa(w * T1)
+#let coeff-panel = (T, label) => {
+  let omega0 = 2 * calc.pi / T
+  let kmax = int(calc.floor(10 / omega0))
+  let ks = range(-kmax, kmax + 1)
+  lq.diagram(
+    title: $T a_k, #label$,
+    xlabel: $omega$,
+    height: 4cm,
+    width: 5cm,
+    xlim: (-10.5, 10.5),
+    ylim: (-0.9, 2.6),
+    lq.plot(
+      envelope-w,
+      envelope-w.map(envelope),
+      mark: none,
+      stroke: (paint: c-muted, dash: "dashed", thickness: 0.7pt),
+    ),
+    lq.stem(
+      ks.map(k => k * omega0),
+      ks.map(k => envelope(k * omega0)),
+      color: c-accent,
+    ),
+  )
+}
 
 #altfig(
-  alt: "Three plots side by side. Left: periodic square wave x of t with pulse half-width T sub one and period T. Middle: Fourier series coefficients a sub k for period T equal T sub one, sampling a sinc envelope coarsely. Right: a sub k for the larger period T equal T sub two, sampling the same envelope more densely.",
+  alt: "Three plots side by side. Left: periodic square wave x of t with pulse half-width T sub one and period T. Middle: the scaled Fourier series coefficients T a sub k for the shorter period T sub a, drawn as stems against omega on top of a dashed sinc envelope. Right: the same envelope for the longer period T sub b, sampled twice as densely.",
+  caption: [
+    A square wave (left) and its scaled coefficients $T a_k$ for two periods,
+    $T_a$ (middle) and $T_b = 2 T_a$ (right). The dashed envelope is the same in
+    both; only the spacing $omega_0 = 2 pi \/ T$ of the samples changes.
+  ],
   align(center)[
   #grid(
     columns: (1fr, 1fr, 1fr),
     column-gutter: 2em,
     [
       #let x = lq.linspace(-6, 6, num: 1000)
-      #let triangle = x => if (calc.rem(x + 9, 4)) < 2 { 2.5 } else { 0 }
+      #let square = x => if (calc.rem(x + 9, 4)) < 2 { 2.5 } else { 0 }
       #cdiagram(
         title: $x(t)$,
         xlabel: $t$,
@@ -26,70 +62,41 @@ where $omega_0 = (2 pi) / T$. Below, we plot both the time domain signal, and th
         xlim: (-4, 4),
         height: 4cm,
         width: 5cm,
-        lq.plot(x, x.map(x => triangle(x)), mark: none),
+        lq.plot(x, x.map(x => square(x)), mark: none),
         lq.place(-1.45, 2.5, align: center)[$1$],
-        lq.place(1, -0.3, align: center)[$T_1$],
-        lq.place(-1.2, -0.3, align: center)[$-T_1$],
-        lq.place(2, -0.3, align: center)[$T/2$],
-        lq.place(-2.3, -0.3, align: center)[$-T/2$],
+        lq.place(1, -0.3, align: center, plabel[$T_1$]),
+        lq.place(-1.2, -0.3, align: center, plabel[$-T_1$]),
+        lq.place(2, -0.3, align: center, plabel[$T/2$]),
+        lq.place(-2.3, -0.3, align: center, plabel[$-T/2$]),
         lq.place(3.8, 1.5, align: center)[$dots.c$],
         lq.place(-3.8, 1.5, align: center)[$dots.c$],
         lq.plot((2, 2), (0, 3), mark: none, stroke: (
           dash: "dashed",
-          paint: red,
+          paint: c-muted,
         )),
         lq.plot((-2, -2), (0, 3), mark: none, stroke: (
           dash: "dashed",
-          paint: red,
+          paint: c-muted,
         )),
       )],
-    [
-      #let n1 = lq.linspace(-6, 6, num: 31)
-      #let T = 1
-      #let T1 = 0.3 * T
-      #let omega0 = 2 * calc.pi / T
-
-      #cdiagram(
-        title: $a_k, T = T_1$,
-        xlabel: $k$,
-        height: 4cm,
-        width: 5cm,
-        ylim: (-0.15, 1.05),
-        lq.plot(n1, n1.map(n1 => if n1 == 0 { 2 * T1 / T } else {
-          calc.sin(2 * calc.pi * n1 * T1 / T) / (n1 * calc.pi)
-        })),
-        lq.place(-0.7, 0.65, align: center)[$(2 T_1) / T$],
-      )
-    ],
-    [
-      #let n2 = lq.linspace(-6, 6, num: 61)
-      #let T = 1
-      #let T1 = 0.3 * T
-      #let omega0 = 2 * calc.pi / T
-
-      #cdiagram(
-        title: $a_k, T = T_2$,
-        xlabel: $k$,
-        height: 4cm,
-        width: 5cm,
-        ylim: (-0.15, 1.05),
-        lq.plot(n2, n2.map(n2 => if n2 == 0 { 2 * T1 / T } else {
-          calc.sin(2 * calc.pi * n2 * T1 / T) / (n2 * calc.pi)
-        })),
-        lq.place(-0.7, 0.65, align: center)[$(2 T_1) / T$],
-      )
-    ],
+    coeff-panel(4 * T1, $T = T_a$),
+    coeff-panel(8 * T1, $T = T_b$),
   )
 ],
 )
 
-As we can see from the above example, intuitively, when $T arrow infinity$ (i.e., the periodic signal becomes aperiodic), the Fourier series approaches the envelop function.
+As we can see from the above example, when $T arrow infinity$, so that the periodic signal becomes aperiodic, the samples $T a_k$ fill in the envelope function, and the sum over $k$ becomes an integral over $omega$.
 
 == Representation of Aperiodic Signals: The Continuous-Time Fourier Transform
 We start with an aperiodic signal $x(t)$, which is zero when $|t| > T_1$ for some number $T_1$. We then construct a periodic signal $tilde(x)(t)$ for which $x(t)$ is one period. As we choose the period $T$ to be larger, say $T arrow infinity$, $tilde(x)(t) arrow x(t)$.
 
 #altfig(
-  alt: "Two plots. Left: an aperiodic pulse x of t that is nonzero only on the interval from minus T sub one to T sub one. Right: its periodic extension tilde x of t, formed by repeating the pulse every T units; the central period is drawn in blue and adjacent copies in green, with dashed red lines at plus and minus T and plus and minus two T.",
+  alt: "Two plots. Left: an aperiodic pulse x of t that is nonzero only on the interval from minus T sub one to T sub one. Right: its periodic extension tilde x of t, formed by repeating the pulse every T units; the central period is drawn in the accent color and adjacent copies in green, with dashed gray lines at plus and minus T and plus and minus two T.",
+  caption: [
+    An aperiodic $x(t)$ of finite duration (left) and the periodic $tilde(x)(t)$
+    built by repeating it every $T$ (right). Letting $T arrow infinity$ pushes
+    the copies apart until only $x(t)$ is left.
+  ],
   align(center)[
   #grid(
     columns: (1fr, 3fr),
@@ -133,7 +140,7 @@ We start with an aperiodic signal $x(t)$, which is zero when $|t| > T_1$ for som
             1.5 * calc.exp(-((x - 7) + 1.0) * ((x - 7) + 1.0) / 0.3)
               + 0.8 * calc.exp(-((x - 7) - 0.5) * ((x - 7) - 0.5) / 0.7)
           )),
-          color: green,
+          color: c-green,
           mark: none,
         ),
         lq.plot(
@@ -142,7 +149,7 @@ We start with an aperiodic signal $x(t)$, which is zero when $|t| > T_1$ for som
             1.5 * calc.exp(-((x + 7) + 1.0) * ((x + 7) + 1.0) / 0.3)
               + 0.8 * calc.exp(-((x + 7) - 0.5) * ((x + 7) - 0.5) / 0.7)
           )),
-          color: green,
+          color: c-green,
           mark: none,
         ),
         lq.plot(
@@ -151,7 +158,7 @@ We start with an aperiodic signal $x(t)$, which is zero when $|t| > T_1$ for som
             1.5 * calc.exp(-((x + 14) + 1.0) * ((x + 14) + 1.0) / 0.3)
               + 0.8 * calc.exp(-((x + 14) - 0.5) * ((x + 14) - 0.5) / 0.7)
           )),
-          color: green,
+          color: c-green,
           mark: none,
         ),
         lq.plot(
@@ -160,7 +167,7 @@ We start with an aperiodic signal $x(t)$, which is zero when $|t| > T_1$ for som
             1.5 * calc.exp(-((x - 14) + 1.0) * ((x - 14) + 1.0) / 0.3)
               + 0.8 * calc.exp(-((x - 14) - 0.5) * ((x - 14) - 0.5) / 0.7)
           )),
-          color: green,
+          color: c-green,
           mark: none,
         ),
         lq.place(-3, -0.21, align: center)[$-T_1$],
@@ -173,19 +180,19 @@ We start with an aperiodic signal $x(t)$, which is zero when $|t| > T_1$ for som
         lq.place(18, 0.7, align: center)[$dots.c$],
         lq.plot((7, 7), (0, 1), mark: none, stroke: (
           dash: "dashed",
-          paint: red,
+          paint: c-muted,
         )),
         lq.plot((-7, -7), (0, 1), mark: none, stroke: (
           dash: "dashed",
-          paint: red,
+          paint: c-muted,
         )),
         lq.plot((14, 14), (0, 1), mark: none, stroke: (
           dash: "dashed",
-          paint: red,
+          paint: c-muted,
         )),
         lq.plot((-14, -14), (0, 1), mark: none, stroke: (
           dash: "dashed",
-          paint: red,
+          paint: c-muted,
         )),
       )],
   )],
@@ -242,7 +249,12 @@ The process of $omega_0 arrow 0$ is depicted below. As $omega_0 arrow 0$, the su
 
 #align(center)[
   #cdiagram(
-    alt: "Smooth continuous curve of X of j omega times e to the j omega t plotted against omega, overlaid with a red staircase approximation that samples the curve at spacing omega-zero. The discrete samples approach the continuous integral as omega-zero approaches zero.",
+    alt: "Smooth continuous curve of X of j omega times e to the j omega t plotted against omega, overlaid with a blue staircase approximation that samples the curve at spacing omega-zero. The discrete samples approach the continuous integral as omega-zero approaches zero.",
+    caption: [
+      The synthesis sum as a Riemann sum: rectangles of width $omega_0$ under
+      $X(j omega) e^(j omega t)$. As $omega_0 arrow 0$ the sum becomes the
+      inverse-transform integral.
+    ],
     title: $X(j omega) e^(j omega t)$,
     xlabel: $omega$,
     ylim: (-2, 3),
@@ -253,15 +265,15 @@ The process of $omega_0 arrow 0$ is depicted below. As $omega_0 arrow 0$, the su
       stair-coarse.map(p => p.at(0)),
       stair-coarse.map(p => p.at(1)),
       mark: none,
-      stroke: 0.2pt + red,
+      stroke: (paint: c-blue, thickness: 0.4pt),
     ),
     lq.plot((xd.at(8), xd.at(8)), (0, yd.at(8)), mark: none, stroke: (
       dash: "dashed",
-      paint: red,
+      paint: c-muted,
     )),
     lq.plot((xd.at(9), xd.at(9)), (0, yd.at(9)), mark: none, stroke: (
       dash: "dashed",
-      paint: red,
+      paint: c-muted,
     )),
     lq.place(0.4, -0.2, align: left)[$omega_0$],
     lq.place(0.4, 1.8, align: left)[$X(j k omega_0) e^(j k omega_0 t)$],
@@ -285,9 +297,9 @@ We define the Fourier transform pair as follows.
   )
 ]
 
-When comparing the Fourier coefficients $a_k$ of a periodic signal $tilde(x) (t)$, and exploiting the fact that $x(t)$ is zero outside the range $s <= t <= s + T$, we have
+The same argument holds for the Fourier coefficients $a_k$ of any periodic signal $tilde(x)(t)$ whose period is one copy of an $x(t)$ that vanishes outside the range $s <= t <= s + T$:
 $
-  a_k = 1/T integral_(s)^(s+T) tilde(x) (t) e^(-j k omega_0 t) "d"t = 1/T integral_s^(s+T) x(t) e^(-j k omega_0 t) "d"t = 1/T integral_(-infinity)^infinity x(t) e^(-j k omega t) "d"t
+  a_k = 1/T integral_(s)^(s+T) tilde(x) (t) e^(-j k omega_0 t) "d"t = 1/T integral_s^(s+T) x(t) e^(-j k omega_0 t) "d"t = 1/T integral_(-infinity)^infinity x(t) e^(-j k omega_0 t) "d"t
 $
 
 Comparing the equation with the Fourier transform, we conclude that
@@ -298,7 +310,7 @@ where $X(j omega)$ is the Fourier transform of $x(t)$. Intuitively, $a_k$ are _s
 
 == Convergence of Fourier Transforms
 
-Similar to the Fourier series, there is a set of conditions which are sufficient to ensure that $tilde(x) (t)$ is equal to $x(t)$ for any $t$ except at a discontinuity. The Dirichlet conditions require that
+Similar to the Fourier series, there is a set of conditions which are sufficient to ensure that the signal recovered by the inverse transform equals $x(t)$ at every $t$ except at a discontinuity. The Dirichlet conditions require that
 
 - $x(t)$ be absolutely integrable: $integral_RR |x(t)| "d"t < infinity$.
 - $x(t)$ have a finite number of maxima and minima within any finite interval.
@@ -315,7 +327,7 @@ Similar to the Fourier series, there is a set of conditions which are sufficient
   $
   The Fourier transform of it is
   $
-    X(j omega) = integral_RR x(t) e^(-j omega t) "d"t = integral_0^infinity e^(-a t) e^(-j omega t) = - 1/(a + j omega) e^(-(a + j omega) t) lr(|, size: #200%)^infinity_0 = 1 / (a + j omega), quad a > 0
+    X(j omega) = integral_RR x(t) e^(-j omega t) "d"t = integral_0^infinity e^(-a t) e^(-j omega t) "d"t = - 1/(a + j omega) e^(-(a + j omega) t) lr(|, size: #200%)^infinity_0 = 1 / (a + j omega), quad a > 0
   $
 
   Consider then the signal
@@ -343,13 +355,18 @@ Similar to the Fourier series, there is a set of conditions which are sufficient
 
   #altfig(
     alt: "Two plots. Left: a rectangular pulse x of t of height one, nonzero on the interval from minus T sub one to T sub one. Right: its Fourier transform X of j omega, a sinc-shaped envelope of height two T sub one with zero crossings at multiples of pi over T sub one.",
+    caption: [
+      A rectangular pulse (left) and its transform (right). Narrowing the pulse
+      in time widens the first null at $omega = pi \/ T_1$, which is the
+      time-bandwidth trade-off in its simplest form.
+    ],
     align(center)[
     #grid(
       columns: (1fr, 1fr),
       column-gutter: 2em,
       [
         #let x = lq.linspace(-6, 6, num: 1000)
-        #let triangle = x => if calc.abs(x) < 2 { 2.5 } else { 0 }
+        #let pulse = x => if calc.abs(x) < 2 { 2.5 } else { 0 }
         #cdiagram(
           title: $x(t)$,
           xlabel: $t$,
@@ -357,33 +374,27 @@ Similar to the Fourier series, there is a set of conditions which are sufficient
           xlim: (-4, 4),
           height: 4cm,
           width: 6cm,
-          lq.plot(x, x.map(x => triangle(x)), mark: none),
+          lq.plot(x, x.map(x => pulse(x)), mark: none),
           lq.place(-1.45, 2.7, align: center)[$1$],
-          lq.place(2.3, -0.3, align: center)[$T_1$],
-          lq.place(-2.3, -0.3, align: center)[$-T_1$],
+          lq.place(2.3, -0.3, align: center, plabel[$T_1$]),
+          lq.place(-2.3, -0.3, align: center, plabel[$-T_1$]),
         )],
       [
-        #let n1 = lq.linspace(-6, 6, num: 81)
-        #let T = 1
-        #let T1 = 0.3 * T
-        #let omega0 = 2 * calc.pi / T
+        // Plotted against omega itself, with T1 = 1, so that the first zero
+        // crossing really does sit at the labeled omega = pi / T1.
+        #let T1 = 1.0
+        #let w = lq.linspace(-10, 10, num: 501)
 
         #cdiagram(
           title: $X(j omega)$,
           xlabel: $omega$,
           height: 4cm,
           width: 6cm,
-          ylim: (-0.15, 0.85),
-          lq.plot(
-            n1,
-            n1.map(n1 => if n1 == 0 { 2 * T1 / T } else {
-              calc.sin(2 * calc.pi * n1 * T1 / T) / (n1 * calc.pi)
-            }),
-            mark: none,
-          ),
-          lq.place(-0.85, 0.68, align: center)[$2 T_1$],
-          lq.place(1, -0.1, align: center)[$pi / T_1$],
-          lq.place(-1, -0.1, align: center)[$-pi / T_1$],
+          ylim: (-0.8, 2.6),
+          lq.plot(w, w.map(w => 2 * T1 * sa(w * T1)), mark: none),
+          lq.place(-1.1, 2.0, align: center, plabel[$2 T_1$]),
+          lq.place(calc.pi / T1, -0.35, align: center, plabel[$pi / T_1$]),
+          lq.place(-calc.pi / T1, -0.35, align: center, plabel[$-pi / T_1$]),
         )
       ],
     )],
@@ -394,7 +405,7 @@ Similar to the Fourier series, there is a set of conditions which are sufficient
   $
   The inverse Fourier transform is
   $
-    x(t) = 1/(2 pi) integral_RR X(j omega) e^(j omega t) "d"t = 1/(2 pi) integral_(-W)^W e^(j omega t) "d"t = (sin W t)/(pi t) = W/pi "sinc"((W t)/pi)
+    x(t) = 1/(2 pi) integral_RR X(j omega) e^(j omega t) "d"omega = 1/(2 pi) integral_(-W)^W e^(j omega t) "d"omega = (sin W t)/(pi t) = W/pi "sinc"((W t)/pi)
   $
 ]
 
@@ -402,40 +413,40 @@ Similar to the Fourier series, there is a set of conditions which are sufficient
 
 We denote a Fourier pair as
 $
-  x(t) arrow.l.r^limits(cal("F")) X(j omega)
+  x(t) #ftpair X(j omega)
 $
 
 We list the properties without proof below
 
 - Linearity:
 $
-  a x(t) + b y(t) arrow.l.r^limits(cal("F")) a X(j omega) + b Y(j omega)
+  a x(t) + b y(t) #ftpair a X(j omega) + b Y(j omega)
 $
 - Time Shifting:
 $
-  x(t - t_0) arrow.l.r^limits(cal("F")) e^(-j omega t_0) X(j omega)
+  x(t - t_0) #ftpair e^(-j omega t_0) X(j omega)
 $
 - Conjugation and Conjugate Symmetry
 $
-  x^*(t) arrow.l.r^limits(cal("F")) X^*(-j omega)
+  x^*(t) #ftpair X^*(-j omega)
 $
 $
   X(-j omega) = X^*(j omega) quad x(t) "real"
 $
 - Differentiation and Integration
 $
-  ("d"x(t))/("d"t) arrow.l.r^limits(cal("F")) j omega X(j omega)
+  ("d"x(t))/("d"t) #ftpair j omega X(j omega)
 $
 $
-  integral_(-infinity)^t x(tau) "d"tau arrow.l.r^limits(cal("F")) 1/(j omega) X(j omega) + pi X(0) delta(omega)
+  integral_(-infinity)^t x(tau) "d"tau #ftpair 1/(j omega) X(j omega) + pi X(0) delta(omega)
 $
 - Time and Frequency Scaling
 $
-  x(a t) arrow.l.r^limits(cal("F")) 1/(|a|) X((j omega) / a)
+  x(a t) #ftpair 1/(|a|) X((j omega) / a)
 $
 A special case
 $
-  x(-t) arrow.l.r^limits(cal("F")) X(-j omega)
+  x(-t) #ftpair X(-j omega)
 $
 - Parseval's
 $
@@ -457,15 +468,15 @@ is the frequency response (or transfer function) evaluated at $omega = k omega_0
 $
   1/(2 pi) sum_(k = -infinity)^(infinity) X(j k omega_0) e^(j k omega_0 t) omega_0 arrow 1 / (2 pi) sum_(k = -infinity)^infinity X(j k omega_0) H(j k omega_0) e^(j k omega_0 t) omega_0
 $
-Note that $x(t) -> y(t)$ denotes the output $y(t)$ corresponds to the input $x(t)$.
+Note that $x(t) -> y(t)$ denotes that the output $y(t)$ corresponds to the input $x(t)$.
 
-Therefore, the response of linear system to $x(t)$ is
+Therefore, the response of a linear system to $x(t)$ is
 $
   y(t) = lim_(omega_0 -> 0) 1 / (2 pi) sum_(k = -infinity)^infinity X(j k omega_0) H(j k omega_0) e^(j k omega_0 t) omega_0 = 1/ (2 pi) integral_RR X(j omega) H(j omega) e^(j omega t) "d"omega
 $
 We also know that the Fourier transform of $y(t)$ is $Y(j omega)$:
 $
-  y(t) = 1 / (2 pi) integral_RR Y(j omega) e^(j omega t) "d"t
+  y(t) = 1 / (2 pi) integral_RR Y(j omega) e^(j omega t) "d"omega
 $
 We can then identify that
 $
@@ -497,7 +508,7 @@ We then have
   #eqalt(
     "y of t equals h of t convolved with x of t, which Fourier-transforms to Y of j omega equal to H of j omega times X of j omega.",
     $
-      y(t) = h(t) star x(t) arrow.l.r^limits(cal("F")) Y (j omega) = H (j omega) X (j omega)
+      y(t) = h(t) star x(t) #ftpair Y (j omega) = H (j omega) X (j omega)
     $,
   )
 ]
@@ -546,7 +557,7 @@ We then have
       columns: 3,
       align: center + horizon,
       stroke: 0.5pt,
-      [*Property*], [*Aperiodic Signal*], [*Fourier Transform*],
+      table.header([*Property*], [*Aperiodic Signal*], [*Fourier Transform*]),
 
       [Linearity], [$a x(t) + b y(t)$], [$a X(j omega) + b Y(j omega)$],
 
@@ -569,10 +580,10 @@ We then have
       [Differentiation in Time], [$"d"/("d"t) x(t)$], [$j omega X(j omega)$],
 
       [Integration],
-      [$integral_(-infinity)^t x(tau) d tau$],
+      [$integral_(-infinity)^t x(tau) "d"tau$],
       [$1/(j omega) X(j omega) + pi X(0) delta(omega)$],
 
-      [Differentiation in Frequency], [$t x(t)$], [$j d/d omega X(j omega)$],
+      [Differentiation in Frequency], [$t x(t)$], [$j "d"/("d" omega) X(j omega)$],
 
       [Conjugate Symmetry for Real Signals],
       [$x(t)$ real],
@@ -587,8 +598,8 @@ We then have
       [$X(j omega)$ purely imaginary and odd],
 
       [Parseval's Theorem],
-      [$integral_(-infinity)^(infinity) |x(t)|^2 d t$],
-      [$1/(2 pi) integral_(-infinity)^(infinity) |X(j omega)|^2 d omega$],
+      [$integral_(-infinity)^(infinity) |x(t)|^2 "d"t$],
+      [$1/(2 pi) integral_(-infinity)^(infinity) |X(j omega)|^2 "d"omega$],
     )]
 ]
 
@@ -598,9 +609,11 @@ We then have
       columns: 3,
       align: center + horizon,
       stroke: 0.5pt,
-      [*Signal*],
-      [*Fourier Transform*],
-      [*Fourier Series Coefficients (if periodic)*],
+      table.header(
+        [*Signal*],
+        [*Fourier Transform*],
+        [*Fourier Series Coefficients (if periodic)*],
+      ),
 
       [$sum_k a_k e^(j k omega_0 t)$],
       [$2 pi sum_k a_k delta (omega - k omega_0)$],
@@ -608,7 +621,7 @@ We then have
 
       [$e^(j omega_0 t)$],
       [$2 pi delta(omega - omega_0)$],
-      [$a_k = delta[k - k_0]$ where $omega_0 = k_0 omega_0$],
+      [$a_1 = 1$, $a_k = 0$ for $k != 1$],
 
       [$cos(omega_0 t)$],
       [$pi [delta(omega - omega_0) + delta(omega + omega_0)]$],
@@ -616,13 +629,13 @@ We then have
 
       [$sin(omega_0 t)$],
       [$j pi [delta(omega + omega_0) - delta(omega - omega_0)]$],
-      [$a_(plus.minus 1) = plus.minus j/2$, others = 0],
+      [$a_1 = -j/2$, $a_(-1) = j/2$, others = 0],
 
       [$1$], [$2 pi delta(omega)$], [$a_0 = 1$, $a_k = 0$, $k != 0$],
 
       [Periodic square wave, period $T$],
-      [$2pi/T sum_(k=-infinity)^(infinity) (sin(k omega_0 T_1))/(k omega_0 T_1) delta(omega - k omega_0)$],
-      [$a_k = (sin(k omega_0 T_1))/(k omega_0 T_1)$ where $T_1$ is pulse width],
+      [$sum_(k=-infinity)^(infinity) (2 sin(k omega_0 T_1))/k delta(omega - k omega_0)$],
+      [$a_k = (sin(k omega_0 T_1))/(k pi)$, where $T_1$ is the pulse half-width],
 
       [$sum_(n=-infinity)^(infinity) delta(t - n T)$],
       [$(2pi)/T sum_(k=-infinity)^(infinity) delta(omega - k omega_0)$],
@@ -698,7 +711,7 @@ $
   #set math.equation(numbering: none)
   Consider a stable LTI system that is characterized by the differential equation
   $
-    ("d"^2 y(t)) / ("d"t^2) + 4 ("d"y(t)) / ("d"t) + 3 y(t) = ("d"x(t))/("d"t) + 2 x(t) 
+    ("d"^2 y(t)) / ("d"t^2) + 4 ("d"y(t)) / ("d"t) + 3 y(t) = ("d"x(t))/("d"t) + 2 x(t)
   $
   The frequency response is simply
   $

@@ -4,7 +4,7 @@
 #show: lq.theme.schoolbook
 #show: schoolbook-style
 
-In this section, we attempt to bridge the gap between the continuous-time signals and discrete-time signals. Under certain conditions, a continuous-time signal can be completely represented by and recovered from knowledge of its values, or _samples_.
+In this section, we attempt to bridge the gap between continuous-time and discrete-time signals. Under certain conditions, a continuous-time signal can be completely represented by and recovered from knowledge of its values, or _samples_.
 
 == The Sampling Theorem
 
@@ -27,8 +27,12 @@ Let us consider a system that consists of a periodic impulse train and a multipl
 }
 #let yd = xd.map(x => f(x))
 #let stair-coarse = make-staircase(xd, yd)
-#figure(
+#altfig(
   alt: "Block diagram and three time-domain plots illustrating impulse-train sampling. Left: x of t and p of t enter a multiplier whose output is x sub p of t. Center-left: smooth continuous signal x of t. Center-right: periodic impulse train p of t. Right: the sampled signal x sub p of t with impulses scaled by x at the sample times, overlaid by the dashed original x of t.",
+  caption: [
+    Impulse-train sampling: multiplying $x(t)$ by the train $p(t)$ leaves an
+    impulse at each sample time, weighted by the value of $x$ there.
+  ],
   align(center)[
     #grid(
       columns: (1fr, 1fr, 1fr, 1fr),
@@ -81,7 +85,7 @@ Let us consider a system that consists of a periodic impulse train and a multipl
           ylim: (-2, 2),
           height: 2cm,
           width: 3cm,
-          lq.stem(xd, xd.map(xd => (xd - xd + 1)), mark: "^"),
+          lq.stem(xd, xd.map(_ => 1), mark: "^"),
         )],
       [
         #cdiagram(
@@ -96,7 +100,7 @@ Let us consider a system that consists of a periodic impulse train and a multipl
     )],
 )
 
-Because of the sampling property of the unit impulse discussed previously, we know that multiplying $x(t)$ by a unit impulse samples the value of the signal at the point at which the impulse located, i.e., $x(t) delta(t - t_0) = x(t_0) delta(t - t_0)$. We then represent the sampled signal $x_p (t)$ as
+Because of the sampling property of the unit impulse discussed previously, we know that multiplying $x(t)$ by a unit impulse samples the value of the signal at the point where the impulse is located, i.e., $x(t) delta(t - t_0) = x(t_0) delta(t - t_0)$. We then represent the sampled signal $x_p (t)$ as
 $
   x_p (t) = sum_(n = -infinity)^(infinity) x(n T) delta(t - n T)
 $
@@ -114,10 +118,15 @@ $
   X_p (j omega) = 1 / T sum_(k = -infinity)^(infinity) X(j (omega - k omega_s))
 $
 
-That is, $X_p (j omega)$ is a periodic function of $omega$ consisting of a superposition of shifted replicas of $X(j omega)$, scaled by $1 / T$, as illustrated below,
+That is, $X_p (j omega)$ is a periodic function of $omega$ consisting of a superposition of shifted replicas of $X(j omega)$, scaled by $1 / T$, as illustrated below.
 
 #altfig(
-  alt: "Two spectra side by side. Left: the original band-limited spectrum X of j omega, nonzero only between minus omega sub M and omega sub M. Right: the sampled spectrum X sub p of j omega, a periodic train of shifted copies of X of j omega spaced by omega sub s; dashed red lines mark the centers at plus and minus omega sub s and plus and minus two omega sub s.",
+  alt: "Two spectra side by side. Left: the original band-limited spectrum X of j omega, nonzero only between minus omega sub M and omega sub M. Right: the sampled spectrum X sub p of j omega, a periodic train of shifted copies of X of j omega spaced by omega sub s; dashed gray lines mark the centers at plus and minus omega sub s and plus and minus two omega sub s.",
+  caption: [
+    Sampling in the frequency domain: the spectrum of $x_p (t)$ is the spectrum
+    of $x(t)$ repeated every $omega_s$ and scaled by $1\/T$. The copies stay
+    clear of one another only while $omega_s > 2 omega_M$.
+  ],
   align(center)[
   #grid(
     columns: (1fr, 3fr),
@@ -161,7 +170,7 @@ That is, $X_p (j omega)$ is a periodic function of $omega$ consisting of a super
             1.5 * calc.exp(-((x - 7) + 1.0) * ((x - 7) + 1.0) / 0.3)
               + 0.8 * calc.exp(-((x - 7) - 0.5) * ((x - 7) - 0.5) / 0.7)
           )),
-          color: green,
+          color: c-green,
           mark: none,
         ),
         lq.plot(
@@ -170,7 +179,7 @@ That is, $X_p (j omega)$ is a periodic function of $omega$ consisting of a super
             1.5 * calc.exp(-((x + 7) + 1.0) * ((x + 7) + 1.0) / 0.3)
               + 0.8 * calc.exp(-((x + 7) - 0.5) * ((x + 7) - 0.5) / 0.7)
           )),
-          color: green,
+          color: c-green,
           mark: none,
         ),
         lq.plot(
@@ -179,7 +188,7 @@ That is, $X_p (j omega)$ is a periodic function of $omega$ consisting of a super
             1.5 * calc.exp(-((x + 14) + 1.0) * ((x + 14) + 1.0) / 0.3)
               + 0.8 * calc.exp(-((x + 14) - 0.5) * ((x + 14) - 0.5) / 0.7)
           )),
-          color: green,
+          color: c-green,
           mark: none,
         ),
         lq.plot(
@@ -188,7 +197,7 @@ That is, $X_p (j omega)$ is a periodic function of $omega$ consisting of a super
             1.5 * calc.exp(-((x - 14) + 1.0) * ((x - 14) + 1.0) / 0.3)
               + 0.8 * calc.exp(-((x - 14) - 0.5) * ((x - 14) - 0.5) / 0.7)
           )),
-          color: green,
+          color: c-green,
           mark: none,
         ),
         lq.place(-3, -0.21, align: center)[$-omega_M$],
@@ -199,19 +208,19 @@ That is, $X_p (j omega)$ is a periodic function of $omega$ consisting of a super
         lq.place(18, 0.7, align: center)[$dots.c$],
         lq.plot((7, 7), (0, 1), mark: none, stroke: (
           dash: "dashed",
-          paint: red,
+          paint: c-muted,
         )),
         lq.plot((-7, -7), (0, 1), mark: none, stroke: (
           dash: "dashed",
-          paint: red,
+          paint: c-muted,
         )),
         lq.plot((14, 14), (0, 1), mark: none, stroke: (
           dash: "dashed",
-          paint: red,
+          paint: c-muted,
         )),
         lq.plot((-14, -14), (0, 1), mark: none, stroke: (
           dash: "dashed",
-          paint: red,
+          paint: c-muted,
         )),
       )],
   )],
@@ -244,6 +253,10 @@ To reconstruct the signal from $X_p (j omega)$, all we need to do is to apply an
 
 #altfig(
   alt: "Two spectra. Left: the sampled spectrum X sub p of j omega showing periodic copies, with an orange rectangle marking the ideal lowpass filter passband from minus omega sub c to omega sub c. Right: the reconstructed spectrum X sub r of j omega, recovered as the central copy of X of j omega.",
+  caption: [
+    Reconstruction: an ideal lowpass filter with cutoff $omega_M < omega_c <
+    omega_s - omega_M$ (orange) keeps the central copy and discards the rest.
+  ],
   align(center)[
   #grid(
     columns: (3fr, 1fr),
@@ -271,7 +284,7 @@ To reconstruct the signal from $X_p (j omega)$, all we need to do is to apply an
             1.5 * calc.exp(-((x - 7) + 1.0) * ((x - 7) + 1.0) / 0.3)
               + 0.8 * calc.exp(-((x - 7) - 0.5) * ((x - 7) - 0.5) / 0.7)
           )),
-          color: green,
+          color: c-green,
           mark: none,
         ),
         lq.plot(
@@ -280,7 +293,7 @@ To reconstruct the signal from $X_p (j omega)$, all we need to do is to apply an
             1.5 * calc.exp(-((x + 7) + 1.0) * ((x + 7) + 1.0) / 0.3)
               + 0.8 * calc.exp(-((x + 7) - 0.5) * ((x + 7) - 0.5) / 0.7)
           )),
-          color: green,
+          color: c-green,
           mark: none,
         ),
         lq.plot(
@@ -289,7 +302,7 @@ To reconstruct the signal from $X_p (j omega)$, all we need to do is to apply an
             1.5 * calc.exp(-((x + 14) + 1.0) * ((x + 14) + 1.0) / 0.3)
               + 0.8 * calc.exp(-((x + 14) - 0.5) * ((x + 14) - 0.5) / 0.7)
           )),
-          color: green,
+          color: c-green,
           mark: none,
         ),
         lq.plot(
@@ -298,7 +311,7 @@ To reconstruct the signal from $X_p (j omega)$, all we need to do is to apply an
             1.5 * calc.exp(-((x - 14) + 1.0) * ((x - 14) + 1.0) / 0.3)
               + 0.8 * calc.exp(-((x - 14) - 0.5) * ((x - 14) - 0.5) / 0.7)
           )),
-          color: green,
+          color: c-green,
           mark: none,
         ),
         lq.place(-3, -0.21, align: center)[$-omega_M$],
@@ -309,28 +322,28 @@ To reconstruct the signal from $X_p (j omega)$, all we need to do is to apply an
         lq.place(18, 0.7, align: center)[$dots.c$],
         lq.plot((7, 7), (0, 1), mark: none, stroke: (
           dash: "dashed",
-          paint: red,
+          paint: c-muted,
         )),
         lq.plot((-7, -7), (0, 1), mark: none, stroke: (
           dash: "dashed",
-          paint: red,
+          paint: c-muted,
         )),
         lq.plot((14, 14), (0, 1), mark: none, stroke: (
           dash: "dashed",
-          paint: red,
+          paint: c-muted,
         )),
         lq.plot((-14, -14), (0, 1), mark: none, stroke: (
           dash: "dashed",
-          paint: red,
+          paint: c-muted,
         )),
         lq.plot((-4, -4), (0, 1.7), mark: none, stroke: (
-          paint: orange,
+          paint: c-orange,
         )),
         lq.plot((4, 4), (0, 1.7), mark: none, stroke: (
-          paint: orange,
+          paint: c-orange,
         )),
         lq.plot((-4, 4), (1.7, 1.7), mark: none, stroke: (
-          paint: orange,
+          paint: c-orange,
         )),
       )],
 
@@ -356,7 +369,7 @@ To reconstruct the signal from $X_p (j omega)$, all we need to do is to apply an
   )],
 )
 
-When applying a lowpass filter in the frequency domain, it is equivalent to convolving the signal with a $"sinc"$ function in the time domain, i.e.,
+Applying a lowpass filter in the frequency domain is equivalent to convolving the signal with a $"sinc"$ function in the time domain, i.e.,
 $
   x_r (t) = x_p (t) star h(t)
 $
@@ -390,12 +403,16 @@ $
   points
 }
 #let xs = lq.linspace(-3, 3, num: 100)
-#let sinc(x) = calc.sin(calc.pi * x) / (calc.pi * x)
 #let yd = xd.map(x => f(x))
 #let stair-coarse = make-staircase(xd, yd)
 
-#figure(
-  alt: "Two plots. Left: the original continuous signal x of t. Right: its reconstruction x sub r of t shown as the sum of dashed green sinc kernels, each centered at a sample time x sub p of t marked with a red cross, summing to the solid blue curve that matches x of t.",
+#altfig(
+  alt: "Two plots. Left: the original continuous signal x of t. Right: its reconstruction x sub r of t, drawn as the solid curve, with one dashed green sinc kernel per sample and the sample values x sub p of t marked with blue crosses; the kernels sum to the solid curve.",
+  caption: [
+    The same reconstruction seen in the time domain: one sinc kernel per sample,
+    each scaled by its sample value. Every kernel is zero at all the other
+    sample times, so the sum passes exactly through every sample.
+  ],
   align(center)[
     #grid(
       columns: (1fr, 2fr),
@@ -418,68 +435,22 @@ $
           lq.stem(
             xd,
             xd.map(xd => f(xd)),
-            color: red,
+            color: c-blue,
             mark: "x",
             label: $x_p (t)$,
           ),
 
-          let i = 0,
-          lq.plot(
-            xs.map(xs => xs + xd.at(i)),
-            xs.map(xs => sinc(xs) * f(xd.at(i))),
+          // One kernel per sample, so the family shown is the family summed
+          // in the equation above rather than an arbitrary subset of it. Only
+          // the first carries the legend label.
+          ..range(xd.len()).map(i => lq.plot(
+            xs.map(u => u + xd.at(i)),
+            xs.map(u => sinc(u) * f(xd.at(i))),
             mark: none,
-            color: green,
+            color: c-green,
             stroke: stroke(dash: "dashed"),
-            label: $"sinc" (t - n T)$,
-          ),
-          let i = 2,
-          lq.plot(
-            xs.map(xs => xs + xd.at(i)),
-            xs.map(xs => sinc(xs) * f(xd.at(i))),
-            mark: none,
-            color: green,
-            stroke: stroke(dash: "dashed"),
-          ),
-          let i = 3,
-          lq.plot(
-            xs.map(xs => xs + xd.at(i)),
-            xs.map(xs => sinc(xs) * f(xd.at(i))),
-            mark: none,
-            color: green,
-            stroke: stroke(dash: "dashed"),
-          ),
-          let i = 4,
-          lq.plot(
-            xs.map(xs => xs + xd.at(i)),
-            xs.map(xs => sinc(xs) * f(xd.at(i))),
-            mark: none,
-            color: green,
-            stroke: stroke(dash: "dashed"),
-          ),
-          let i = 5,
-          lq.plot(
-            xs.map(xs => xs + xd.at(i)),
-            xs.map(xs => sinc(xs) * f(xd.at(i))),
-            mark: none,
-            color: green,
-            stroke: stroke(dash: "dashed"),
-          ),
-          let i = 6,
-          lq.plot(
-            xs.map(xs => xs + xd.at(i)),
-            xs.map(xs => sinc(xs) * f(xd.at(i))),
-            mark: none,
-            color: green,
-            stroke: stroke(dash: "dashed"),
-          ),
-          let i = 7,
-          lq.plot(
-            xs.map(xs => xs + xd.at(i)),
-            xs.map(xs => sinc(xs) * f(xd.at(i))),
-            mark: none,
-            color: green,
-            stroke: stroke(dash: "dashed"),
-          ),
+            label: if i == 0 { $"sinc" (t - n T)$ },
+          )),
         )
       ],
     )],
@@ -504,8 +475,12 @@ $
 }
 #let yd = xd.map(x => f(x))
 #let stair-coarse = make-staircase(xd, yd)
-#figure(
+#altfig(
   alt: "Block diagram and three discrete-time plots illustrating discrete-time sampling. Left: x of n and an impulse train p of n equal to the sum over k of delta of n minus k N enter a multiplier whose output is x sub p of n. Center-left: stem plot of x of n. Center-right: stem plot of p of n. Right: stem plot of x sub p of n, equal to x of n at multiples of N and zero elsewhere.",
+  caption: [
+    Discrete-time sampling: $x_p [n]$ keeps every $N$th sample of $x[n]$ and
+    sets the rest to zero, rather than discarding them.
+  ],
   align(center)[
     #grid(
       columns: (1fr, 1fr, 1fr, 1fr),
@@ -558,7 +533,7 @@ $
           ylim: (-2, 2),
           height: 2cm,
           width: 3cm,
-          lq.stem(xd, xd.map(xd => (xd - xd + 1))),
+          lq.stem(xd, xd.map(_ => 1)),
         )],
       [
         #cdiagram(
@@ -575,9 +550,9 @@ $
 
 Here the new sequence $x_p [n]$ resulting from the sampling process is equal to the original sequence $x[n]$ at integer multiples of the sampling period $N$ and is zero at the intermediate samples,
 $
-  x_p [n] = cases(x[n]\, quad n = m N, 0\, quad "o.w.")
+  x_p [n] = cases(x[n]\, quad n = m N, 0\, quad "otherwise")
 $
-where $m$ is an integer. The effect of frequency domain of discrete-time sampling is seen by using the multiplication property, we have
+where $m$ is an integer. The frequency-domain effect of discrete-time sampling follows from the multiplication property. In the time domain,
 $
   x_p [n] = x[n] p[n] = sum_k x[k N] delta[n - k N]
 $
@@ -595,4 +570,4 @@ $
   X_p (e^(j omega)) = 1 / N sum_(k = 0)^(N - 1) X(e^(j (omega - k omega_s)))
 $
 
-Similar to the continuous-time system, when $omega_s > 2 omega_M$, there is no aliasing. 
+Similar to the continuous-time case, when $omega_s > 2 omega_M$, there is no aliasing.

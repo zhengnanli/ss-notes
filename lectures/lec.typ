@@ -11,7 +11,7 @@
       link: "https://zhengnanli.gitlab.io",
     ),
   ),
-  
+
   // lof: true,
   // lot: true,
   // lol: true,
@@ -29,21 +29,19 @@
 
 #show selector(<nonumber>): set heading(numbering: none)
 
+// The topics run on rather than each starting a fresh page: a page break before
+// every topic left a blank tail on the last page of each one, about five pages
+// across the document. What announces a new topic instead is the extra air
+// above a level-1 heading, set in `template`, together with the running header,
+// which names the topic in force at the foot of the page. The one page break
+// kept is the one after the table of contents.
 #pagebreak()
 #include "intro.typ"
-#pagebreak()
 #include "lti.typ"
-#pagebreak()
 #include "random_process.typ"
-#pagebreak()
 #include "fourier_series.typ"
-#pagebreak()
 #include "ct_fourier_transform.typ"
-#pagebreak()
 #include "dt_fourier_transform.typ"
-#pagebreak()
 #include "sampling.typ"
-#pagebreak()
 #include "laplace.typ"
-#pagebreak()
 #include "math.typ"

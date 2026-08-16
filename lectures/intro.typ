@@ -9,13 +9,22 @@ Signals describe a wide variety of physical phenomena. In this course, we intend
   skip-rows: 2,
   delimiter: " ",
 )
-#let h = 6.62607015e-34
-#let c = 299792458
-#let e = 1.60217733e-19
-#let k = 1e9 * h * c / e
+// Named in full: a bare `h`, `c`, or `e` at file scope shadows Typst's `h()`
+// spacing function and reads as the mathematical constants everywhere below.
+#let planck = 6.62607015e-34
+#let light-speed = 299792458
+#let elem-charge = 1.60217733e-19
+// Photon energy in eV from wavelength in nm: E = h c / (lambda e), with the
+// 1e9 carrying nm to m.
+#let nm-to-ev = 1e9 * planck * light-speed / elem-charge
 
 #cdiagram(
   alt: "Spectroscopy plot showing relative intensity versus wavelength in nm for the oxygen molecule, with a secondary top axis showing photon energy in eV.",
+  caption: [
+    An emission spectrum of molecular oxygen: relative intensity against
+    wavelength, with photon energy on the upper axis. The independent variable
+    here is wavelength rather than time.
+  ],
   width: 10cm,
   margin: 3%,
 
@@ -31,7 +40,7 @@ Signals describe a wide variety of physical phenomena. In this course, we intend
     offset: 0,
     exponent: 0,
     tick-distance: 5e-5,
-    functions: (λ => k / λ, E => k / E),
+    functions: (λ => nm-to-ev / λ, E => nm-to-ev / E),
   ),
 )
 
@@ -49,7 +58,8 @@ and the signal power is defined as
   "Signal power P_infinity is defined as the limit as T goes to infinity of one over 2T times the integral from -T to T of the squared magnitude of x(t).",
   $ P_infinity eq.delta lim_(T arrow infinity) 1/(2T) integral_(-T)^(T) |x(t)|^2 "d"t $,
 )
-for some time interval $T$.
+that is, the energy in a window of length $2T$, averaged over that window, as
+the window grows without bound.
 
 == Typical Signals
 #show: lq.theme.schoolbook
@@ -59,17 +69,17 @@ for some time interval $T$.
 
 === Continuous versus Discrete Signals
 
-Continuous-Time Signal: independent variable in continuous dependent variable defined for each value. For example, position of a vehicle as a function of time; sun intensity as a function of time in a day.
+Continuous-Time Signal: the independent variable is continuous, and the signal is defined for every value it takes. For example, position of a vehicle as a function of time; sun intensity as a function of time in a day.
 
-Discrete-Time Signal: independent variable defined for only certain values so the signal is only defined for these values. For example, luggage lost each day at an airport, pixels in an image.
+Discrete-Time Signal: the independent variable takes only certain values, so the signal is defined only at those values. For example, luggage lost each day at an airport, pixels in an image.
 
 === Analog versus Digital Signals
 
-Analog Signal: over a finite interval, the signal can take infinite number of values.
+Analog Signal: over a finite interval, the signal can take an infinite number of values.
 
-Digital Signal: over a finite interval, the signal can only take finite number of values.
+Digital Signal: over a finite interval, the signal can take only a finite number of values.
 
-The discrete-time signal can be _sampled_ from continuous-time signal. We will discuss the process of sampling in great detail later in this class.
+A discrete-time signal can be _sampled_ from a continuous-time signal. We will discuss the process of sampling in great detail later in this class.
 
 === Deterministic versus Random Signals
 
@@ -83,13 +93,13 @@ Periodic signals are those which repeat after a finite fixed time interval has e
 
 #example("Periodic and Aperiodic Signals")[
   - $x(t) = cos(2 pi t) + sin (2 t)$ is not periodic. We cannot find a common period that can be formed from the underlying periods.
-  - $x[n] = cos (2 n)$ is also aperiodic. The `cosine` function has a period of $pi$, but $pi$ is not an integer (because $n$ has to be integer).
+  - $x[n] = cos (2 n)$ is also aperiodic. Periodicity requires $2 N = 2 pi k$ for integers $N > 0$ and $k$, i.e., $N = pi k$, and no integer $N$ satisfies this.
   - $x[n] = cos( pi n^2 )$, however, is periodic. The sequence evaluates to $1, -1, 1, -1, dots$, so it has a period of $2$.
 ]
 
 === Finite and Infinite Signals
 
-Finite signals are defined over a fixed time interval. Infinite signals are defined over all time, i.e., $t in (-infinity, infinity)$, or $t in RR$. In the discrete-time case, $n in NN$.
+Finite signals are defined over a fixed time interval. Infinite signals are defined over all time, i.e., $t in (-infinity, infinity)$, or $t in RR$. In the discrete-time case, $n in ZZ$.
 
 === Even versus Odd Signals
 
@@ -111,30 +121,33 @@ The continuous-time _complex exponential signal_ is of the form
   "Continuous-time complex exponential signal: x(t) equals C times e to the (a t), where C and a are in general complex.",
   $ x(t) = C e^(a t) $,
 )
-where $C$ and $a$ are, in general, complex numbers. This signal form serves as a building block for analyzing more complex signals and systems.
+where $C$ and $a$ are, in general, complex numbers. This signal form serves as a building block for analyzing more complicated signals and systems.
 
-We start by examining the simplest case: _real exponential signals_, where both $C$ and $a$ are real numbers. The behavior of these signals is determined by the sign of the parameter $a$. As illustrated in the figures below, when $a$ is positive, the signal exhibits exponential growth as time increases, while when $a$ is negative, the signal decays exponentially toward zero. These exponential behaviors model physical phenomena such as population growth, radioactive decay, and the charging and discharging of capacitors in electrical circuits.
+We start by examining the simplest case: _real exponential signals_, where both $C$ and $a$ are real numbers. The behavior of these signals is determined by the sign of the parameter $a$, as illustrated in @fig-real-exp: when $a$ is positive, the signal exhibits exponential growth as time increases, while when $a$ is negative, the signal decays exponentially toward zero. These exponential behaviors model physical phenomena such as population growth, radioactive decay, and the charging and discharging of capacitors in electrical circuits.
 
 #let x = lq.linspace(-2.3, 2.3)
-#align(center)[
-  #grid(
-    columns: (1fr, 1fr),
-    column-gutter: 2em,
-    [
-      #cdiagram(
-        alt: "Plot of the real exponential x(t) = C e^(a t) for a > 0, showing exponential growth from near zero up to about t = 2.3.",
+#altfig(
+  alt: "Two plots of the real exponential x(t) = C e^(a t). Left, for a > 0: exponential growth from near zero up to about t = 2.3. Right, for a < 0: exponential decay from a peak near t = -2.3 toward zero as t increases.",
+  caption: [
+    The real exponential $x(t) = C e^(a t)$ with $a$ and $C$ real, growing for
+    $a > 0$ (left) and decaying for $a < 0$ (right).
+  ],
+  align(center)[
+    #grid(
+      columns: (1fr, 1fr),
+      column-gutter: 2em,
+      cdiagram(
         title: $x(t) = C e^(a t), a > 0, a, C in bb("R")$,
         xlabel: $t$,
         lq.plot(x, x.map(x => calc.exp(x)), mark: none),
-      )],
-    [
-      #cdiagram(
-        alt: "Plot of the real exponential x(t) = C e^(a t) for a < 0, showing exponential decay from a peak near t = -2.3 toward zero as t increases.",
+      ),
+      cdiagram(
         title: $x(t) = C e^(a t), a < 0, a, C in bb("R")$,
         xlabel: $t$,
         lq.plot(x, x.map(x => calc.exp(-x)), mark: none),
-      )],
-  )]
+      ),
+    )],
+) <fig-real-exp>
 
 === Periodic Complex Exponential and Sinusoidal Signals
 
@@ -156,9 +169,13 @@ A signal that is closely related to the periodic complex exponential is the _sin
 where $A$ is the amplitude (determining the signal's peak value), $omega_0$ is the angular frequency in radians per second, and $phi$ is the phase shift. Sinusoidal signals appear in alternating current electrical systems, mechanical vibrations, and acoustic waves. To determine the period of this sinusoidal signal, we seek the smallest positive value $T_0$ that satisfies $x(t) = x(t + T_0)$ for all $t$. Using trigonometric identities, it can be shown that $T_0 = (2 pi)/omega_0$, which matches the period of the complex exponential with the same frequency parameter.
 
 #let x = lq.linspace(-5, 8, num: 100)
-#align(center)[
-  #cdiagram(
+#cdiagram(
     alt: "Plot of the sinusoid x(t) = A cos(omega_0 t + phi), with the value A cos(phi) annotated at t = 0 and the period T = 2 pi / omega_0 marked by a double-ended arrow between two successive peaks.",
+    caption: [
+      The sinusoid $x(t) = A cos(omega_0 t + phi)$. The phase $phi$ sets the
+      value $A cos phi$ at the origin; the period between successive peaks is
+      $T = 2 pi \/ omega_0$.
+    ],
     title: $x(t) = A cos (omega_0 t + phi)$,
     xlabel: $t$,
     lq.plot(x, x.map(x => 0.5 * calc.cos(1.3 * x - 2.3)), mark: none),
@@ -170,7 +187,7 @@ where $A$ is the amplitude (determining the signal's peak value), $omega_0$ is t
       (1.75, 0.5),
       (6.55, 0.5),
     ),
-  )]
+  )
 
 Euler's relation provides the connection between exponential and trigonometric functions:
 #theorem("Euler's Relation")[
@@ -208,6 +225,10 @@ The real part of this expression, $|C| e^(r t) cos (omega_0 t + theta)$, represe
 #let x = lq.linspace(-3.2, 5.2, num: 220)
 #cdiagram(
   alt: "Plot of Re{C e^(a t)} = |C| e^(r t) cos(omega_0 t + theta) for r > 0: a sinusoid bounded above and below by exponentially growing dotted envelopes plus and minus |C| e^(r t).",
+  caption: [
+    A growing complex exponential, $r > 0$: the oscillation at $omega_0$ stays
+    between the dotted envelopes $plus.minus |C| e^(r t)$.
+  ],
   title: $Re {C e^(a t)}= |C| e^(r t) cos(omega_0 t + theta); r > 0$,
   xlabel: $t$,
   lq.plot(x, x.map(x => calc.exp(0.3 * x) * calc.cos(5 * x)), mark: none),
@@ -225,7 +246,7 @@ The real part of this expression, $|C| e^(r t) cos (omega_0 t + theta)$, represe
   ),
 )
 
-=== Complex Exponential and Sinusoidal Signals
+=== Discrete-Time Complex Exponential and Sinusoidal Signals
 
 The discrete-time analog of the complex exponential signal is given by
 #eqalt(
@@ -251,31 +272,35 @@ The discrete-time sinusoidal sequence is expressed as
 This representation shows how a real sinusoidal sequence can be decomposed into a sum of two complex exponential sequences, which is fundamental to frequency domain analysis.
 
 #let x = lq.linspace(-2.3, 2.3, num: 10)
-#align(center)[
-  #grid(
-    columns: (1fr, 1fr),
-    column-gutter: 2em,
-    [
-      #altfig(alt: "Discrete-time stem plot of x[n] = C alpha^n for |alpha| > 1, with stem heights growing rapidly as n increases.")[
-        #lq.diagram(
-          title: $x[n] = C alpha^n, |alpha| > 1, alpha, C in bb("R")$,
-          height: 3cm,
-          ylim: (-2, 11),
-          xlabel: $n$,
-          lq.stem(x, x.map(x => calc.exp(x))),
-        )]],
-    [
-      #altfig(alt: "Discrete-time stem plot of x[n] = C alpha^n for |alpha| < 1, with stem heights decaying toward zero as n increases.")[
-        #lq.diagram(
-          title: $x[n] = C alpha^n, |alpha| < 1, alpha, C in bb("R")$,
-          height: 3cm,
-          ylim: (-2, 11),
-          xlabel: $n$,
-          lq.stem(x, x.map(x => calc.exp(-x))),
-        )]],
-  )]
+#altfig(
+  alt: "Two discrete-time stem plots of x[n] = C alpha^n. Left, for |alpha| > 1: stem heights grow rapidly as n increases. Right, for |alpha| < 1: stem heights decay toward zero as n increases.",
+  caption: [
+    The discrete-time real exponential $x[n] = C alpha^n$, growing for
+    $|alpha| > 1$ (left) and decaying for $|alpha| < 1$ (right). It is the
+    magnitude of $alpha$, not its sign, that decides which.
+  ],
+  align(center)[
+    #grid(
+      columns: (1fr, 1fr),
+      column-gutter: 2em,
+      lq.diagram(
+        title: $x[n] = C alpha^n, |alpha| > 1, alpha, C in bb("R")$,
+        height: 3cm,
+        ylim: (-2, 11),
+        xlabel: $n$,
+        lq.stem(x, x.map(x => calc.exp(x))),
+      ),
+      lq.diagram(
+        title: $x[n] = C alpha^n, |alpha| < 1, alpha, C in bb("R")$,
+        height: 3cm,
+        ylim: (-2, 11),
+        xlabel: $n$,
+        lq.stem(x, x.map(x => calc.exp(-x))),
+      ),
+    )],
+)
 
-=== General Complex Exponential Signals
+=== General Discrete-Time Complex Exponential Signals
 
 We now examine the discrete-time analog. If we write $C$ and $alpha$ in polar form, namely $C = |C| e^(j theta)$ and $alpha = |alpha| e^(j omega_0)$, we obtain the discrete-time equivalent of the general complex exponential:
 #eqalt(
@@ -287,14 +312,18 @@ We now examine the discrete-time analog. If we write $C$ and $alpha$ in polar fo
 
 This expression shows the discrete-time counterpart to the growing or decaying sinusoidal behavior observed in continuous time. The magnitude $|alpha|$ determines whether the sequence grows ($|alpha| > 1$), decays ($|alpha| < 1$), or maintains constant amplitude ($|alpha| = 1$). The discrete frequency $omega_0$ controls the rate of oscillation, while the initial phase $theta$ determines the starting point of the oscillation.
 
-The figure below illustrates the real part of such a sequence, showing how discrete samples follow an exponentially modulated sinusoidal pattern. The dotted envelope lines show the exponential growth or decay boundary, while the discrete samples oscillate within this envelope. This type of signal appears frequently in the analysis of discrete-time systems, digital filters, and sampled-data control systems.
+@fig-dt-general-exp illustrates the real part of such a sequence, showing how discrete samples follow an exponentially modulated sinusoidal pattern. The dotted envelope lines show the exponential growth or decay boundary, while the discrete samples oscillate within this envelope. This type of signal appears frequently in the analysis of discrete-time systems, digital filters, and sampled-data control systems.
 
 #let x = lq.linspace(-3.2, 8.5, num: 220)
 #let n = lq.linspace(-3.2, 8.5, num: 70)
 
 #cdiagram(
   alt: "Discrete-time stem plot of Re{C alpha^n} = |C| |alpha|^n cos(omega_0 n + theta) for |alpha| > 1, with samples oscillating inside exponentially growing dotted envelopes.",
-  title: $Re {C alpha^n} = |C| |alpha|^n cos(omega_0 n + theta); alpha > 1$,
+  caption: [
+    A growing discrete-time complex exponential, $|alpha| > 1$: the samples
+    oscillate at $omega_0$ inside the dotted envelopes $plus.minus |C| |alpha|^n$.
+  ],
+  title: $Re {C alpha^n} = |C| |alpha|^n cos(omega_0 n + theta); |alpha| > 1$,
   xlabel: $n$,
   lq.stem(n, n.map(n => calc.exp(0.3 * n) * calc.cos(2 * n))),
   lq.plot(
@@ -309,20 +338,20 @@ The figure below illustrates the real part of such a sequence, showing how discr
     mark: none,
     stroke: stroke(dash: "dotted"),
   ),
-)
+) <fig-dt-general-exp>
 
 === Periodicity Properties of Discrete-Time Complex Exponentials
 
-In order for the signal $e^(j omega_0 n)$ to be periodic with period $N > 0$, we must have $e^(j omega_0 (n + N)) = e^(j omega_0 n)$, i.e., $omega_0 / (2 pi ) = m / N$. In continuous-time, as $omega_0$ increases, the signal will oscillate with higher frequency. However, this is _not_ the case in discrete-time. Consider now
+In order for the signal $e^(j omega_0 n)$ to be periodic with period $N > 0$, we must have $e^(j omega_0 (n + N)) = e^(j omega_0 n)$, i.e., $omega_0 / (2 pi ) = m / N$. In continuous-time, as $omega_0$ increases, the signal will oscillate with higher frequency. However, this is _not_ the case in discrete-time. Since $n$ is an integer, $e^(j 2 pi n) = 1$, and therefore
 $
-  e^(j omega_0 n) equiv e^(j (omega_0 + 2 pi) n) = e^(j omega_0 n) e^(j -2 pi n) equiv 1
+  e^(j (omega_0 + 2 pi) n) = e^(j omega_0 n) e^(j 2 pi n) = e^(j omega_0 n)
 $
 
-In discrete-time, the frequency $omega_0 + 2 pi k$ is the _same_ $omega_0$ as the frequency $omega_0$. In continuous-time, $e^(j omega_0 t)$ is unique for each frequency $omega_0$. However, this is not the case in discrete-time. The signal with frequency $omega_0$ is the same as the signal with frequency $omega_0 plus.minus 2 n pi$. Thus, in discrete-time, frequency is only defined over the interval $0 < omega_0 < 2 pi$, or $-pi < omega_0 < pi$.
+In discrete-time, the frequency $omega_0 + 2 pi k$ is therefore the _same_ frequency as $omega_0$, for every integer $k$. In continuous-time, $e^(j omega_0 t)$ is a distinct signal for each frequency $omega_0$; in discrete-time it is not. Thus, in discrete-time, frequency need only be considered over one interval of length $2 pi$, such as $0 <= omega_0 < 2 pi$ or $-pi <= omega_0 < pi$.
 
 Now, let us compute the period $N$ for a discrete-time sinusoid:
 $
-  e^(j omega_0 n) = e^(j (omega_0 n + N)) = e^(j omega_0 n) e^(j omega_0 N)
+  e^(j omega_0 (n + N)) = e^(j omega_0 n) e^(j omega_0 N) = e^(j omega_0 n)
 $
 Therefore, we need to have
 $
@@ -337,7 +366,7 @@ Since $N in NN$, the ratio $omega_0 / (2 pi)$ must be rational. If $omega_0 / (2
 
 === `sinc` signal
 
-In general, there are two similar definitions of the `sinc` signal and alike, namely,
+Two closely related definitions are both in common use, namely,
 
 #eqalt(
   "Sampling-function form: sa(t) is defined as sine of t divided by t.",
@@ -351,48 +380,46 @@ and
   $ "sinc"(t) = (sin (pi t)) / (pi t) $,
 )
 
-The $"sa"(t)$ is shown below. It is easy to show that
+Both are plotted in @fig-sinc. It is easy to show that
 #eqalt(
   "Integral of sa(t) over all real t equals pi.",
   $ integral_(-infinity)^(infinity) "sa"(t) "d"t = pi $,
 )
 
 #let x = lq.linspace(-20, 20, num: 420)
-#align(center)[
-  #grid(
-    columns: (1fr, 1fr),
-    column-gutter: 2em,
-    [
-      #altfig(alt: "Plot of sinc(t) = sin(pi t)/(pi t) on t in [-5, 5], a main lobe of height 1 at t = 0 with decaying side lobes; zero crossings at the integers t = 1, 2, 3, ...")[
-        #lq.diagram(
-          xlabel: $t$,
-          title: $"sinc"(t)$,
-          xlim: (-5, 5),
-          height: 3.5cm,
-          lq.plot(
-            x,
-            x.map(x => calc.sin(calc.pi * x) / (calc.pi * x)),
-            mark: none,
-          ),
-          lq.place(1.2, -0.1, align: left)[$1$],
-          lq.place(2.2, -0.1, align: left)[$2$],
-          lq.place(3.0, -0.1, align: left)[$dots.c$],
-        )]],
-    [
-      #altfig(alt: "Plot of sa(t) = sin(t)/t on t in [-15, 15], a main lobe of height 1 at t = 0 with decaying side lobes; zero crossings at integer multiples of pi.")[
-        #lq.diagram(
-          xlabel: $t$,
-          title: $"sa"(t)$,
-          xlim: (-15, 15),
-          height: 3.5cm,
-          lq.plot(x, x.map(x => calc.sin(x) / x), mark: none),
-          lq.place(calc.pi + 0.5, -0.1, align: left)[$pi$],
-          lq.place(calc.pi * 2 + 0.1, -0.1, align: left)[$2pi$],
-          lq.place(calc.pi * 3 + 0.1, -0.1, align: left)[$dots.c$],
-        )]
-    ],
-  )
-]
+#altfig(
+  alt: "Two plots. Left: sinc(t) = sin(pi t)/(pi t) on t in [-5, 5], a main lobe of height 1 at t = 0 with decaying side lobes and zero crossings at the integers. Right: sa(t) = sin(t)/t on t in [-15, 15], the same shape with zero crossings at integer multiples of pi.",
+  caption: [
+    The two conventions side by side. Both have a main lobe of height one at the
+    origin; $"sinc"(t)$ (left) crosses zero at every nonzero integer, while
+    $"sa"(t)$ (right) crosses zero at every nonzero multiple of $pi$.
+  ],
+  align(center)[
+    #grid(
+      columns: (1fr, 1fr),
+      column-gutter: 2em,
+      lq.diagram(
+        xlabel: $t$,
+        title: $"sinc"(t)$,
+        xlim: (-5, 5),
+        height: 3.5cm,
+        lq.plot(x, x.map(sinc), mark: none),
+        lq.place(1.2, -0.1, align: left, plabel[$1$]),
+        lq.place(2.2, -0.1, align: left, plabel[$2$]),
+        lq.place(3.0, -0.1, align: left)[$dots.c$],
+      ),
+      lq.diagram(
+        xlabel: $t$,
+        title: $"sa"(t)$,
+        xlim: (-15, 15),
+        height: 3.5cm,
+        lq.plot(x, x.map(sa), mark: none),
+        lq.place(calc.pi + 0.5, -0.1, align: left, plabel[$pi$]),
+        lq.place(calc.pi * 2 + 0.1, -0.1, align: left, plabel[$2pi$]),
+        lq.place(calc.pi * 3 + 0.1, -0.1, align: left)[$dots.c$],
+      ),
+    )],
+) <fig-sinc>
 
 === Unit Impulse and Unit Step Functions
 
@@ -405,51 +432,52 @@ One of the simplest discrete-time signals is the _unit impulse_ (or _unit sample
     "Discrete unit impulse: delta of n is 0 when n is not equal to 0, and 1 when n equals 0.",
     $ delta[n] = cases(0 \, quad n eq.not 0, 1 \, quad n = 0) $,
   )
-  The unit impulse is plotted on the left figure.
   The discrete-time unit step function is defined as
   #eqalt(
     "Discrete unit step: u of n is 0 for n less than 0, and 1 for n greater than or equal to 0.",
     $ u[n] = cases(0 \, quad n < 0, 1 \, quad n >= 0) $,
   )
-  and it is plotted on the right.
+  Both are plotted in @fig-dt-impulse-step.
 
   #let n = range(-5, 6)
-  #align(center)[
-    #grid(
-      columns: (1fr, 1fr),
-      column-gutter: 2em,
-      [
-        #altfig(alt: "Stem plot of the discrete unit impulse delta[n]: a single stem of height 1 at n = 0 and zero everywhere else.")[
-          #lq.diagram(
-            title: [$delta[n]$],
-            xlabel: $n$,
-            ylim: (-0.1, 1.2),
-            width: 5cm,
-            height: 3cm,
-            lq.stem(
-              n,
-              n.map(n => if n == 0 { 1 } else { 0 }),
-              stroke: 2.0pt,
-              mark-size: 10pt,
-            ),
-          )]],
-      [#altfig(alt: "Stem plot of the discrete unit step u[n]: stems of height 0 for n < 0 and height 1 for n >= 0.")[
-          #lq.diagram(
-            title: [$u[n]$],
-            xlabel: $n$,
-            ylim: (-0.1, 1.2),
-            width: 5cm,
-            height: 3cm,
-            lq.stem(
-              n,
-              n.map(n => if n >= 0 { 1 } else { 0 }),
-              stroke: 2.0pt,
-              mark-size: 10pt,
-            ),
-          )]
-      ],
-    )
-  ]
+  #altfig(
+    alt: "Two stem plots. Left: the discrete unit impulse delta[n], a single stem of height 1 at n = 0 and zero everywhere else. Right: the discrete unit step u[n], stems of height 0 for n < 0 and height 1 for n >= 0.",
+    caption: [
+      The discrete-time unit impulse $delta[n]$ (left) and unit step $u[n]$
+      (right).
+    ],
+    align(center)[
+      #grid(
+        columns: (1fr, 1fr),
+        column-gutter: 2em,
+        lq.diagram(
+          title: [$delta[n]$],
+          xlabel: $n$,
+          ylim: (-0.1, 1.2),
+          width: 5cm,
+          height: 3cm,
+          lq.stem(
+            n,
+            n.map(n => if n == 0 { 1 } else { 0 }),
+            stroke: 2.0pt,
+            mark-size: 10pt,
+          ),
+        ),
+        lq.diagram(
+          title: [$u[n]$],
+          xlabel: $n$,
+          ylim: (-0.1, 1.2),
+          width: 5cm,
+          height: 3cm,
+          lq.stem(
+            n,
+            n.map(n => if n >= 0 { 1 } else { 0 }),
+            stroke: 2.0pt,
+            mark-size: 10pt,
+          ),
+        ),
+      )],
+  ) <fig-dt-impulse-step>
 ]
 
 There is a close relationship between the discrete-time unit impulse and unit step. In particular, the discrete-time unit impulse is the _first difference_ of the discrete-time step:
@@ -491,6 +519,7 @@ as shown below
 #let t = (-1, -0.00001, 0, 0.00001, 2)
 #cdiagram(
   alt: "Plot of the continuous unit step u(t): equal to 0 for t < 0 and 1 for t > 0, with a vertical jump at t = 0.",
+  caption: [The continuous-time unit step $u(t)$, which is left undefined at $t = 0$.],
   title: [$u(t)$],
   xlabel: $t$,
   ylim: (-0.1, 1.2),
@@ -506,14 +535,14 @@ The continuous-time _unit impulse function_ $delta(t)$ is related to the unit st
   $ u(t) = integral_(-infinity)^t delta(tau) "d"tau $,
 )
 
-In other words, the continuous-time unit impulse response can be thought of as the _first derivative_ of the continuous-time unit step, i.e.,
+In other words, the continuous-time unit impulse can be thought of as the _first derivative_ of the continuous-time unit step, i.e.,
 
 #eqalt(
   "Impulse as derivative: delta of t equals the derivative of u of t with respect to t.",
   $ delta(t) = ("d"u(t)) / ("d"t) $,
 )
 
-If we consider an approximation to the unit step $u_Delta (t)$, which rises from the value 0 to the value 1 in a short time interval of length $Delta$. The unit step, of course, changes values instantaneously and thus can be thought of as an idealization of $u_Delta (t)$ for $Delta$ so short that its duration does not matter for any practical purpose. Formally, $u(t)$ is the limit of $u_Delta (t)$ as $Delta arrow 0$. This relationship is shown below.
+Consider an approximation to the unit step, $u_Delta (t)$, which rises from the value 0 to the value 1 in a short time interval of length $Delta$. The unit step, of course, changes values instantaneously and thus can be thought of as an idealization of $u_Delta (t)$ for $Delta$ so short that its duration does not matter for any practical purpose. Formally, $u(t)$ is the limit of $u_Delta (t)$ as $Delta arrow 0$. This relationship is shown in @fig-step-approx, together with its derivative $delta_Delta (t) = "d"u_Delta (t) \/ "d"t$.
 
 Note that $delta_Delta (t)$ is a short pulse, of duration $Delta$, and with unit area for any value of $Delta$. As $Delta arrow 0$, $delta_Delta (t)$ becomes narrower and higher, maintaining its unit area. Its limiting form
 
@@ -525,44 +554,49 @@ Note that $delta_Delta (t)$ is a short pulse, of duration $Delta$, and with unit
 can be thought of as an idealization of the short pulse $delta_Delta (t)$ as the duration $Delta$ becomes insignificant.
 
 #let t = (-0.7, -0.01, 0, 0.15, 0.1501, 1)
-#grid(
-  columns: (1fr, 1fr),
-  column-gutter: 2em,
-  [
-    #cdiagram(
-      alt: "Plot of the smoothed unit step u_Delta(t): zero for t < 0, rising linearly from 0 to 1 over the interval [0, Delta], then constant at 1.",
-      title: [$u_Delta (t)$],
-      xlabel: $t$,
-      ylim: (-0.1, 1.2),
-      lq.plot(
-        t,
-        t.map(t => if t > 0 { 1 } else { 0 }),
-        stroke: 1.5pt,
-        mark: none,
+#altfig(
+  alt: "Two plots. Left: the smoothed unit step u_Delta(t), zero for t < 0, rising linearly from 0 to 1 over the interval [0, Delta], then constant at 1. Right: its derivative delta_Delta(t), a rectangular pulse of height 1/Delta supported on [0, Delta] and zero elsewhere, with unit area.",
+  caption: [
+    The smoothed step $u_Delta (t)$ (left) and its derivative $delta_Delta (t)$
+    (right). The pulse has width $Delta$ and height $1 \/ Delta$, so its area is
+    one for every $Delta$; the impulse is the limit as $Delta arrow 0$.
+  ],
+  align(center)[
+    #grid(
+      columns: (1fr, 1fr),
+      column-gutter: 2em,
+      cdiagram(
+        title: [$u_Delta (t)$],
+        xlabel: $t$,
+        ylim: (-0.1, 1.2),
+        lq.plot(
+          t,
+          t.map(t => if t > 0 { 1 } else { 0 }),
+          stroke: 1.5pt,
+          mark: none,
+        ),
+        lq.place(0.1, -0.1, align: left, plabel[$Delta$]),
+        lq.place(-0.1, 1.0, align: left, plabel[$1$]),
+        height: 3cm,
+        width: 6cm,
       ),
-      lq.place(0.1, -0.1, align: left)[$Delta$],
-      lq.place(-0.1, 1.0, align: left)[$1$],
-      height: 3cm,
-      width: 6cm,
-    )],
-  [
-    #cdiagram(
-      alt: "Plot of delta_Delta(t) = d u_Delta(t) / d t: a rectangular pulse of height 1/Delta supported on [0, Delta] and zero elsewhere, with unit area.",
-      title: [$delta_Delta (t) = ("d"u_Delta (t)) / ("d"t)$],
-      xlabel: $t$,
-      ylim: (-0.1, 1.2),
-      lq.place(0.1, -0.1, align: left)[$Delta$],
-      lq.place(-0.2, 1.0, align: left)[$1/Delta$],
-      lq.plot(
-        t,
-        t.map(t => if t >= 0.1501 or t <= -0.01 { 0 } else { 1 }),
-        stroke: 1.5pt,
-        mark: none,
+      cdiagram(
+        title: [$delta_Delta (t) = ("d"u_Delta (t)) / ("d"t)$],
+        xlabel: $t$,
+        ylim: (-0.1, 1.2),
+        lq.place(0.1, -0.1, align: left, plabel[$Delta$]),
+        lq.place(-0.2, 1.0, align: left, plabel[$1/Delta$]),
+        lq.plot(
+          t,
+          t.map(t => if t >= 0.1501 or t <= -0.01 { 0 } else { 1 }),
+          stroke: 1.5pt,
+          mark: none,
+        ),
+        height: 3cm,
+        width: 6cm,
       ),
-      height: 3cm,
-      width: 6cm,
     )],
-)
+) <fig-step-approx>
 
 Similar to the discrete-time case, we have
 
@@ -577,93 +611,93 @@ Similar to the discrete-time case, we have
 
 === Time Shift, Time Reversal and Time Scaling
 
-A very important example of transforming is a _time shift_. A time shift in discrete time is illustrated below. The two signals $x[n]$ and $x[n-1]$ are identical in shape, but are displaced or shifted relative to each other. A second example of a basic transformation is _time reversal_, which is depicted below in the middle. Finally, the _time scaling_ is plotted on the right.
+A very important example of transforming is a _time shift_, illustrated on the left of @fig-transformations: the two signals $x[n]$ and $x[n-1]$ are identical in shape, but are displaced or shifted relative to each other. A second example of a basic transformation is _time reversal_, depicted in the middle panel. Finally, _time scaling_ is plotted on the right.
 
 #let xx = lq.linspace(-4, 4, num: 9)
 #let y = lq.linspace(-3, 5, num: 9)
 #let x = lq.linspace(-6, 6, num: 400)
 #let t = lq.linspace(-3, 3, num: 500)
-#align(center)[
-  #grid(
-    columns: (1fr, 1fr, 1fr),
-    column-gutter: 2em,
-    [
-      #altfig(alt: "Stem plot showing time shift: x[n] (a decreasing line through zero) and its shifted copy x[n-1], identical in shape but displaced one sample to the right.")[
-        #lq.diagram(
-          xlabel: $t$,
-          lq.stem(xx, xx.map(xx => -xx), label: $x[n]$),
-          lq.stem(y, y.map(y => -y + 1), label: $x[n-1]$),
-          width: 5cm,
-          height: 3cm,
-        )]],
-    [
-      #altfig(alt: "Plot showing time reversal: x(t) has a tall peak near t = -2 and a smaller peak near t = 3; its time-reversed counterpart x(-t) is the mirror image about the vertical axis.")[
-        #lq.diagram(
-          lq.plot(
-            x,
-            x.map(x => (
-              2.5 * calc.exp(-(x + 1.8) * (x + 1.8) / 0.3)
-                + 0.8 * calc.exp(-(x - 3.2) * (x - 3.2) / 0.3)
-            )),
-            mark: none,
-            label: $x(t)$,
-          ),
-          lq.plot(
-            x,
-            x.map(x => (
-              2.5 * calc.exp(-(-x + 1.8) * (-x + 1.8) / 0.3)
-                + 0.8 * calc.exp(-(-x - 3.2) * (-x - 3.2) / 0.3)
-            )),
-            mark: none,
-            label: $x(-t)$,
-          ),
-          xlabel: $t$,
-          width: 5cm,
-          height: 3cm,
-        )]],
-
-    [
-      #altfig(alt: "Plot showing time scaling: a Gaussian-shaped x(t), its expanded form x(t/2) (wider, drawn dashed), and its compressed form x(2t) (narrower, drawn dotted).")[
-        #lq.diagram(
-          lq.plot(
-            t,
-            t.map(t => 2.5 * calc.exp(-(t) * (t) / 0.5)),
-            mark: none,
-            label: $x(t)$,
-          ),
-          lq.plot(
-            t,
-            t.map(t => 2.5 * calc.exp(-(t / 2) * (t / 2) / 0.5)),
-            mark: none,
-            stroke: stroke(dash: "dashed"),
-            label: $x(t/2)$,
-          ),
-          lq.plot(
-            t,
-            t.map(t => 2.5 * calc.exp(-(t * 2) * (t * 2) / 0.5)),
-            mark: none,
-            stroke: stroke(dash: "dotted"),
-            label: $x(2t)$,
-          ),
-          xlabel: $t$,
-          width: 5cm,
-          height: 3cm,
-        )]
-    ],
-  )
-]
+#altfig(
+  alt: "Three plots. Left, time shift: x[n] (a decreasing line through zero) and its shifted copy x[n-1], identical in shape but displaced one sample to the right. Middle, time reversal: x(t), drawn solid, has a tall peak near t = -2 and a smaller peak near t = 3, and its time-reversed counterpart x(-t), drawn dashed, is the mirror image about the vertical axis. Right, time scaling: a Gaussian-shaped x(t), its expanded form x(t/2) drawn dashed, and its compressed form x(2t) drawn dotted.",
+  caption: [
+    The three elementary transformations of the independent variable: a time
+    shift (left), a time reversal (middle), and a time scaling (right). Only the
+    argument changes; the shape of the signal is carried along unaltered.
+  ],
+  align(center)[
+    #grid(
+      columns: (1fr, 1fr, 1fr),
+      column-gutter: 2em,
+      lq.diagram(
+        xlabel: $n$,
+        lq.stem(xx, xx.map(xx => -xx), label: $x[n]$),
+        lq.stem(y, y.map(y => -y + 1), label: $x[n-1]$),
+        width: 5cm,
+        height: 3cm,
+      ),
+      lq.diagram(
+        lq.plot(
+          x,
+          x.map(x => (
+            2.5 * calc.exp(-(x + 1.8) * (x + 1.8) / 0.3)
+              + 0.8 * calc.exp(-(x - 3.2) * (x - 3.2) / 0.3)
+          )),
+          mark: none,
+          label: $x(t)$,
+        ),
+        lq.plot(
+          x,
+          x.map(x => (
+            2.5 * calc.exp(-(-x + 1.8) * (-x + 1.8) / 0.3)
+              + 0.8 * calc.exp(-(-x - 3.2) * (-x - 3.2) / 0.3)
+          )),
+          mark: none,
+          stroke: series-stroke(1),
+          label: $x(-t)$,
+        ),
+        xlabel: $t$,
+        width: 5cm,
+        height: 3cm,
+      ),
+      lq.diagram(
+        lq.plot(
+          t,
+          t.map(t => 2.5 * calc.exp(-(t) * (t) / 0.5)),
+          mark: none,
+          label: $x(t)$,
+        ),
+        lq.plot(
+          t,
+          t.map(t => 2.5 * calc.exp(-(t / 2) * (t / 2) / 0.5)),
+          mark: none,
+          stroke: series-stroke(1),
+          label: $x(t/2)$,
+        ),
+        lq.plot(
+          t,
+          t.map(t => 2.5 * calc.exp(-(t * 2) * (t * 2) / 0.5)),
+          mark: none,
+          stroke: series-stroke(2),
+          label: $x(2t)$,
+        ),
+        xlabel: $t$,
+        width: 5cm,
+        height: 3cm,
+      ),
+    )],
+) <fig-transformations>
 
 
 === Miscellaneous
 
 - A _periodic_ signal has the property that there is a positive value of $T$ for which $x(t) = x(t + T)$ for all values of $t$.
-- A signal is referred to as an _even_ signal if it is identical to its time-reversed counterpart, i.e., $x(-t) = x(t)$ or $x[-n] = x[n]$. To decompose signal into even signals, $x_e (t) = 1 / 2 (x(t) + x(-t))$.
-- An _odd_ signal is defined as $x(-t) = -x(t)$ or $x[-n] = -x[n]$. $x_o (t) = 1/2 (x(t) - x(-t))$.
+- A signal is referred to as an _even_ signal if it is identical to its time-reversed counterpart, i.e., $x(-t) = x(t)$ or $x[-n] = x[n]$. The even part of a signal is $x_e (t) = 1 / 2 (x(t) + x(-t))$.
+- An _odd_ signal is defined as $x(-t) = -x(t)$ or $x[-n] = -x[n]$. The odd part of a signal is $x_o (t) = 1/2 (x(t) - x(-t))$.
 
 === Example
 
 #example("Signal Operations")[
-  Given the signal $x(t)$ shown below, plot $3/5 x(-5/2 t + 1)$.
+  Given the signal $x(t)$ plotted below, sketch $3/5 x(-5/2 t + 1)$.
 
   #let t = lq.linspace(-2, 4, num: 1000)
   #let x_func = t => {
@@ -685,6 +719,7 @@ A very important example of transforming is a _time shift_. A time shift in disc
 
   #cdiagram(
     alt: "Plot of x(t): zero for t < 0, equal to 1 on [0, 1], a linear ramp from 1 down to 0 on [1, 2], and zero for t > 2.",
+    caption: [The signal $x(t)$ to be transformed.],
     title: $x(t)$,
     xlabel: [$t$],
     lq.plot(t, t.map(t => x_func(t)), mark: none, stroke: 2pt),
@@ -695,128 +730,102 @@ A very important example of transforming is a _time shift_. A time shift in disc
     width: 5cm,
   )
 
-  The operations are depicted below.
+  The operations are depicted in @fig-signal-ops, one at a time.
 
-  #align(center)[
-    #grid(
-      columns: 2,
-      column-gutter: 5em,
-      row-gutter: 1em,
-      altfig(alt: "Plot of x(t+1): the original signal shifted one unit to the left, supported on [-1, 1].")[#lq.diagram(
-        width: 5cm,
-        height: 2.5cm,
-        title: [$x(t+1)$],
-        xlabel: [$t$],
-        xlim: (-2, 4),
-        ylim: (-0.2, 1.2),
-        xaxis: (ticks: (-2, -1, 0, 1, 2, 3, 4)),
-        yaxis: (ticks: (0, 1)),
-        lq.plot(t, x_t_plus_1, mark: none, stroke: 2pt),
-      )],
-      altfig(alt: "Plot of x(-t+1): x(t+1) time-reversed, supported on [-1, 1] with the ramp on the left side.")[#lq.diagram(
-        width: 5cm,
-        height: 2.5cm,
-        title: [$x(-t+1)$],
-        xlabel: [$t$],
-        xlim: (-2, 4),
-        ylim: (-0.2, 1.2),
-        xaxis: (ticks: (-2, -1, 0, 1, 2, 3, 4)),
-        yaxis: (ticks: (0, 1)),
-        lq.plot(t, x_neg_t_plus_1, mark: none, stroke: 2pt),
-      )],
+  #let step-panel = (title, ys) => lq.diagram(
+    width: 5cm,
+    height: 2.5cm,
+    title: title,
+    xlabel: [$t$],
+    xlim: (-2, 4),
+    ylim: (-0.2, 1.2),
+    xaxis: (ticks: (-2, -1, 0, 1, 2, 3, 4)),
+    yaxis: (ticks: (0, 1)),
+    lq.plot(t, ys, mark: none, stroke: 2pt),
+  )
 
-      altfig(alt: "Plot of x(-5/2 t): x(t) time-reversed and compressed in time by a factor of 5/2, supported on a short interval to the left of t = 0.")[#lq.diagram(
-        width: 5cm,
-        height: 2.5cm,
-        title: [$x(-5/2 t)$],
-        xlabel: [$t$],
-        xlim: (-2, 4),
-        ylim: (-0.2, 1.2),
-        xaxis: (ticks: (-2, -1, 0, 1, 2, 3, 4)),
-        yaxis: (ticks: (0, 1)),
-        lq.plot(t, x_5_2_t, mark: none, stroke: 2pt),
+  #altfig(
+    alt: "Four plots read left to right, top to bottom. First, x(t+1): the original signal shifted one unit to the left, supported on [-1, 1]. Second, x(-t+1): that signal time-reversed, with the ramp on the left side. Third, x(-5/2 t): x(t) time-reversed and compressed by a factor of 5/2, supported on a short interval left of t = 0. Fourth, 3/5 x(-5/2 t + 1): the final result, compressed, shifted, and scaled to peak at 3/5.",
+    caption: [
+      The transformation $3\/5 x(-5\/2 t + 1)$ built up one operation at a
+      time: shift, then reverse, then scale the time axis, and finally scale the
+      amplitude. Doing the shift before the scaling is what keeps the $+1$ from
+      being applied to the compressed axis.
+    ],
+    align(center)[
+      #grid(
+        columns: 2,
+        column-gutter: 5em,
+        row-gutter: 1em,
+        step-panel([$x(t+1)$], x_t_plus_1),
+        step-panel([$x(-t+1)$], x_neg_t_plus_1),
+        step-panel([$x(-5/2 t)$], x_5_2_t),
+        step-panel([$3/5 x(-5/2 t + 1)$], x_5_2_t_plus_1),
       )],
-      altfig(alt: "Plot of 3/5 x(-5/2 t + 1): the final transformation, time-reversed and compressed by 5/2, shifted, and amplitude-scaled to peak at 3/5.")[#lq.diagram(
-        width: 5cm,
-        height: 2.5cm,
-        title: [$3/5 x(-5/2 t + 1)$],
-        xlabel: [$t$],
-        xlim: (-2, 4),
-        ylim: (-0.2, 1.2),
-        xaxis: (ticks: (-2, -1, 0, 1, 2, 3, 4)),
-        yaxis: (ticks: (0, 1)),
-        lq.plot(t, x_5_2_t_plus_1, mark: none, stroke: 2pt),
-      )],
-    )]
+  ) <fig-signal-ops>
 ]
 
 == Continuous-Time and Discrete-Time Systems
 
-In many context, a _system_ can be interpreted as a process in which input signals are transformed by the system, or cause the system to respond in some way, resulting in other signals as outputs. For example, a high fidelity system takes a recorded audio signal and generates a reproduction of that signal.
+In many contexts, a _system_ can be interpreted as a process in which input signals are transformed by the system, or cause the system to respond in some way, resulting in other signals as outputs. For example, a high-fidelity system takes a recorded audio signal and generates a reproduction of that signal.
 
-A _continuous-time system_ is a system in which continuous-time input signals are applied and result in continuous-time output signals. Similarly, a _discrete-time system_ transforms discrete-time inputs into discrete-time outputs. Throughout the course, we will often represent the input-output relation of a system by notations such as $x(t) arrow y(t)$ and $x[n] arrow y[n]$ for both continuous-time and discrete-time, respectively. They are often depicted as
+A _continuous-time system_ is a system in which continuous-time input signals are applied and result in continuous-time output signals. Similarly, a _discrete-time system_ transforms discrete-time inputs into discrete-time outputs. Throughout the course, we will often represent the input-output relation of a system by notations such as $x(t) arrow y(t)$ and $x[n] arrow y[n]$, for continuous time and discrete time respectively. They are often depicted as
 
 
-#align(center)[
-  #grid(
-    columns: (1fr, 1fr),
-    column-gutter: 2em,
-    [
-      #altfig(alt: "Block diagram of a continuous-time system: input x(t) enters a block labeled 'system' and its output y(t) leaves on the right.")[
-        #diagram(
-          debug: false,
-          node-stroke: 2pt,
-          spacing: (15mm, 10mm),
-          mark-scale: 150%,
-          node((1, 0), "system"),
-          edge((0, 0), (1, 0), "->-", label: $x(t)$),
-          edge((1, 0), (2, 0), "->-", label: $y(t)$),
-        )]],
-    [
-      #altfig(alt: "Block diagram of a discrete-time system: input x[n] enters a block labeled 'system' and its output y[n] leaves on the right.")[
-        #diagram(
-          debug: false,
-          node-stroke: 2pt,
-          spacing: (15mm, 10mm),
-          mark-scale: 150%,
-          node((1, 0), "system"),
-          edge((0, 0), (1, 0), "->-", label: $x[n]$),
-          edge((1, 0), (2, 0), "->-", label: $y[n]$),
-        )]],
-  )
-]
+#altfig(
+  alt: "Two block diagrams. Left: a continuous-time system, where input x(t) enters a block labeled 'system' and its output y(t) leaves on the right. Right: the discrete-time counterpart, with x[n] in and y[n] out.",
+  caption: [
+    The block-diagram notation for a system, in continuous time (left) and
+    discrete time (right).
+  ],
+  align(center)[
+    #grid(
+      columns: (1fr, 1fr),
+      column-gutter: 2em,
+      diagram(
+        debug: false,
+        node-stroke: 2pt,
+        spacing: (15mm, 10mm),
+        mark-scale: 150%,
+        node((1, 0), "system"),
+        edge((0, 0), (1, 0), "->-", label: $x(t)$),
+        edge((1, 0), (2, 0), "->-", label: $y(t)$),
+      ),
+      diagram(
+        debug: false,
+        node-stroke: 2pt,
+        spacing: (15mm, 10mm),
+        mark-scale: 150%,
+        node((1, 0), "system"),
+        edge((0, 0), (1, 0), "->-", label: $x[n]$),
+        edge((1, 0), (2, 0), "->-", label: $y[n]$),
+      ),
+    )],
+)
 
 === Interconnections of Systems
 
 While one can construct a variety of system interconnections, there are several basic ones that are frequently encountered. A _series_ or _cascade_ connection of two systems is illustrated below.
 
-#grid(
-  columns: (1fr),
-  column-gutter: 1em,
-  align: (auto, bottom),
-  // figure(
-  //   image("totk-fused.jpg", width: 100%),
-  //   caption: "Fusion in The Legend of Zelda: Tears of the Kingdom",
-  //   numbering: none,
-  // ),
-  figure(
-    align(center)[
-      #diagram(
-        debug: false,
-        node-stroke: 2pt,
-        spacing: (15mm, 10mm),
-        mark-scale: 150%,
-        node((1, 0), "system 1"),
-        node((2, 0), "system 2"),
-        edge((0, 0), (1, 0), "->-", label: $x[n]$),
-        edge((1, 0), (2, 0), "->-"),
-        edge((2, 0), (3, 0), "->-", label: $y[n]$),
-      )
-    ],
-    alt: "Block diagram of two cascaded systems: x[n] enters system 1, whose output feeds system 2, which then produces y[n].",
-    caption: "Block diagram of cascaded systems",
-    numbering: none,
-  ),
+#altfig(
+  alt: "Block diagram of two cascaded systems: x[n] enters system 1, whose output feeds system 2, which then produces y[n].",
+  caption: [
+    A series, or cascade, connection: the output of system 1 is the input to
+    system 2.
+  ],
+  align(center)[
+    #diagram(
+      debug: false,
+      node-stroke: 2pt,
+      spacing: (15mm, 10mm),
+      mark-scale: 150%,
+      node((1, 0), "system 1"),
+      node((2, 0), "system 2"),
+      edge((0, 0), (1, 0), "->-", label: $x[n]$),
+      edge((1, 0), (2, 0), "->-"),
+      edge((2, 0), (3, 0), "->-", label: $y[n]$),
+    )
+  ],
 )
 
 It is also possible to have a series-parallel connection, as shown below.
@@ -850,8 +859,10 @@ It is also possible to have a series-parallel connection, as shown below.
     )
   ],
   alt: "Block diagram of a series-parallel interconnection: input x[n] splits into two parallel paths; the upper path passes through system 1 then system 2, the lower path passes through system 3; both paths rejoin to produce y[n].",
-  caption: "Block diagram of series-parallel interconnection",
-  numbering: none,
+  caption: [
+    A series-parallel interconnection: the input feeds two paths, which are
+    summed to produce the output.
+  ],
 )
 
 Another important type of system interconnection is a _feedback interconnection_, an example of which is illustrated below. Here, the output of system 1 is the input to system 2, while the output of system 2 is fed back and added to the external input to produce the actual input to system 1.
@@ -876,8 +887,10 @@ Another important type of system interconnection is a _feedback interconnection_
     )
   ],
   alt: "Block diagram of a feedback interconnection: input x(t) is summed with the output of system 2 to form the input to system 1; system 1's output y(t) is also fed back through system 2.",
-  caption: "Block diagram of feedback system",
-  numbering: none,
+  caption: [
+    A feedback interconnection: the output of system 2 is added to the external
+    input, so the input to system 1 depends on its own past output.
+  ],
 )
 
 === Basic System Properties
@@ -932,17 +945,17 @@ Note that the output $y[n_0]$ at a positive time $n_0$ depends only on the value
 
 Let us examine two particular systems, namely, $cal("S")_1: y(t) = t x(t)$, and $cal("S")_2: y(t) = e^(x(t))$. For system $cal("S")_1$, a constant input $x(t) = 1$ yields $y(t) = t$, which is unbounded, since no matter what finite constant we pick, $|y(t)|$ will exceed that constant for some $t$. Therefore, $cal("S")_1$ is not stable.
 
-For system $cal("S")_2$, which happens to be stable, we would not be able to find a bounded input that results in an unbounded output. Specifically, let $B in NN^+$, and let $x(t)$ be an arbitrary signal bounded by $B$, i.e., $|x(t)| < B$ for all $t$. Using the definition of $cal("S")_2$, we then see that if $x(t)$ satisfies $|x(t)|<B$, then $|y(t)|<e^B$. In other words, if any input to $cal("S")_2$ is bounded by an arbitrary positive number $B$, then the corresponding output is guaranteed to be bounded by $e^B$. Thus, $cal("S")_2$ is stable.
+For system $cal("S")_2$, which happens to be stable, we would not be able to find a bounded input that results in an unbounded output. Specifically, let $B > 0$ be real, and let $x(t)$ be an arbitrary signal bounded by $B$, i.e., $|x(t)| < B$ for all $t$. Using the definition of $cal("S")_2$, we then see that if $x(t)$ satisfies $|x(t)|<B$, then $|y(t)|<e^B$. In other words, if any input to $cal("S")_2$ is bounded by an arbitrary positive number $B$, then the corresponding output is guaranteed to be bounded by $e^B$. Thus, $cal("S")_2$ is stable.
 
-Later in this class, we will learn more about linear and time-invariant system. The (BIBO) stability criteria is then
+Later in this class, we will learn more about linear time-invariant systems. The BIBO stability criterion is then
 $
-  |y[n]| = |sum_k x[k] h[n-k]| <= sum_k |x[k]| |h[n-k]| <= sum_k |h[n-k]| ||x||_infinity = ||x||_infinity sum_k |h[k]| < infinity
+  |y[n]| = abs(sum_k x[k] h[n-k]) <= sum_k |x[k]| |h[n-k]| <= ||x||_infinity sum_k |h[n-k]| = ||x||_infinity sum_k |h[k]| < infinity
 $
 In the continuous-time case,
 $
   integral_(-infinity)^(infinity) |h(tau)| "d"tau < infinity
 $
-In other words, an LTI system is stable iff. its impulse response is absolutely summable / integrable.
+In other words, a discrete-time LTI system is stable if and only if its impulse response is absolutely summable, and a continuous-time LTI system is stable if and only if its impulse response is absolutely integrable.
 
 ==== Time Invariance
 
@@ -956,7 +969,7 @@ Let us consider the following system $cal("S"): y[n] = n x[n]$. This is a time-v
 ==== Linearity
 
 #definition("Linearity")[
-  A _linear system_, in continuous time or discrete time, is a system that possesses the important property of superposition: if an input consists of the weighted sum of several signals, then the output is the superposition -- that is, the weighted sum -- of the responses of the system to each signal. More precisely, let $y_1(t)$ be the response of a continuous-time system to an input $x_1(t)$, and let $y_2(t)$ be the output corresponding to the input $x_2(t)$. Then the system is linear if
+  A _linear system_, in continuous time or discrete time, is a system that possesses the important property of superposition: if an input consists of the weighted sum of several signals, then the output is the superposition, that is, the weighted sum, of the responses of the system to each signal. More precisely, let $y_1(t)$ be the response of a continuous-time system to an input $x_1(t)$, and let $y_2(t)$ be the output corresponding to the input $x_2(t)$. Then the system is linear if
 
   - The response to $x_1(t) + x_2(t)$ is $y_1(t) + y_2(t)$.
   - The response to $a x_1(t)$ is $a y_1(t)$, where $a$ is any complex constant.

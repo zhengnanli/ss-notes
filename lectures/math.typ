@@ -4,12 +4,13 @@
 
 == Complex numbers <nonumber>
 
-Let $a, b in RR$, and $z in CC$, and the $j = sqrt(-1)$. The cartesian form of a complex number is expressed as $z = a + j b$, where $a = Re{z}$ and $b = Im{z}$ are the real and imaginary part of the complex number $z$, respectively. When expressed in polar form, i.e., $z = r e^(j theta)$, where $r in [0, infinity)$ and $theta in [0, 2 pi)$, $r = |z|$ and $theta = angle z$ are the magnitude and phase of the complex number $z$. We have $a = r cos theta$, and $b = r sin theta$. Of course, $r = sqrt(a^2 + b^2)$ and $theta = arctan b/a$.
-Let $z_1 = a_1 + j b_1$ and $z_2 = a_2 + j b_2$, we have
+Let $a, b in RR$ and $z in CC$, and let $j = sqrt(-1)$. The Cartesian form of a complex number is expressed as $z = a + j b$, where $a = Re{z}$ and $b = Im{z}$ are the real and imaginary part of the complex number $z$, respectively. When expressed in polar form, i.e., $z = r e^(j theta)$, where $r in [0, infinity)$ and $theta in [0, 2 pi)$, $r = |z|$ and $theta = angle z$ are the magnitude and phase of the complex number $z$. We have $a = r cos theta$, and $b = r sin theta$. Of course, $r = sqrt(a^2 + b^2)$ and $theta = arctan (b\/a)$, with the quadrant of $z$ deciding which branch of the arctangent to take.
+
+Let $z_1 = a_1 + j b_1$ and $z_2 = a_2 + j b_2$. Then
 $
   z_1 + z_2 = (a_1 + a_2) + j(b_1 + b_2)
 $
-when multiplying two complex numbers together, we have
+When multiplying two complex numbers together, we have
 $
   z_1 z_2 = (a_1 + j b_1) (a_2 + j b_2) = (a_1 a_2 - b_1 b_2) + j (a_1 b_2 + b_1 a_2)
 $
@@ -70,9 +71,9 @@ $
   sin alpha cos beta &= 1/2 [sin (alpha + beta) + sin(alpha - beta)]
 $
 
-3. Taylor series for $f(x)$ at $x = alpha$ is
+3. Taylor series
 
-For a function $f: RR arrow.bar RR$ or $f : CC arrow.bar CC$, which is infinitely differentiable at some point $alpha$, the Taylor series of $f(x)$ about $alpha$ is given by
+For a function $f: RR -> RR$ or $f : CC -> CC$, which is infinitely differentiable at some point $alpha$, the Taylor series of $f(x)$ about $alpha$ is given by
 $
   f(x) = sum_(k = 0)^infinity (f^((k)) (alpha)) / k! (x - alpha)^k
 $
@@ -80,7 +81,7 @@ where $f^((k))$ is the $k$-th derivative of $f(x)$.
 
 4. Binomial expansion
 $
-  (a+b)^n = sum_(k = 0)^(n) vec(n, k) a^k b^(n - k)
+  (a+b)^n = sum_(k = 0)^(n) binom(n, k) a^k b^(n - k)
 $
 
 5. Some integrals

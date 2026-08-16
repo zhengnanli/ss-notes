@@ -4,9 +4,9 @@
 #show: lq.theme.schoolbook
 #show: schoolbook-style
 
-Linear Time-Invariant (LTI) systems constitute the cornerstone of signal processing and system analysis. Two fundamental properties -- linearity and time invariance -- render these systems both practically relevant and mathematically tractable. Many physical processes can be modeled as LTI systems, and they possess an important property: complete characterization through their response to a single elementary signal.
+Linear Time-Invariant (LTI) systems constitute the cornerstone of signal processing and system analysis. Two fundamental properties, linearity and time invariance, render these systems both practically relevant and mathematically tractable. Many physical processes can be modeled as LTI systems, and they possess an important property: complete characterization through their response to a single elementary signal.
 
-The key insight is that LTI systems satisfy the superposition property, enabling us to decompose complex inputs into simpler components and analyze the system's response to each component separately. This chapter develops the mathematical framework for analyzing LTI systems through convolution operations.
+The key insight is that LTI systems satisfy the superposition property, enabling us to decompose complicated inputs into simpler components and analyze the system's response to each component separately. This topic develops the mathematical framework for analyzing LTI systems through convolution operations.
 
 == Discrete-Time Signal Representation
 
@@ -53,10 +53,15 @@ That is, $h[n]$ is the output of the LTI system when $delta[n]$ is the input. Th
 
 *Physical interpretation*: The output at time $n$ represents the superposition of all "echoes" of the impulse response. Each echo $h[n-k]$ is scaled by the corresponding input value $x[k]$ and appropriately time-shifted.
 
-Another way of explaining the convolution sum is through the impulse response of LTI systems. The impulse response of LTI systems is defined as the output of the system when the input is an impulse, i.e.,
+Another way of explaining the convolution sum is through the impulse response of LTI systems. The impulse response of an LTI system is defined as the output of the system when the input is an impulse, as in @fig-impulse-response.
 
 #altfig(
   alt: "Block diagram of an LTI system. Input delta of n enters a block labeled T of dot, which outputs the impulse response h of n.",
+  caption: [
+    The impulse response is what the system $T{dot.c}$ returns when the input is
+    the unit impulse. For an LTI system this single sequence determines the
+    response to every other input.
+  ],
   align(center)[
     #diagram(
       debug: false,
@@ -80,19 +85,19 @@ Another way of explaining the convolution sum is through the impulse response of
       ),
       node((0, 0), $T{dot.c}$, width: 4em),
     )],
-)
+) <fig-impulse-response>
 
 We now would like to examine the system response to an arbitrary input $x[n]$. Per @sifting, the output of the system can be written as
 $
   y[n] = T{ sum_(k=-infinity)^(infinity) x[k] delta [n-k]}
 $
 
-If the system is linear, we can change the order of operation (per the scaling property) as
+If the system is linear, we can change the order of operation (per the superposition property) as
 $
   y[n] = T{ sum_(k=-infinity)^(infinity) x[k] delta [n-k]} = sum_(k = -infinity)^(infinity) x[k] T{ delta[n - k] }
 $
 
-Further more, if the system is also time-invariant, i.e., $delta[n] arrow.r h[n]$, and $delta[n-k] arrow.r h[n-k]$, we have
+Furthermore, if the system is also time-invariant, i.e., $delta[n] arrow.r h[n]$, and $delta[n-k] arrow.r h[n-k]$, we have
 $
   y[n] = sum_(k = -infinity)^(infinity) x[k] h[n - k]
 $
@@ -136,7 +141,7 @@ To compute $y[n]$ for a specific value of $n$, we employ the "flip, slide, and s
 
 #attention("Convolution Sum")[
   #set math.equation(numbering: none)
-  Consider an LTI system with impulse response $h[n]$ and input $x[n]$, as illustrated in the following figure. For this case, since only $x[0]$ and $x[1]$ are nonzero, the convolution sum simplifies to:
+  Consider an LTI system with impulse response $h[n]$ and input $x[n]$, as illustrated in @fig-conv-inputs. For this case, since only $x[0]$ and $x[1]$ are nonzero, the convolution sum simplifies to:
   $
     y[n] = x[0] h[n - 0] + x[1] h[n - 1] = 0.5 h[n] + 2 h [n - 1]
   $
@@ -148,6 +153,10 @@ To compute $y[n]$ for a specific value of $n$, we employ the "flip, slide, and s
   #let y = (0, 0, 0.5, 2.5, 2.5, 2, 0)
   #altfig(
     alt: "Two stem plots side by side. Left: h of n equals one at n equal to zero, one, and two, and zero elsewhere. Right: x of n equals one half at n equal to zero, two at n equal to one, and zero elsewhere.",
+    caption: [
+      The impulse response $h[n]$ (left) and the input $x[n]$ (right) for the
+      worked example. Only two samples of $x[n]$ are nonzero.
+    ],
     align(center)[
       #grid(
         columns: (1fr, 1fr),
@@ -173,10 +182,14 @@ To compute $y[n]$ for a specific value of $n$, we employ the "flip, slide, and s
             lq.stem(t, x),
           )],
       )],
-  )
+  ) <fig-conv-inputs>
 
   #altfig(
     alt: "Three stem plots showing the convolution components. Left: zero point five h of n with height one half at n equal to zero, one, and two. Middle: two h of n minus one with height two at n equal to one, two, and three. Right: the sum y of n showing values one half, two and a half, two and a half, and two at n equal zero through three.",
+    caption: [
+      The convolution as a superposition of shifted, scaled copies of $h[n]$:
+      $0.5 h[n]$ (left) and $2 h[n-1]$ (middle) add to give $y[n]$ (right).
+    ],
     align(center)[
       #grid(
         columns: (1fr, 1fr, 1fr),
@@ -225,6 +238,11 @@ To compute $y[n]$ for a specific value of $n$, we employ the "flip, slide, and s
   #let ylims = (-0.2, 10)
   #altfig(
     alt: "Two stem plots. Left: x of n is a rectangular pulse of height one for n from zero through four. Right: h of n is a growing geometric sequence alpha to the n with alpha greater than one, nonzero for n from zero through six.",
+    caption: [
+      The two sequences to be convolved: a rectangular pulse $x[n]$ of length
+      five (left) and a growing geometric $h[n] = alpha^n$ of length seven
+      (right), drawn here with $alpha = 1.35$.
+    ],
     align(center)[
       #grid(
         columns: (1fr, 1fr),
@@ -259,12 +277,12 @@ To compute $y[n]$ for a specific value of $n$, we employ the "flip, slide, and s
       y[n] = sum_(k=0)^n x[k] h[n-k] = sum_(k=0)^n alpha^(n-k) = alpha^n sum_(k=0)^n alpha^(-k) = alpha^n (1 - alpha^(-n-1)) / (1 - alpha^(-1)) = (1 - alpha^(n+1)) / (1 - alpha)
     $
 
-  - *Interval 3*: $4 < n <= 6$. In this case, all of $x[n]$ overlaps with $h[n-k]$:
+  - *Interval 3*: $4 < n <= 6$. In this case, all of $x[k]$ overlaps with $h[n-k]$:
     $
       y[n] = sum_(k=0)^4 alpha^(n-k) = alpha^n sum_(k=0)^4 alpha^(-k) = alpha^n (1 - alpha^(-5)) / (1 - alpha^(-1)) = (alpha^(n-4) - alpha^(n+1)) / (1 - alpha)
     $
 
-  - *Interval 4*: $6 < n <= 10$. Here, $n - 6 < 4$:
+  - *Interval 4*: $6 < n <= 10$. Here the overlap starts at $k = n - 6$, and $n - 6 <= 4$:
     $
       y[n] = sum_(k = n-6)^4 alpha^(n - k) = alpha^n sum_(k = n-6)^4 alpha^(-k) = (alpha^(n-4) - alpha^7)/(1 - alpha)
     $
@@ -302,37 +320,41 @@ To compute $y[n]$ for a specific value of $n$, we employ the "flip, slide, and s
 #let yd = xd.map(x => f(x))
 #let stair-coarse = make-staircase(xd, yd)
 
-#align(center)[
-  #cdiagram(
-    alt: "Plot of a smooth continuous-time signal x of t overlaid with a red staircase approximation. Vertical dashed red lines mark the width Delta between two adjacent steps.",
-    title: $x(t)$,
-    xlabel: $t$,
-    ylim: (-2, 2),
-    height: 5cm,
-    width: 10cm,
-    lq.plot(x, x.map(x => f(x)), mark: none),
-    lq.plot(
-      stair-coarse.map(p => p.at(0)),
-      stair-coarse.map(p => p.at(1)),
-      mark: none,
-      stroke: 0.2pt + red,
-    ),
-    lq.plot((xd.at(8), xd.at(8)), (0, yd.at(8)), mark: none, stroke: (
-      dash: "dashed",
-      paint: red,
-    )),
-    lq.plot((xd.at(9), xd.at(9)), (0, yd.at(9)), mark: none, stroke: (
-      dash: "dashed",
-      paint: red,
-    )),
-    lq.place(0.4, -0.2, align: left)[$Delta$],
-  )]
+#cdiagram(
+  alt: "Plot of a smooth continuous-time signal x of t overlaid with a staircase approximation drawn in blue. Two vertical dashed gray lines mark the width Delta between adjacent steps.",
+  caption: [
+    A continuous-time signal approximated by a staircase of pulses of width
+    $Delta$. As $Delta arrow 0$ the sum of the pulses becomes the convolution
+    integral.
+  ],
+  title: $x(t)$,
+  xlabel: $t$,
+  ylim: (-2, 2),
+  height: 5cm,
+  width: 10cm,
+  lq.plot(x, x.map(x => f(x)), mark: none),
+  lq.plot(
+    stair-coarse.map(p => p.at(0)),
+    stair-coarse.map(p => p.at(1)),
+    mark: none,
+    stroke: (paint: c-blue, thickness: 0.4pt),
+  ),
+  lq.plot((xd.at(8), xd.at(8)), (0, yd.at(8)), mark: none, stroke: (
+    dash: "dashed",
+    paint: c-muted,
+  )),
+  lq.plot((xd.at(9), xd.at(9)), (0, yd.at(9)), mark: none, stroke: (
+    dash: "dashed",
+    paint: c-muted,
+  )),
+  lq.place(0.4, -0.2, align: left, plabel[$Delta$]),
+) <fig-staircase>
 
-As shown above, we can approximate $x(t)$ as:
+As shown in @fig-staircase, we can approximate $x(t)$ as:
 $
   x(t) = lim_(Delta arrow 0) sum_(k = -infinity)^(infinity) x(k Delta) delta_Delta (t - k Delta) Delta
 $
-where $Delta$ is the rectangular width, and $x(k Delta) delta_Delta (t - k Delta)$ is the rectangular height. Through a limiting process from rectangular pulse approximations, any continuous-time signal can be expressed using the continuous-time sifting property, representing $x(t)$ as a weighted integral of shifted unit impulses:
+where $Delta$ is the width of each rectangle and $x(k Delta)$ its height, since $delta_Delta$ has height $1 \/ Delta$ and the factor $Delta$ cancels it. Through a limiting process from rectangular pulse approximations, any continuous-time signal can be expressed using the continuous-time sifting property, representing $x(t)$ as a weighted integral of shifted unit impulses:
 
 #eqalt(
   "x of t equals the integral from negative infinity to infinity of x of tau times delta of t minus tau, d tau.",
@@ -394,7 +416,7 @@ Analogous to the discrete-time system, for a continuous-time LTI system with imp
 
 1. Memory
   - Memoryless: $h[n] = K delta[n]$ (discrete) or $h(t) = K delta(t)$ (continuous)
-  - With memory: $h[n] != 0$ for $n != 0$ or $h(t) != 0$ for $t != 0$
+  - With memory: $h[n] != 0$ for some $n != 0$, or $h(t) != 0$ for some $t != 0$
 
 2. Invertibility
   An LTI system is invertible if there exists an inverse system such that:
@@ -409,7 +431,7 @@ Analogous to the discrete-time system, for a continuous-time LTI system with imp
   Physical meaning: The impulse response is zero before the impulse occurs.
 
 4. Stability
-  An LTI system is stable if and only if its impulse response is absolutely summable/integrable:
+  An LTI system is stable if and only if its impulse response is absolutely summable, in discrete time, or absolutely integrable, in continuous time:
   - Discrete-time: $sum_(k=-infinity)^(infinity) |h[k]| < infinity$
   - Continuous-time: $integral_(-infinity)^(infinity) |h(tau)| "d"tau < infinity$
 
@@ -422,12 +444,12 @@ The unit step response $s[n]$ or $s(t)$ is related to the impulse response by:
 - *Continuous-time*: $s(t) = integral_(-infinity)^t h(tau) "d"tau$ and $h(t) = ("d"s(t))/("d"t)$
 
 #example("Stability of Infinite Impulse Response (IIR) Systems")[
-  We are interested in the linearity, causality and stability of the following system:
+  We are interested in the linearity, causality, and stability of the following system:
   $
     y[n] = x[n] - x[n-1] - y[n-1]
   $
 
-  This system is generally referred to as the infinite impulse response (IIR) system. It is a typical type of digital filters that is widely used in signal processing. The general form of an IIR filter is
+  This system is generally referred to as an infinite impulse response (IIR) system. It is a type of digital filter that is widely used in signal processing. The general form of an IIR filter is
   $
     y[n] = sum_(i = 0)^P b_i x[n - i] + sum_(j = 1)^Q a_j y[n - j]
   $
@@ -435,9 +457,9 @@ The unit step response $s[n]$ or $s(t)$ is related to the impulse response by:
   - It is causal.
   - Regarding BIBO stability,
   $
-    |y[n]| = |sum_k x[k] h[n-k]| <= sum_k |x[k]| |h[n-k]| <= sum_k |h[n-k]| ||x||_infinity = ||x||_infinity sum_k |h[k]| = B_x sum_k |h[k]|
+    |y[n]| = abs(sum_k x[k] h[n-k]) <= sum_k |x[k]| |h[n-k]| <= ||x||_infinity sum_k |h[n-k]| = ||x||_infinity sum_k |h[k]| = B_x sum_k |h[k]|
   $
-  To examine the (BIBO) stability, we give the system an impulse, i.e., $x[n] = [1, 0, 0, dots]$. We then have
+  so the question is whether $sum_k |h[k]|$ is finite. To find out, we give the system an impulse, i.e., $x[n] = [1, 0, 0, dots.c]$. We then have
   $
     y[0] & = x[0] - 0 - 0 = 1 \
     y[1] & = x[1] - x[0] - y[0] = 0 - 1 - 1 = -2 \
@@ -446,20 +468,20 @@ The unit step response $s[n]$ or $s(t)$ is related to the impulse response by:
     y[4] & = dots.c
   $
   The impulse response is $h[n] = delta[n] + 2 (-1)^n u[n-1]$. The sum $sum_k |h[k]| = 1 + sum_(n = 1)^infinity |2 (-1)^n| = 1 + sum_(n=1)^infinity 2$ diverges, so the system is *not* BIBO stable. // Later in this class, we will learn more about _z-transform_, and from there, the (BIBO) stability of such a system can be determined by the positions of their poles. _If all poles of the z-transform of the system are strictly within the unit circle, the said system is stable._
-  - To examine the linearity and time-invariance, we can use mathematical induction. For an signal $x[n]$ that starts at time zero,
+  - To examine the linearity and time-invariance, we can use mathematical induction. For a signal $x[n]$ that starts at time zero,
   $
     y[0] & = x[0] \
     y[1] & = x[1] - x[0] - y[0] = x[1] - x[0] - x[0] = x[1] - 2 x[0] \
     y[2] & = x[2] - x[1] - y[1] = x[2] - 2x[1] + 2x[0] \
     y[3] & = x[3] - x[2] - y[2] = x[3] - 2x[2] + 2x[1] - 2x[0] \
-    y[4] & = ...
+    y[4] & = dots.c
   $
-  If now the system is now replaced by $x_1[n] eq.delta x[n - m]$, which is $x[n]$ delayed by $m$ samples, then the output $y_1[n] = 0$, for all $n < m$, followed by
+  If the input is now replaced by $x_1[n] eq.delta x[n - m]$, which is $x[n]$ delayed by $m$ samples, then the output $y_1[n] = 0$, for all $n < m$, followed by
   $
         y_1[m] & = x[0] \
     y_1[m + 1] & = x[1] - x[0] - y_1[m] = x[1] - 2x[0] \
     y_1[m + 2] & = x[2] - x[1] - y_1[m+1] = x[2] - 2x[1] + 2x[0] \
-    y_1[m + 3] & = ...
+    y_1[m + 3] & = dots.c
   $
   or in other words, $y_1[n] = y[n - m], forall n >= m >= 0$. This establishes that every output of the system can be expressed as a time-invariant linear combination of present and past samples. Therefore, it is a linear and time-invariant (LTI) system.
 ]
@@ -474,7 +496,7 @@ An important class of continuous-time systems comprises those for which the inpu
 
 Linear constant-coefficient differential equations (LCCDE) of finite order always take the following form:
 $
-  a_n y^((n)) (t) + a_(n-1) y^((n-1)) (t) + dots.c + a_1 y^prime (t) + a_0 y(t) = b_0 x(t) + b_1 x^prime (t) + dots.c + b_m x^((m)) (t)
+  a_N y^((N)) (t) + a_(N-1) y^((N-1)) (t) + dots.c + a_1 y^prime (t) + a_0 y(t) = b_0 x(t) + b_1 x^prime (t) + dots.c + b_M x^((M)) (t)
 $
 
 #note("General Form - CT")[
@@ -482,7 +504,7 @@ $
   #eqalt(
     "Sum from i equals zero to N of a sub i times the i-th derivative of y of t equals sum from j equals zero to M of b sub j times the j-th derivative of x of t, with all coefficients real.",
     $
-      sum_(i=0)^N a_i ("d"^i y(t))/("d"t^i) = sum_(j=0)^M b_j ("d"^j x(t))/("d"t^j), quad a_k, b_k in RR
+      sum_(i=0)^N a_i ("d"^i y(t))/("d"t^i) = sum_(j=0)^M b_j ("d"^j x(t))/("d"t^j), quad a_i, b_j in RR
     $,
   )
   or equivalently:
@@ -495,10 +517,9 @@ $
   The order $N$ refers to the highest derivative of the output $y(t)$. For a causal LTI system: if $x(t) = 0$ for $t <= t_0$, then $y(t) = 0$ for $t <= t_0$. This condition is referred to as the *initial rest condition*.
   // This condition ensures the system is both LTI and causal.
 
-  The complete solution consists of $y(t) = y_p (t) + y_h (t)$:
-  - $y_p (t)$: particular solution (forced response)
-  - $y_h (t)$: homogeneous solution (natural response)
-  - Total solution: $y(t) = y_p (t) + y_h (t)$
+  The complete solution is $y(t) = y_p (t) + y_h (t)$, where
+  - $y_p (t)$ is the particular solution (forced response), and
+  - $y_h (t)$ is the homogeneous solution (natural response).
 
   #set math.equation(numbering: none)
   Now, let us find the solution of:
@@ -513,7 +534,7 @@ $
   $
     y(t) = y_p (t) + y_h (t)
   $
-  where $y_p (t)$ satisfies $x(t)$ and $y_h(t)$ is a solution of the homogeneous differential equation:
+  where $y_p (t)$ satisfies the differential equation for the given $x(t)$, and $y_h(t)$ is a solution of the homogeneous differential equation:
   $
     ("d"y(t)) / ("d"t) + 2 y(t) = 0
   $
@@ -522,7 +543,7 @@ $
 
   A method for finding the particular solution is to seek the so-called _forced response_. We hypothesize a solution of the form:
   $
-    y_p (t) = Y e^(3t) u(t)
+    y_p (t) = Y e^(3t), quad t > 0
   $
   where $Y$ is a constant we must determine. Substituting:
   $
@@ -569,7 +590,7 @@ Similar to the continuous-time counterpart, discrete-time linear constant-coeffi
 
   This can be rearranged into recursive form:
   $
-    y[n] = 1/a_0 {sum_(k=0)^M b_k x[n-k] - sum_(k=1)^N a_k y[n-k]}
+    y[n] = 1/a_0 (sum_(k=0)^M b_k x[n-k] - sum_(k=1)^N a_k y[n-k])
   $
 ]
 
@@ -616,9 +637,13 @@ One key difference between the discrete-time and continuous-time versions of the
 - *Discrete-time*: Adder, coefficient multiplier, unit delay ($D$)
 - *Continuous-time*: Adder, coefficient multiplier, differentiator, integrator
 
-The following diagrams represent addition:
-#figure(
+@fig-adder shows two ways of drawing addition:
+#altfig(
   alt: "Two equivalent adder block diagrams. Left: x sub one of n enters a plus node from the left and x sub two of n enters from the bottom; the output x sub one of n plus x sub two of n exits to the right. Right: the same summation drawn as a junction node with the two inputs and one output.",
+  caption: [
+    Two equivalent ways of drawing an adder: an explicit summing node (left) and
+    a bare junction (right).
+  ],
   align(center)[
     #grid(
       columns: (1fr, 1fr),
@@ -686,11 +711,15 @@ The following diagrams represent addition:
         node((0, 0)),
       )],
     )],
-)
+) <fig-adder>
 
-The following diagrams represent multiplication by a coefficient and a unit delay:
-#figure(
+@fig-mult-delay shows multiplication by a coefficient and a unit delay:
+#altfig(
   alt: "Two block diagrams. Left: a coefficient multiplier where input x of n is scaled by a, producing output a times x of n. Right: a unit delay block labeled D that maps x of n to x of n minus one.",
+  caption: [
+    The remaining two elements: a coefficient multiplier (left) and a unit delay
+    $D$ (right).
+  ],
   align(center)[
     #grid(
       columns: (1fr, 1fr),
@@ -743,7 +772,7 @@ The following diagrams represent multiplication by a coefficient and a unit dela
           node((0, 0), $D$, width: 2em),
         )],
     )],
-)
+) <fig-mult-delay>
 
 Finally, the causal system described by the first-order difference equation:
 #eqalt(
@@ -753,6 +782,11 @@ Finally, the causal system described by the first-order difference equation:
 has the following block diagram:
 #altfig(
   alt: "Block diagram of the first-order discrete-time system. Input x of n is multiplied by b and feeds into a summing junction; the junction output goes to y of n and also through a unit delay D, whose output is scaled by minus a and fed back to the summer.",
+  caption: [
+    The first-order difference equation $y[n] + a y[n-1] = b x[n]$ drawn with an
+    adder, two multipliers, and one unit delay. The delay in the feedback path
+    is what makes the response infinite in length.
+  ],
   align(center)[
   #diagram(
     debug: false,
@@ -791,7 +825,11 @@ Similarly, the continuous-time counterpart defined as:
 )
 can be represented by the following block diagram:
 #altfig(
-  alt: "Block diagram of the first-order continuous-time system. Input x of t is scaled by b over a into a summer; the summer output is y of t and is also fed through a differentiator block D, whose output is scaled by negative one over a and returned to the summer.",
+  alt: "Block diagram of the first-order continuous-time system. Input x of t is scaled by b over a into a summer; the summer output is y of t and is also fed through a differentiator block labeled d by d t, whose output is scaled by negative one over a and returned to the summer.",
+  caption: [
+    The continuous-time counterpart, with the unit delay replaced by a
+    differentiator.
+  ],
   align(center)[
   #diagram(
     debug: false,
@@ -818,7 +856,9 @@ can be represented by the following block diagram:
     edge((1, 0), "d", "-|>-"),
     edge((1, 1), (1, 2), (0, 2), (0, 0), "-|>-", $-1/a$),
     node((0, 0), $+$),
-    node((1, 1), $D$, width: 2em),
+    // Not `D`: that letter is the unit delay in the discrete-time diagram
+    // above, and this block is a differentiator.
+    node((1, 1), $"d"/("d"t)$, width: 3em),
   )
 ],
 )
