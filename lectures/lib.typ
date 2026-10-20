@@ -10,11 +10,15 @@
 #import "@preview/codly-languages:0.1.10": codly-languages
 #import "@preview/ctheorems:1.1.3": thmenv, thmrules
 #import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
-#import "@preview/lilaq:0.6.0" as lq
+#import "lq.typ" as lq // lilaq, with headroom over the y axis
 #import "@preview/showybox:2.0.4": showybox
 #import "@preview/tiptoe:0.4.0"
 #import "@preview/whalogen:0.3.0": ce
 #import "@preview/zap:0.5.0"
+// The course repository reads these from its shared fonts.typ; this copy
+// stands alone, with a code face the release build machine has.
+#let text-font = "Libertinus Serif"
+#let code-font = "DejaVu Sans Mono"
 
 // Series palette =====================================================
 // Categorical colors for the figures. Slot 1 is the document accent; the rest
@@ -64,10 +68,22 @@
     filter: filter,
     format-ticks: none,
     tick-distance: 1000,
+    // No minor ticks, for the same reason `question/lib.typ` turns them off:
+    // on an axis drawn as an arrow through the origin they read as hatching
+    // on the arrow rather than as a scale, and a figure that forgot to say
+    // `subticks: none` got them while the one beside it did not.
+    subticks: none,
   )
   show: lq.set-tick(inset: 2pt, outset: 2pt, pad: 0em)
   show: lq.set-spine(tip: tiptoe.stealth, stroke: 0.5pt)
-  show: lq.set-diagram(xaxis: axis-args, yaxis: axis-args)
+  // Extra air on top so the y arrow clears the data. A figure that states
+  // `ylim` is tight and never sees this margin; `lq.diagram` lifts the
+  // stated limit by the same fraction instead, so the two agree.
+  show: lq.set-diagram(
+    xaxis: axis-args,
+    yaxis: axis-args,
+    margin: (top: lq.y-headroom, rest: 6%),
+  )
   show: lq.set-grid(stroke: none)
   it
 }
@@ -177,9 +193,11 @@
   landscape: false,
   // The number of columns to be used in the page
   cols: 1,
-  // The text and code font. Must be a valid font name.
-  text_font: "Libertinus Serif",
-  code_font: "DejaVu Sans Mono",
+  // The text and code font. Must be a valid font name. The defaults are
+  // the course-wide pair from `fonts.typ`; a document should not need to
+  // override them.
+  text_font: text-font,
+  code_font: code-font,
   // The color of the lecture notes' accent color. Must be a valid HEX color.
   accent: "#DC143C",
   h1-prefix: "Lecture",
@@ -264,7 +282,7 @@
 
   // Set the text and code font (lang drives PDF/UA tagging language)
   set text(font: text_font, size: 10pt, lang: lang)
-  show raw: set text(size: 10pt)
+  show raw: set text(font: code_font, size: 10pt)
 
   // Boxed environments break across pages, so a paragraph inside one can now
   // land on a page boundary. Price a single stranded line high enough that the
@@ -360,7 +378,7 @@
 
       if git_info != none {
         place(top + right, dx: -5pt, dy: 2pt)[
-          #text(size: 7pt, fill: accent_color.lighten(10%), font: "DejaVu Sans Mono")[#git_info]
+          #text(size: 7pt, fill: accent_color.lighten(10%), font: code_font)[#git_info]
         ]
       }
     },
@@ -399,10 +417,19 @@
   set enum(indent: 0pt, body-indent: 6pt)
   set list(indent: 0pt, body-indent: 6pt)
 
-  // The reference tables are long lists of one-line entries, so the default
-  // 5pt of vertical cell padding adds up to a page of air across the document.
-  // Horizontal padding is left alone; the columns need it to stay apart.
-  set table(inset: (x: 5pt, y: 3.5pt))
+  // The reference tables are full of fractions, integrals with limits and
+  // cases. The default 5pt of vertical cell padding keeps them clear of the
+  // rules above and below: every row grows to fit its tallest cell. Cases
+  // print at full size, as in a displayed equation; inline they shrink to
+  // script size. Fractions stay inline, since many sit in exponents.
+  set table(inset: (x: 5pt, y: 5pt))
+  show table.cell: it => {
+    // Line boxes as tall as the ink, so a brace or a stacked exponent
+    // counts toward the row height instead of reaching into the padding.
+    set text(top-edge: "bounds", bottom-edge: "bounds")
+    show math.cases: c => math.display(c)
+    it
+  }
 
   // Configure headings with subsection numbering up to level 3
   set heading(numbering: none) // Default: no numbering

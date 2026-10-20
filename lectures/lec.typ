@@ -19,9 +19,8 @@
   // bibliography_file: "refs.bib",
   paper_size: "us-letter",
   cols: 1,
-  // text_font: "New Computer Modern Math",
-  text_font: "STIX Two Text",
-  code_font: "Cascadia Mono",
+  // Fonts are set once in `lib.typ` (text-font, code-font); there is
+  // nothing to set here.
   accent: "#9E1B32",
   h1-prefix: "Topic",
   colortab: true,
