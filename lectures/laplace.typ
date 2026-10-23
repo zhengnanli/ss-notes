@@ -80,9 +80,9 @@ For $s$ imaginary (i.e., $s = j omega$), the integral in the above equation corr
   $
     -e^(-a t) u(-t) #lpair 1/(s+a), quad Re{s} < -a
   $
-]
+] <ex-laplace-fourier>
 
-In specifying the Laplace transform of a signal, both the *algebraic expression* and *the range of values* of $s$ for which this expression is valid are required. The range of values of $s$ for which the integral (i.e., @laplace) converges is referred to as the _region of convergence_ (ROC). // A convenient way to display the ROC is shown below for $Re{s} > -a$.
+In specifying the Laplace transform of a signal, both the *algebraic expression* and *the range of values* of $s$ for which this expression is valid are required. The range of values of $s$ for which the integral in @laplace converges is referred to as the _region of convergence_ (ROC). // A convenient way to display the ROC is shown below for $Re{s} > -a$.
 
 #example("Examples of Laplace Transform")[
   In this example, we consider a signal that is the sum of a real and a complex exponential:
@@ -111,7 +111,7 @@ In specifying the Laplace transform of a signal, both the *algebraic expression*
     $,
   ) <xs>
 
-  A convenient way to display the ROC is shown below. The shaded area is $Re{s} > -1$. Except for a scaling factor, the numerator and denominator polynomials in a rational Laplace transform can be specified by their roots. The roots of the numerator polynomial are commonly referred to as the _zeros_, denoted by $circle$ on the plot, and the roots of the denominator polynomial are referred to as the _poles_ of $X(s)$, marked by $times$.
+  A convenient way to display the ROC is the pole-zero plot in @fig-roc1. The shaded area is $Re{s} > -1$. Except for a scaling factor, the numerator and denominator polynomials in a rational Laplace transform can be specified by their roots. The roots of the numerator polynomial are commonly referred to as the _zeros_, denoted by $circle$ on the plot, and the roots of the denominator polynomial are referred to as the _poles_ of $X(s)$, marked by $times$.
 
 
   #let zeros = quadratic(2, 5, 12)
@@ -153,16 +153,16 @@ In specifying the Laplace transform of a signal, both the *algebraic expression*
           text(mark.fill)[$times$],
         )),
         lq.place(-1, -0.5, align: center, plabel[$-1$]),
-        lq.place(-0.1, 1, align: center, plabel[$1$]),
+        lq.place(-0.25, 1, align: center, plabel[$1$]),
         lq.place(0.2, 3.4, align: left, plabel[$Re{s} > -1$]),
       )
     ],
-  )
+  ) <fig-roc1>
 ]
 
 == The Inverse Laplace Transform
 
-In the previous section, we discussed the interpretation of the Laplace transform of a signal as the Fourier transform of an exponentially weighted version of the signal: that is, with $s$ expressed as $s = sigma + j omega$, the Laplace transform of a signal $x(t)$ is
+As @ex-laplace-fourier suggests, the Laplace transform of a signal can be interpreted as the Fourier transform of an exponentially weighted version of the signal: with $s = sigma + j omega$, the Laplace transform of a signal $x(t)$ is
 $
   X(sigma + j omega) = cal(F){x(t) e^(-sigma t)} = integral_RR x(t) e^(-sigma t) e^(-j omega t) "d"t
 $
@@ -179,7 +179,7 @@ $
   x(t) = 1/(2 pi j) integral_(sigma - j infinity)^(sigma + j infinity) X(s) e^(s t) "d"s
 $
 
-#example("Inverse Laplace Transform")[
+#example("Inverse Laplace Transform", breakable: false)[
   Let
   $
     X(s) = 1/ ((s+1) (s+2)), quad Re{s} > -1
@@ -198,11 +198,11 @@ $
   $
     [e^(-t) - e^(-2 t)]u(t) &#lpair 1/((s+1)(s+2)), quad Re{s} > -1
   $
-  If
+  Now suppose instead that
   $
     X(s) = 1/((s+1)(s+2)), quad Re{s} < -2
   $
-  The ROC is to the left of both poles, and thus, the ROC for the term corresponding to the pole at $s = -1$ is $Re{s} < -1$, while the ROC for the term with pole at $s = -2$ is $Re{s} < -2$. Then,
+  Then the ROC is to the left of both poles, and thus the ROC for the term corresponding to the pole at $s = -1$ is $Re{s} < -1$, while the ROC for the term with pole at $s = -2$ is $Re{s} < -2$. Then,
   $
      -e^(-t) u(-t) & #lpair 1/(s+1), quad Re{s} < -1 \
     -e^(-2t) u(-t) & #lpair 1/(s+2), quad Re{s} < -2
@@ -211,7 +211,7 @@ $
   $
     x(t) = [-e^(-t) + e^(-2 t)] u(-t) #lpair 1/((s+1)(s+2)), quad Re{s} < -2
   $
-  Finally, suppose that the ROC of $X(s)$ is now $-2 < Re{s} < -1$. In this case, the ROC is to the left of the pole at $s = -1$ so that this term corresponds to the left-sided signal, i.e., $-e^(-t) u(-t)$, while the ROC is to the right of the pole at $s = -2$, so that this term corresponds to the right-sided signal, i.e., $e^(-2 t) u(t)$. Finally,
+  Finally, suppose that the ROC of $X(s)$ is now $-2 < Re{s} < -1$. In this case, the ROC is to the left of the pole at $s = -1$ so that this term corresponds to a left-sided signal, i.e., $-e^(-t) u(-t)$, while the ROC is to the right of the pole at $s = -2$, so that this term corresponds to a right-sided signal, i.e., $e^(-2 t) u(t)$. Thus,
   $
     x(t) = -e^(-t) u(-t) - e^(-2 t) u(t) #lpair 1/((s+1)(s+2)), quad -2 < Re{s} < -1
   $
@@ -221,7 +221,7 @@ $
 
 === Causality
 
-For a causal LTI system, the impulse response is zero for $t < 0$, and thus is right-sided. Therefore, the ROC associated with the system function for a causal system is a right-half plane.
+For a causal LTI system, the impulse response is zero for $t < 0$, and thus is right-sided. Therefore, the ROC associated with the system function for a causal system is a right-half plane. For a system with a rational system function, causality is equivalent to the ROC being the right-half plane to the right of the rightmost pole.
 
 For example, consider a system with impulse response
 $
@@ -230,14 +230,14 @@ $
 
 Since $h(t) = 0$ for all $t < 0$, this system is causal. Also, the system function can be obtained from previous examples as
 $
-  H(s) = 1/(s+1), Re{s} > -1
+  H(s) = 1/(s+1), quad Re{s} > -1
 $
 
-In this case, the system function is rational and the ROC is to the right of the rightmost pole, consistent with our statement that causality for systems with rational system functions is equivalent to the ROC being to the right of the rightmost pole.
+In this case, the system function is rational and the ROC is to the right of the rightmost pole, consistent with this statement.
 
 === Stability
 
-An LTI system is stable if and only if the ROC of its system function $H(s)$ includes the entire $j omega$-axis, that is, the whole line $Re{s} = 0$. Let us look at a few examples:
+An LTI system is stable if and only if the ROC of its system function $H(s)$ includes the entire $j omega$-axis, that is, the whole line $Re{s} = 0$. Consider the following example.
 
 #example("Stability of LTI Systems")[
   Let us consider an LTI system with system function
@@ -270,7 +270,7 @@ An LTI system is stable if and only if the ROC of its system function $H(s)$ inc
             width: 5cm,
             ylim: (-2.5, 2.5),
             xlim: (-3, 3.5),
-            xaxis: (ticks: (-2, -3, -1, 0, 1), subticks: none),
+            xaxis: (ticks: (-3, -2, -1, 0, 1, 2), subticks: none),
             yaxis: (ticks: (-3, -2, -1, 0, 1, 2, 3), subticks: none),
             lq.rect(
               2,
@@ -289,6 +289,7 @@ An LTI system is stable if and only if the ROC of its system function $H(s)$ inc
             )),
             lq.place(-1, -0.3, align: center, plabel[$-1$]),
             lq.place(1, -0.3, align: center, plabel[$1$]),
+            lq.place(2, -0.3, align: center, plabel[$2$]),
             lq.place(-0.3, 1, align: center, plabel[$1$]),
             lq.place(-0.5, -1, align: center, plabel[$-1$]),
           ),
@@ -308,7 +309,7 @@ An LTI system is stable if and only if the ROC of its system function $H(s)$ inc
             width: 5cm,
             ylim: (-2.5, 2.5),
             xlim: (-3, 3.5),
-            xaxis: (ticks: (-2, -3, -1, 0, 1), subticks: none),
+            xaxis: (ticks: (-3, -2, -1, 0, 1, 2), subticks: none),
             yaxis: (ticks: (-3, -2, -1, 0, 1, 2, 3), subticks: none),
             lq.rect(
               -1,
@@ -327,6 +328,7 @@ An LTI system is stable if and only if the ROC of its system function $H(s)$ inc
             )),
             lq.place(-1, -0.3, align: center, plabel[$-1$]),
             lq.place(1, -0.3, align: center, plabel[$1$]),
+            lq.place(2, -0.3, align: center, plabel[$2$]),
             lq.place(-0.3, 1, align: center, plabel[$1$]),
             lq.place(-0.5, -1, align: center, plabel[$-1$]),
           ),
@@ -346,7 +348,7 @@ An LTI system is stable if and only if the ROC of its system function $H(s)$ inc
             width: 5cm,
             ylim: (-2.5, 2.5),
             xlim: (-3, 3.5),
-            xaxis: (ticks: (-2, -3, -1, 0, 1), subticks: none),
+            xaxis: (ticks: (-3, -2, -1, 0, 1, 2), subticks: none),
             yaxis: (ticks: (-3, -2, -1, 0, 1, 2, 3), subticks: none),
             lq.rect(
               -4,
@@ -365,6 +367,7 @@ An LTI system is stable if and only if the ROC of its system function $H(s)$ inc
             )),
             lq.place(-1, -0.3, align: center, plabel[$-1$]),
             lq.place(1, -0.3, align: center, plabel[$1$]),
+            lq.place(2, -0.3, align: center, plabel[$2$]),
             lq.place(-0.3, 1, align: center, plabel[$1$]),
             lq.place(-0.5, -1, align: center, plabel[$-1$]),
           ),
@@ -377,20 +380,19 @@ An LTI system is stable if and only if the ROC of its system function $H(s)$ inc
       ],
     )
     ],
-  )
+  ) <fig-roc3>
 
-  If the system is known to be _causal_, the ROC will be that indicated in (a), with impulse response
+  If the system is known to be _causal_, the ROC will be that indicated in panel (a) of @fig-roc3, with impulse response
   $
     h(t) = (2/3 e^(-t) + 1/3 e^(2 t)) u(t)
   $
   Note that this choice of ROC does not include the $j omega$-axis, and consequently the system is not stable.
 
-  On the other hand, if the system is known to be _stable_, the ROC is that given in (b), and the corresponding impulse response is
+  On the other hand, if the system is known to be _stable_, the ROC is that given in panel (b), and the corresponding impulse response is
   $
     h(t) = 2/3 e^(-t) u(t) - 1/3 e^(2 t) u(-t)
   $
-
-  which is absolutely integrable, i.e., $integral_RR |h(t)| "d"t < infinity$. Finally, for the ROC in figure (c), the system is both anticausal and unstable, with
+  which is absolutely integrable, i.e., $integral_RR |h(t)| "d"t < infinity$. Finally, for the ROC in panel (c), the system is both anticausal and unstable, with
   $
     h(t) = -(2/3 e^(-t) + 1/3 e^(2 t)) u(-t)
   $
@@ -447,7 +449,7 @@ $
       })
       ],
     )
-    Suppose the input signal is the voltage across the source, i.e., $x(t) = v_S (t)$, and the voltage of the capacitor is the output signal, i.e., $y(t) = v_C (t)$, we obtain
+    If the input signal is the source voltage, i.e., $x(t) = v_S (t)$, and the output signal is the capacitor voltage, i.e., $y(t) = v_C (t)$, then
 
     $
       R C ("d"y(t))/("d"t) + L C ("d"^2 y(t))/("d"t^2) + y(t) = x(t)
@@ -458,20 +460,20 @@ $
       H(s) = (1/ (L C))/(s^2 + (R/L) s + (1/(L C)))
     $
   // If the values of $R$, $L$ and $C$ are all positive, the poles of this system function will have negative real parts, and consequently, the system will be stable.
-  2. Suppose we know the input and the output to an LTI system are
+  2. Suppose we know the input and the output of an LTI system are
 
     $
       x(t) = e^(-3 t) u(t); quad y(t) = [e^(-t) - e^(-2 t)] u(t)
     $
     Taking the Laplace transform of both $x(t)$ and $y(t)$ yields
     $
-      X(s) = 1/(s+3), Re{s} > -3; quad Y(s) = 1/((s+1)(s+2)), Re{s} > -1
+      X(s) = 1/(s+3), quad Re{s} > -3; quad Y(s) = 1/((s+1)(s+2)), quad Re{s} > -1
     $
     Hence,
     $
       H(s) = (Y(s))/(X(s)) = (s+3)/((s+1)(s+2)) = (s+3)/(s^2 + 3s + 2)
     $
-    Since the ROC of $Y(s)$ must include at least the intersection of the ROCs of $X(s)$ and $H(s)$, examining the three possible choices of the ROC of $H(s)$ (i.e., $Re{s} < -2$, $-2 < Re{s} < -1$, and $Re{s} > -1$), we see that the only choice consistent with the ROCs of $X(s)$ and $Y(s)$ is $Re{s} > -1$. Since this is to the right of the rightmost pole of $H(s)$, we conclude that the system is causal. Since both poles of $H(s)$ have negative real parts, the system is also stable. The LCCDE describing the system is given as, assuming initial rest,
+    Since the ROC of $Y(s)$ must include at least the intersection of the ROCs of $X(s)$ and $H(s)$, examining the three possible choices of the ROC of $H(s)$ (i.e., $Re{s} < -2$, $-2 < Re{s} < -1$, and $Re{s} > -1$), we see that the only choice consistent with the ROCs of $X(s)$ and $Y(s)$ is $Re{s} > -1$. Since this is to the right of the rightmost pole of $H(s)$, we conclude that the system is causal. Since both poles of $H(s)$ have negative real parts, the system is also stable. Assuming initial rest, the system is described by the LCCDE
     $
       ("d"^2 y(t))/("d"t^2) + 3 ("d"y(t))/("d"t) + 2 y(t) = ("d"x(t))/("d"t) + 3 x(t)
     $

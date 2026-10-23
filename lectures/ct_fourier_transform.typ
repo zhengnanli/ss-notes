@@ -8,7 +8,7 @@ We developed a representation of periodic signals as linear combinations of comp
 $
   a_k = (2 sin (k omega_0 T_1)) / (k omega_0 T)
 $
-where $omega_0 = (2 pi) / T$. Below, we plot the time domain signal on the left and, on the other two panels, the scaled coefficients $T a_k$ against $omega = k omega_0$ for two periods $T_a < T_b$, holding the pulse half-width $T_1$ fixed. The dashed curve is the envelope $2 sin(omega T_1) \/ omega$, which does not depend on $T$: lengthening the period leaves the envelope alone and packs the samples more densely along it.
+where $omega_0 = (2 pi) / T$. Below, we plot the time-domain signal on the left and, on the other two panels, the scaled coefficients $T a_k$ against $omega = k omega_0$ for two periods $T_a < T_b$, holding the pulse half-width $T_1$ fixed. The dashed curve is the envelope $2 sin(omega T_1) \/ omega$, which does not depend on $T$: lengthening the period leaves the envelope alone and packs the samples more densely along it.
 
 #let T1 = 1.0
 #let envelope-w = lq.linspace(-10, 10, num: 501)
@@ -198,7 +198,7 @@ We start with an aperiodic signal $x(t)$, which is zero when $|t| > T_1$ for som
   )],
 )
 
-Let us now examine the effect of this on the Fourier series representation of $tilde(x)(t)$. We represent the $tilde(x) (t)$ by
+Let us now examine the effect of this on the Fourier series representation of $tilde(x)(t)$. We represent $tilde(x)(t)$ by
 $
   tilde(x) (t) = sum_(k = -infinity)^infinity a_k e^(j k omega_0 t)
 $
@@ -206,7 +206,7 @@ where
 $
   a_k = 1/T integral_(-T/2)^(T/2) tilde(x) (t) e^(-j k omega_0 t) "d"t
 $ <aktildex>
-and $omega_0 = (2 pi) / T$. Since $tilde(x) (t) arrow x(t)$ for $|t| < T / 2$, and $x(t)$ = 0 outside this interval, we can rewrite @aktildex as
+and $omega_0 = (2 pi) / T$. Since $tilde(x)(t) = x(t)$ for $|t| < T/2$ (once $T/2 > T_1$), and $x(t) = 0$ outside this interval, we can rewrite @aktildex as
 $
   a_k = 1/T integral_(-T/2)^(T/2) tilde(x)(t) e^(-j k omega_0 t) "d"t = 1/T integral_RR x(t) e^(-j k omega_0 t) "d"t
 $
@@ -218,7 +218,7 @@ we have, for the coefficients $a_k$,
 $
   a_k = 1/T X(j k omega_0)
 $
-then, we can represent $tilde(x) (t)$ now with
+Then we can represent $tilde(x)(t)$ as
 $
   tilde(x) (t) = sum_(k = -infinity)^infinity a_k e^(j k omega_0 t) = sum_(k = -infinity)^infinity 1/T X(j k omega_0) e^(j k omega_0 t) = 1 / (2 pi) sum_(k = -infinity)^infinity X(j k omega_0) e^(j k omega_0 t) omega_0
 $
@@ -280,7 +280,7 @@ The process of $omega_0 arrow 0$ is depicted below. As $omega_0 arrow 0$, the su
   )]
 
 We define the Fourier transform pair as follows.
-#definition("Fourier Transformation Pair")[
+#definition("Fourier Transform Pair")[
   The Fourier transform is defined as
   #eqalt(
     "X of j omega equals the integral from negative infinity to infinity of x of t times e to the negative j omega t, d t.",
@@ -306,7 +306,7 @@ Comparing the equation with the Fourier transform, we conclude that
 $
   a_k = 1/T X(j omega) lr(|, size: #200%)_(omega=k omega_0)
 $
-where $X(j omega)$ is the Fourier transform of $x(t)$. Intuitively, $a_k$ are _samples_ of the Fourier transform of one period of $tilde(x) (t)$.
+where $X(j omega)$ is the Fourier transform of $x(t)$. Intuitively, $T a_k$ are _samples_ of the Fourier transform of one period of $tilde(x)(t)$.
 
 == Convergence of Fourier Transforms
 
@@ -344,21 +344,26 @@ Similar to the Fourier series, there is a set of conditions which are sufficient
     X(j omega) = integral_RR delta(t) e^(-j omega t) "d"t = 1
   $
 
-  The Fourier transform of the rectangular pulse signal
-  $
-    x(t) = cases(1\, quad |t| < T_1, 0\, quad |t| > T_1)
-  $
-  is
-  $
-    X(j omega) = integral_(-T_1)^(T_1) e^(-j omega t) "d"t = (2 sin(omega T_1))/omega = 2 T_1 "sinc"((omega T_1)/pi)
-  $
+  // Unbreakable, so that "is" cannot be stranded at the foot of a page
+  // with its equation on the next.
+  #block(breakable: false)[
+    The Fourier transform of the rectangular pulse signal
+    $
+      x(t) = cases(1\, quad |t| < T_1, 0\, quad |t| > T_1)
+    $
+    is
+    $
+      X(j omega) = integral_(-T_1)^(T_1) e^(-j omega t) "d"t = (2 sin(omega T_1))/omega = 2 T_1 "sinc"((omega T_1)/pi)
+    $
+    where $"sinc"(x) = sin(pi x) \/ (pi x)$ is the normalized sinc function of @fig-sinc.
+  ]
 
   #altfig(
     alt: "Two plots. Left: a rectangular pulse x of t of height one, nonzero on the interval from minus T sub one to T sub one. Right: its Fourier transform X of j omega, a sinc-shaped envelope of height two T sub one with zero crossings at multiples of pi over T sub one.",
     caption: [
       A rectangular pulse (left) and its transform (right). Narrowing the pulse
-      in time widens the first null at $omega = pi \/ T_1$, which is the
-      time-bandwidth trade-off in its simplest form.
+      in time pushes the first null at $omega = pi \/ T_1$ outward, widening
+      the main lobe, which is the time-bandwidth trade-off in its simplest form.
     ],
     align(center)[
     #grid(
@@ -392,14 +397,14 @@ Similar to the Fourier series, there is a set of conditions which are sufficient
           width: 6cm,
           ylim: (-0.8, 2.6),
           lq.plot(w, w.map(w => 2 * T1 * sa(w * T1)), mark: none),
-          lq.place(-1.1, 2.0, align: center, plabel[$2 T_1$]),
-          lq.place(calc.pi / T1, -0.35, align: center, plabel[$pi / T_1$]),
-          lq.place(-calc.pi / T1, -0.35, align: center, plabel[$-pi / T_1$]),
+          lq.place(-1.7, 2.1, align: center, plabel[$2 T_1$]),
+          lq.place(calc.pi / T1, -0.62, align: center, plabel[$pi / T_1$]),
+          lq.place(-calc.pi / T1, -0.62, align: center, plabel[$-pi / T_1$]),
         )
       ],
     )],
   )
-  Consider the Fourier transform of the signal $x(t)$
+  Consider a signal $x(t)$ whose Fourier transform is
   $
     X(j omega) = cases(1\, quad |omega| < W, 0\, quad |omega| > W)
   $
@@ -416,13 +421,13 @@ $
   x(t) #ftpair X(j omega)
 $
 
-We list the properties without proof below
+We list the properties without proof below:
 
 - Linearity:
 $
   a x(t) + b y(t) #ftpair a X(j omega) + b Y(j omega)
 $
-- Time Shifting:
+#block(sticky: true)[- Time Shifting:]
 $
   x(t - t_0) #ftpair e^(-j omega t_0) X(j omega)
 $
@@ -460,21 +465,20 @@ We start by looking at the inverse Fourier transform,
 $
   x(t) = 1/(2 pi) integral_RR X(j omega) e^(j omega t) "d"omega = lim_(omega_0 arrow 0) 1/(2 pi) sum_(k = -infinity)^infinity X(j k omega_0) e^(j k omega_0 t) omega_0
 $
-The response of a linear system with impulse response $h(t)$ to a complex exponential $e^(j k omega_0 t)$ is $H(j k omega_0) e^(j k omega_0 t)$ (i.e., the eigenfunction), where
+The response of an LTI system with impulse response $h(t)$ to a complex exponential $e^(j k omega_0 t)$ is $H(j k omega_0) e^(j k omega_0 t)$ (complex exponentials are eigenfunctions of LTI systems), where
 $
   H(j k omega_0) = integral_RR h(t) e^(-j k omega_0 t) "d"t
 $
-is the frequency response (or transfer function) evaluated at $omega = k omega_0$. In other words, the Fourier transform of the impulse response is the complex scaling factor that the LTI system applies to the eigenfunction $e^(j k omega_0 t)$. From the superposition property, we have
+is the frequency response (or transfer function) evaluated at $omega = k omega_0$. In other words, the Fourier transform of the impulse response is the complex scaling factor that the LTI system applies to the eigenfunction $e^(j k omega_0 t)$. From the superposition property, we have (where $x(t) -> y(t)$ denotes that $y(t)$ is the output for input $x(t)$)
 $
   1/(2 pi) sum_(k = -infinity)^(infinity) X(j k omega_0) e^(j k omega_0 t) omega_0 arrow 1 / (2 pi) sum_(k = -infinity)^infinity X(j k omega_0) H(j k omega_0) e^(j k omega_0 t) omega_0
 $
-Note that $x(t) -> y(t)$ denotes that the output $y(t)$ corresponds to the input $x(t)$.
 
-Therefore, the response of a linear system to $x(t)$ is
+Therefore, the response of an LTI system to $x(t)$ is
 $
   y(t) = lim_(omega_0 -> 0) 1 / (2 pi) sum_(k = -infinity)^infinity X(j k omega_0) H(j k omega_0) e^(j k omega_0 t) omega_0 = 1/ (2 pi) integral_RR X(j omega) H(j omega) e^(j omega t) "d"omega
 $
-We also know that the Fourier transform of $y(t)$ is $Y(j omega)$:
+Denoting the Fourier transform of $y(t)$ by $Y(j omega)$, we also have
 $
   y(t) = 1 / (2 pi) integral_RR Y(j omega) e^(j omega t) "d"omega
 $
@@ -535,9 +539,9 @@ We then have
   $
   to the input signal
   $
-    x(t) = e^(-b t) u(t), quad b > 0
+    x(t) = e^(-b t) u(t), quad b > 0, b != a
   $
-  Rather than computing $y(t) = x(t) star h(t)$, let us transform the problem into the frequency domain. The Fourier transform of $x(t)$ and $h(t)$ are
+  Rather than computing $y(t) = x(t) star h(t)$, let us transform the problem into the frequency domain. The Fourier transforms of $x(t)$ and $h(t)$ are
   $
     X(j omega) = 1 / (b + j omega), quad H(j omega) = 1 / (a + j omega)
   $
@@ -545,11 +549,12 @@ We then have
   $
     Y(j omega) = 1 / ((a + j omega) (b + j omega)) = A / (a + j omega) + B / (b + j omega) = (1 / (b-a))(1 / (a + j omega) - 1 / (b + j omega))
   $
+  with $A = 1/(b-a)$ and $B = -1/(b-a)$.
   Hence,
   $ y(t) = 1/(b-a) (e^(-a t) u(t) - e^(-b t) u(t)) $
 ]
 
-== Table of Fourier Properties and of Basic Fourier Transformation Pairs
+== Table of Fourier Properties and of Basic Fourier Transform Pairs
 
 #note("Continuous-Time Fourier Transform Properties")[
   #align(center)[
@@ -603,7 +608,7 @@ We then have
     )]
 ]
 
-#note("Continuous-Time Fourier Transform Pairs")[
+#note("Continuous-Time Fourier Transform Pairs", breakable: false)[
   #align(center)[
     #table(
       columns: 3,
@@ -665,7 +670,7 @@ We then have
 
       [$e^(-a |t|)$, $Re{a} > 0$], [$2a/(a^2 + omega^2)$], [N/A],
 
-      [$t^(n-1) / ((n-1)!) e^(-a t) u(t)$], [$1 / (a + j omega)^n$], [N/A],
+      [$t^(n-1) / ((n-1)!) e^(-a t) u(t)$, $Re{a} > 0$], [$1 / (a + j omega)^n$], [N/A],
 
       // [$(sin(pi t / T))/((pi t) / T) cos(omega_0 t)$],
       // [$T/2 [text("rect")((omega - omega_0)T/(2pi)) + text("rect")((omega + omega_0)T/(2pi))]$],
@@ -676,17 +681,13 @@ We then have
 
 == Systems Characterized by Linear Constant-Coefficient Differential Equations
 
-We consider the following continuous-time LTI systems
+We consider continuous-time LTI systems described by
 $
   sum_(k = 0)^N a_k ("d"^(k) y(t)) / ("d"t^k) = sum_(k = 0)^M b_k ("d"^(k) x(t)) / ("d"t^k)
 $
+where $a_k$ and $b_k$ are now the coefficients of the differential equation, not Fourier series coefficients.
 
-From the convolution property, we have
-$
-  Y(j omega) = H(j omega) X(j omega)
-$
-
-Let us perform the Fourier transform to both sides
+Taking the Fourier transform of both sides gives
 $
   cal("F"){sum_(k = 0)^N a_k ("d"^(k) y(t)) / ("d"t^k)} = cal("F"){sum_(k = 0)^M b_k ("d"^(k) x(t)) / ("d"t^k)}
 $
@@ -702,7 +703,7 @@ or equivalently
 $
   Y(j omega)[ sum_(k = 0)^N a_k (j omega)^k ] = X(j omega)[ sum_(k = 0)^M b_k (j omega)^k ]
 $
-Therefore,
+Therefore, by the convolution property $Y(j omega) = H(j omega) X(j omega)$,
 $
   H(j omega) = (Y(j omega))/(X(j omega)) = (sum_(k = 0)^M b_k (j omega)^k) / (sum_(k = 0)^N a_k (j omega)^k)
 $

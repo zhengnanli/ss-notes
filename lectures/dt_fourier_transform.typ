@@ -4,7 +4,7 @@
 #show: lq.theme.schoolbook
 #show: schoolbook-style
 
-Similar to the development of the continuous-time Fourier transform, we start by considering a general sequence $x[n]$ that is of finite duration, i.e., for some integers $N_1$ and $N_2$, $x[n] = 0$ outside the range $-N_1 <= n <= N_2$. A signal of this type is illustrated in the figure below. From this aperiodic signal, we construct a periodic sequence $tilde(x) [n]$ for which $x[n]$ is one period. As we choose the period $N$ to be larger, $tilde(x) [n]$ agrees with $x[n]$ over a longer interval, and as $N -> infinity$, $tilde(x) [n] = x[n]$ for every $n$.
+Similar to the development of the continuous-time Fourier transform, we start by considering a general sequence $x[n]$ that is of finite duration, i.e., for some integers $N_1$ and $N_2$, $x[n] = 0$ outside the range $-N_1 <= n <= N_2$. A signal of this type is illustrated in the figure below. From this aperiodic signal, we construct a periodic sequence $tilde(x) [n]$ for which $x[n]$ is one period. As we choose the period $N$ to be larger (always with $N >= N_1 + N_2 + 1$, so that the shifted copies do not overlap), $tilde(x) [n]$ agrees with $x[n]$ over a longer interval, and as $N -> infinity$, $tilde(x) [n] = x[n]$ for every $n$.
 
 // A discrete-time signal is drawn on the integers, so the stems here are at
 // integer n, not on a fine grid. The support is exactly -N1 .. N2 with
@@ -81,7 +81,7 @@ where
 $
   a_k = 1 / N sum_(n = chevron.l N chevron.r) tilde(x) [n] e^(-j k (2 pi) / N n)
 $
-Since $x[n] = tilde(x) [n], -N_1 <= n <= N_2$, it is convenient to choose the interval of summation to include this interval, so that $tilde(x) [n]$ can be replaced by $x[n]$ in the summation, therefore
+Since $x[n] = tilde(x) [n], -N_1 <= n <= N_2$, it is convenient to choose the interval of summation to include this interval, so that $tilde(x) [n]$ can be replaced by $x[n]$ in the summation. Therefore,
 $
   a_k = 1 / N sum_(n = -N_1)^(N_2) x[n] e^(-j k (2 pi)/N n) = 1 / N sum_(n = -infinity)^(infinity) x[n] e^(-j k (2 pi)/N n)
 $
@@ -93,17 +93,17 @@ we see that the coefficients $a_k$ are proportional to samples of $X(e^(j omega)
 $
   a_k = 1 / N X(e^(j k omega_0))
 $
-where $omega_0 = (2 pi) / N$ is the spacing of the samples in the frequency domain. Given the fact $omega_0 = (2 pi) / N$, or equivalently $1 / N = omega_0 / (2 pi)$,
+where $omega_0 = (2 pi) / N$ is the spacing of the samples in the frequency domain. Substituting $1 / N = omega_0 / (2 pi)$ into the Fourier series gives
 $
   tilde(x) [n] = sum_(k = chevron.l N chevron.r) a_k e^(j k (2 pi) / N n) = sum_(k = chevron.l N chevron.r) 1/N X(e^(j k omega_0)) e^(j k omega_0 n) = 1 / (2 pi) sum_(k = chevron.l N chevron.r) X(e^(j k omega_0)) e^(j k omega_0 n) omega_0
 $
-As $N -> infinity$, $tilde(x) [n] = x[n]$, and we have
+As $N -> infinity$, $omega_0 -> "d"omega$, the sum over $N$ consecutive $k$ becomes an integral over an interval of length $N omega_0 = 2 pi$, and $tilde(x)[n] -> x[n]$, so
 $
   x[n] = 1 / (2 pi) integral_(2 pi) X(e^(j omega)) e^(j omega n) "d"omega
 $
 
 Finally, we have the following pair of equations:
-#definition("Discrete-time Fourier Transform")[
+#definition("Discrete-Time Fourier Transform")[
   The _analysis equation_ is
   #eqalt(
     "X of e to the j omega equals the sum over all integer n of x of n times e to the negative j omega n.",
@@ -147,7 +147,7 @@ Finally, we have the following pair of equations:
   $
     Y(e^(j omega)) = A / (1 - alpha e^(-j omega)) + B / (1 - beta e^(-j omega))
   $
-  Solving for $A$ and $B$ gives $A = alpha \/ (alpha - beta)$ and $B = -beta \/ (alpha - beta)$, so
+  Assuming $alpha != beta$, solving for $A$ and $B$ gives $A = alpha \/ (alpha - beta)$ and $B = -beta \/ (alpha - beta)$, so
   $
     y[n] = A alpha^n u[n] + B beta^n u[n] = alpha / (alpha - beta) alpha^n u[n] - beta / (alpha - beta) beta^n u[n]
   $
@@ -222,7 +222,7 @@ Finally, we have the following pair of equations:
   )
 ]
 
-#note("Discrete-Time Fourier Transform Pairs")[
+#note("Discrete-Time Fourier Transform Pairs", breakable: false)[
   #table(
     columns: 3,
     align: center + horizon,
@@ -267,8 +267,8 @@ Finally, we have the following pair of equations:
     [$(sin(omega M/2))/(sin(omega/2)) e^(-j omega (M-1)/2)$],
     [N/A],
 
-    [$(sin(omega_c n))/(pi n)$],
-    [Rectangle: $cases(1 "if" |omega| < omega_c, 0 "if" omega_c < |omega| <= pi)$],
+    [$(sin(omega_c n))/(pi n)$, $0 < omega_c < pi$],
+    [Rectangle: $cases(1 "if" |omega| < omega_c, 0 "if" omega_c < |omega| <= pi)$ (periodic with period $2pi$)],
     [N/A],
 
     [$sum_(n=-infinity)^(infinity) delta[n - r N]$],
@@ -277,7 +277,7 @@ Finally, we have the following pair of equations:
 
     [Square wave: $cases(1 "if" |n| <= N_1, 0 "if" N_1 < |n| <= N\/2)$],
     [$2pi sum_(k=-infinity)^(infinity) a_k delta(omega - (2 pi k)/N)$],
-    [$a_k = 1/N (sin[2 pi k (N_1 + 1\/2) \/ N])/(sin(pi k \/ N))$ for $k != 0$, $a_0 = (2 N_1 + 1)/N$],
+    [$a_k = 1/N (sin[2 pi k (N_1 + 1\/2) \/ N])/(sin(pi k \/ N))$ for $k != 0, plus.minus N, plus.minus 2N, dots.c$; $a_k = (2 N_1 + 1)/N$ for $k = 0, plus.minus N, dots.c$],
 
     [$(-1)^n$],
     [$2pi sum_(k=-infinity)^(infinity) delta(omega - pi - 2pi k)$],
@@ -340,7 +340,7 @@ $
   $
     H(e^(j omega)) = 2 / (1 - 3/4 e^(-j omega) + 1/8 e^(-j 2 omega))
   $
-  Again, it can be expanded as
+  Using partial fractions, it can be expanded as
   $
     H(e^(j omega)) = 4 / (1 - 1/2 e^(-j omega)) - 2 / (1 - 1/4 e^(-j omega))
   $
@@ -353,7 +353,7 @@ $
 
 == The Discrete Fourier Transform
 
-Discrete Fourier Transform (DFT) is defined for finite length sequences by considering their periodic extension (sometimes with zero-padding). Let $x[n]$ be a finite-length sequence such that $x[n] = 0$ if $n in.not [0, N-1]$. The DFT is defined as
+The discrete Fourier transform (DFT) is defined for finite-length sequences by considering their periodic extension (sometimes with zero-padding). Let $x[n]$ be a finite-length sequence such that $x[n] = 0$ if $n in.not [0, N-1]$. The DFT is defined as
 $
   X[k] = sum_(n = 0)^(N - 1) x[n] W_N^(k n), quad k = 0, 1, dots.c, N - 1
 $
@@ -364,13 +364,13 @@ $
   x[n] = 1/N sum_(k = 0)^(N - 1) X[k] W_N^(-k n), quad n = 0, 1, dots.c, N - 1
 $
 
-Suppose we are given the _samples_ of a signal, $bold(x) = vec(x[0]& x[1] & dots.c & x[N-1], delim: "[")^top$, and we would like the DFT of it, $bold(X) = vec(X[0]&X[1]&dots.c&X[N-1], delim: "[")^top$. We can obtain it by a matrix multiplication,
+Suppose we are given the _samples_ of a signal, $bold(x) = [x[0], x[1], dots.c, x[N-1]]^top$, and we would like the DFT of it, $bold(X) = [X[0], X[1], dots.c, X[N-1]]^top$. We can obtain it by a matrix multiplication,
 
 $ bold(X) = bold(W) bold(x), quad bold(x) = 1/N bold(W)^H bold(X) $
 
 where $bold(W)^H$ is the conjugate transpose and
 $
-  bold(W) = mat(1, 1, dots.h, 1; 1, W_N, dots.h, W_N^(N-1); dots.h, dots.h, dots.down, dots.v; 1, W_N^(N-1), dots.h, W_N^((N-1)(N-1)); delim:"[")
+  bold(W) = mat(1, 1, dots.h, 1; 1, W_N, dots.h, W_N^(N-1); dots.v, dots.v, dots.down, dots.v; 1, W_N^(N-1), dots.h, W_N^((N-1)(N-1)); delim:"[")
 $
 
 Note that $1/sqrt(N) bold(W)$ is unitary: $(1/sqrt(N) bold(W))^(-1) = 1/sqrt(N) bold(W)^H$.
@@ -381,10 +381,10 @@ $
 $
 since $W_4 = e^(-j pi \/ 2) = -j$.
 
-The fast Fourier transform uses divide-and-conquer, reducing the number of multiplications from $cal("O")(N^2)$ to $cal("O")(N log N)$. Can you use DFT to calculate IDFT?
+The fast Fourier transform (FFT) uses divide-and-conquer, reducing the number of multiplications from $cal("O")(N^2)$ to $cal("O")(N log N)$. Exercise: show how a DFT routine can compute the IDFT.
 
-We can say that when comparing DFT with DTFT,
+Comparing the DFT with the DTFT of the same finite-length $x[n]$,
 $
   X[k] = X(e^(j omega)) lr(|, size: #200%)_(omega = (2 pi k) / N) = X(e^(j (2 pi) / N k))
 $
-In other words, the DFT values are samples of the DTFT. To recover the DTFT between those samples, we interpolate the DFT values with a Dirichlet kernel, which is the transform of the finite-length rectangular window that truncated the sequence in the first place.
+In other words, the DFT values are samples of the DTFT. To recover the DTFT between those samples, we interpolate the DFT values with a Dirichlet kernel, the DTFT of the length-$N$ rectangular window on which $x[n]$ is supported.

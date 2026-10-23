@@ -2,7 +2,7 @@
 
 = Introduction
 
-Signals describe a wide variety of physical phenomena. In this course, we intend to develop and analyze signals within an analytical framework using mathematical descriptions and representations. Signals are represented mathematically as functions of one or more _independent_ variables. For example, a speech signal is represented mathematically by acoustic pressure as a function of time. In many other applications, such as in civil engineering, the annual average vertical wind profile (expressed in wind speed) is often a function of height. Below, we show results from spectroscopy, measuring relative intensity as a function of wavelength.
+Signals describe a wide variety of physical phenomena. In this course, we intend to develop and analyze signals within an analytical framework using mathematical descriptions and representations. Signals are represented mathematically as functions of one or more _independent_ variables. For example, a speech signal is represented mathematically by acoustic pressure as a function of time. In civil engineering, for example, the annual average vertical wind profile gives wind speed as a function of height. @fig-o2-spectrum shows results from spectroscopy, measuring relative intensity as a function of wavelength.
 
 #let (λ, intensity) = lq.load-txt(
   read("spectrum_o2.txt"),
@@ -13,7 +13,7 @@ Signals describe a wide variety of physical phenomena. In this course, we intend
 // spacing function and reads as the mathematical constants everywhere below.
 #let planck = 6.62607015e-34
 #let light-speed = 299792458
-#let elem-charge = 1.60217733e-19
+#let elem-charge = 1.602176634e-19
 // Photon energy in eV from wavelength in nm: E = h c / (lambda e), with the
 // 1e9 carrying nm to m.
 #let nm-to-ev = 1e9 * planck * light-speed / elem-charge
@@ -42,9 +42,9 @@ Signals describe a wide variety of physical phenomena. In this course, we intend
     tick-distance: 5e-5,
     functions: (λ => nm-to-ev / λ, E => nm-to-ev / E),
   ),
-)
+) <fig-o2-spectrum>
 
-In this course, most of our signals are functions of time, or in other words, time series. We will consider two types of signals: *continuous-time* signals (CT) and *discrete-time* (DT) signals. In general, we use $t$ to represent continuous time and $n$ for discrete time. In addition, we denote continuous-time signals as $x(t)$ and discrete-time signals as $x[n]$. We will start by discussing a few typical signals.
+In this course, most of our signals are functions of time, or in other words, time series. We will consider two types of signals: *continuous-time* (CT) signals and *discrete-time* (DT) signals. In general, we use $t$ to represent continuous time and $n$ for discrete time. In addition, we denote continuous-time signals as $x(t)$ and discrete-time signals as $x[n]$. We will start by discussing a few typical signals.
 
 We begin by defining signal energy and power. The signal energy is defined as
 
@@ -89,10 +89,10 @@ Random Signal: can only be described using probabilistic models. For example, th
 
 === Periodic and Aperiodic Signals
 
-Periodic signals are those which repeat after a finite fixed time interval has elapsed. The smallest positive value of $T$ in $x(t) = x(t + T)$ is defined as the (fundamental) period.
+Periodic signals are those which repeat after a finite fixed time interval has elapsed. The smallest positive $T$ for which $x(t) = x(t + T)$ for all $t$ is defined as the (fundamental) period.
 
 #example("Periodic and Aperiodic Signals")[
-  - $x(t) = cos(2 pi t) + sin (2 t)$ is not periodic. We cannot find a common period that can be formed from the underlying periods.
+  - $x(t) = cos(2 pi t) + sin (2 t)$ is not periodic. The component periods $1$ and $pi$ have an irrational ratio, so no common period exists.
   - $x[n] = cos (2 n)$ is also aperiodic. Periodicity requires $2 N = 2 pi k$ for integers $N > 0$ and $k$, i.e., $N = pi k$, and no integer $N$ satisfies this.
   - $x[n] = cos( pi n^2 )$, however, is periodic. The sequence evaluates to $1, -1, 1, -1, dots$, so it has a period of $2$.
 ]
@@ -105,13 +105,13 @@ Finite signals are defined over a fixed time interval. Infinite signals are defi
 
 A signal is even if when time is reversed, you obtain the same signal, i.e., $x(-t) = x(t)$, or $x[-n] = x[n]$. A signal is odd if when time is reversed, you obtain the negative of the signal, i.e., $x(-t) = -x(t)$, or $x[-n] = -x[n]$.
 
-Given a signal $x(t)$, we can obtain the even and odd components as follows
+Given a signal $x(t)$, we can obtain the even and odd components $x_e (t)$ and $x_o (t)$ as follows
 $
-  "Even"{x(t)} = 1/2 [ x(t) + x(-t) ]
+  x_e (t) = 1/2 [ x(t) + x(-t) ]
 $
 and
 $
-  "Odd"{x(t)} = 1/2 [ x(t) - x(-t) ]
+  x_o (t) = 1/2 [ x(t) - x(-t) ]
 $
 
 === Complex Exponential and Sinusoidal Signals
@@ -159,14 +159,14 @@ We now consider complex exponential signals of a special form. Let us examine th
 
 This signal represents one of the most important functions in signal processing and engineering. The signal is periodic with a period related to the frequency parameter $omega_0$. To understand this periodicity, we require that
 $ e^(j omega_0 t) = e^(j omega_0 (t + T)) $
-Expanding the right side and using properties of complex exponentials, it follows that for the signal $x(t)$ to be periodic, we must have $e^(j omega_0 T) = 1$. This condition is satisfied when $omega_0 T = 2pi k$ for any integer $k$, giving us the period $T_0 = (2pi)/omega_0$.
+Expanding the right side and using properties of complex exponentials, it follows that for the signal $x(t)$ to be periodic, we must have $e^(j omega_0 T) = 1$. This condition is satisfied when $omega_0 T = 2pi k$ for any integer $k$, giving us the period $T_0 = (2pi)/abs(omega_0)$ for $omega_0 eq.not 0$.
 
 A signal that is closely related to the periodic complex exponential is the _sinusoidal signal_:
 #eqalt(
   "Continuous-time sinusoidal signal: x(t) equals A cosine of (omega_0 t plus phi), with amplitude A, angular frequency omega_0, and phase phi.",
   $ x(t) = A cos (omega_0 t + phi) $,
 )
-where $A$ is the amplitude (determining the signal's peak value), $omega_0$ is the angular frequency in radians per second, and $phi$ is the phase shift. Sinusoidal signals appear in alternating current electrical systems, mechanical vibrations, and acoustic waves. To determine the period of this sinusoidal signal, we seek the smallest positive value $T_0$ that satisfies $x(t) = x(t + T_0)$ for all $t$. Using trigonometric identities, it can be shown that $T_0 = (2 pi)/omega_0$, which matches the period of the complex exponential with the same frequency parameter.
+where $A$ is the amplitude (determining the signal's peak value), $omega_0$ is the angular frequency in radians per second, and $phi$ is the phase shift. Sinusoidal signals appear in alternating current electrical systems, mechanical vibrations, and acoustic waves. To determine the period of this sinusoidal signal, we seek the smallest positive value $T_0$ that satisfies $x(t) = x(t + T_0)$ for all $t$. Using trigonometric identities, it can be shown that $T_0 = (2 pi)/abs(omega_0)$, which matches the period of the complex exponential with the same frequency parameter.
 
 #let x = lq.linspace(-5, 8, num: 100)
 #cdiagram(
@@ -179,7 +179,8 @@ where $A$ is the amplitude (determining the signal's peak value), $omega_0$ is t
     title: $x(t) = A cos (omega_0 t + phi)$,
     xlabel: $t$,
     lq.plot(x, x.map(x => 0.5 * calc.cos(1.3 * x - 2.3)), mark: none),
-    lq.place(0, -0.3, align: left)[$A cos(phi)$],
+    lq.scatter((0,), (0.5 * calc.cos(-2.3),)),
+    lq.place(-0.15, -0.33, align: right)[$A cos(phi)$],
     lq.place(2.7, 0.4, align: left)[$T = (2 pi) / omega_0$],
     lq.line(
       tip: tiptoe.stealth,
@@ -255,7 +256,7 @@ The discrete-time analog of the complex exponential signal is given by
 )
 where $C$ and $alpha$ are complex numbers. This is the fundamental building block for discrete-time signal analysis, just as $C e^(a t)$ is for continuous-time signals.
 
-For the case where both $C$ and $alpha$ are real, we get the discrete-time real exponential sequence. The behavior of this sequence depends on the value of $alpha$: when $|alpha| > 1$, the sequence grows in magnitude, and when $|alpha| < 1$, it decays. The discrete-time complex exponential signal can also be written as
+For the case where both $C$ and $alpha$ are real, we get the discrete-time real exponential sequence. The behavior of this sequence depends on the value of $alpha$: when $|alpha| > 1$, the sequence grows in magnitude, and when $|alpha| < 1$, it decays. Of particular importance is the case $C = 1$, $alpha = e^(j omega_0)$ (so $|alpha| = 1$), which gives
 #eqalt(
   "Discrete-time periodic complex exponential: x[n] equals e to the j omega_0 n.",
   $ x[n] = e^(j omega_0 n) $,
@@ -342,12 +343,12 @@ This expression shows the discrete-time counterpart to the growing or decaying s
 
 === Periodicity Properties of Discrete-Time Complex Exponentials
 
-In order for the signal $e^(j omega_0 n)$ to be periodic with period $N > 0$, we must have $e^(j omega_0 (n + N)) = e^(j omega_0 n)$, i.e., $omega_0 / (2 pi ) = m / N$. In continuous-time, as $omega_0$ increases, the signal will oscillate with higher frequency. However, this is _not_ the case in discrete-time. Since $n$ is an integer, $e^(j 2 pi n) = 1$, and therefore
+In order for the signal $e^(j omega_0 n)$ to be periodic with period $N > 0$, we must have $e^(j omega_0 (n + N)) = e^(j omega_0 n)$, i.e., $omega_0 / (2 pi ) = m / N$ for some integer $m$. In continuous time, as $omega_0$ increases, the signal will oscillate with higher frequency. However, this is _not_ the case in discrete time. Since $n$ is an integer, $e^(j 2 pi n) = 1$, and therefore
 $
   e^(j (omega_0 + 2 pi) n) = e^(j omega_0 n) e^(j 2 pi n) = e^(j omega_0 n)
 $
 
-In discrete-time, the frequency $omega_0 + 2 pi k$ is therefore the _same_ frequency as $omega_0$, for every integer $k$. In continuous-time, $e^(j omega_0 t)$ is a distinct signal for each frequency $omega_0$; in discrete-time it is not. Thus, in discrete-time, frequency need only be considered over one interval of length $2 pi$, such as $0 <= omega_0 < 2 pi$ or $-pi <= omega_0 < pi$.
+In discrete time, the frequency $omega_0 + 2 pi k$ is therefore the _same_ frequency as $omega_0$, for every integer $k$. In continuous time, $e^(j omega_0 t)$ is a distinct signal for each frequency $omega_0$; in discrete time it is not. Thus, in discrete time, frequency need only be considered over one interval of length $2 pi$, such as $0 <= omega_0 < 2 pi$ or $-pi <= omega_0 < pi$.
 
 Now, let us compute the period $N$ for a discrete-time sinusoid:
 $
@@ -355,16 +356,16 @@ $
 $
 Therefore, we need to have
 $
-  omega_0 N = 2 pi k arrow N = k ((2 pi) / (omega_0))
+  omega_0 N = 2 pi k => N = k (2 pi) / omega_0
 $
-Since $N in NN$, the ratio $omega_0 / (2 pi)$ must be rational. If $omega_0 / (2 pi)$ is irrational, the said signal is not periodic.
+Since $N in NN$, the ratio $omega_0 / (2 pi)$ must be rational. If $omega_0 / (2 pi)$ is irrational, the signal is not periodic.
 
 #example("Periodicity of Discrete-Time Complex Exponentials")[
-  - $cos ((8 pi n) / 31) => N = k (2 pi)/((8 pi) / 31) => N = 31$.
+  - $cos ((8 pi n) / 31) => N = k (2 pi)/((8 pi) / 31) = (31 k)/4 => N = 31 " (with " k = 4")"$.
   - $e^(j ((2 pi) / 3) n) + e^(j ((3 pi) / 4) n) => N_1 = 3, N_2 = 8 => N = "lcm"(3, 8) = 24$.
 ]
 
-=== `sinc` signal
+=== Sinc Signals
 
 Two closely related definitions are both in common use, namely,
 
@@ -491,7 +492,7 @@ Conversely, the discrete-time unit step is the _running sum_ of the unit sample,
   $ u[n] = sum_(m=-infinity)^(n) delta[m] $,
 ) <runningsum>
 
-By changing the summation in @runningsum, we find that the discrete-time unit step can also be written as
+Substituting $m = n - k$ in @runningsum, we find that the discrete-time unit step can also be written as
 #eqalt(
   "Equivalent form: u of n equals the sum from k equals 0 to infinity of delta of (n minus k).",
   $ u[n] = sum_(k=0)^infinity delta[n-k] $,
@@ -505,7 +506,7 @@ One interesting fact about the unit impulse is that it can be used to *sample* t
 
 We will see more applications when we discuss sampling later in the course.
 
-==== Continuous-Time
+==== Continuous-Time Unit Impulse and Unit Step Functions
 
 The continuous-time _unit step function_ $u(t)$ is defined in a manner similar to its discrete-time counterpart, i.e.,
 
@@ -514,7 +515,7 @@ The continuous-time _unit step function_ $u(t)$ is defined in a manner similar t
   $ u (t) = cases(0 \, quad t < 0, 1 \, quad t > 0) $,
 )
 
-as shown below
+as shown in @fig-ct-step.
 
 #let t = (-1, -0.00001, 0, 0.00001, 2)
 #cdiagram(
@@ -526,7 +527,7 @@ as shown below
   lq.plot(t, t.map(t => if t > 0 { 1 } else { 0 }), stroke: 1.5pt, mark: none),
   height: 2cm,
   width: 5cm,
-)
+) <fig-ct-step>
 
 The continuous-time _unit impulse function_ $delta(t)$ is related to the unit step in a manner analogous to the relationship between the discrete-time unit impulse and step functions. In particular, the continuous-time unit step is the _running integral_ of the unit impulse
 
@@ -611,7 +612,7 @@ Similar to the discrete-time case, we have
 
 === Time Shift, Time Reversal and Time Scaling
 
-A very important example of transforming is a _time shift_, illustrated on the left of @fig-transformations: the two signals $x[n]$ and $x[n-1]$ are identical in shape, but are displaced or shifted relative to each other. A second example of a basic transformation is _time reversal_, depicted in the middle panel. Finally, _time scaling_ is plotted on the right.
+A very important transformation of the independent variable is a _time shift_, illustrated on the left of @fig-transformations: the two signals $x[n]$ and $x[n-1]$ are identical in shape, but are displaced or shifted relative to each other. A second example of a basic transformation is _time reversal_, depicted in the middle panel. Finally, _time scaling_ is plotted on the right.
 
 #let xx = lq.linspace(-4, 4, num: 9)
 #let y = lq.linspace(-3, 5, num: 9)
@@ -655,6 +656,8 @@ A very important example of transforming is a _time shift_, illustrated on the l
           stroke: series-stroke(1),
           label: $x(-t)$,
         ),
+        legend: (position: left + top),
+        ylim: (0, 4),
         xlabel: $t$,
         width: 5cm,
         height: 3cm,
@@ -680,6 +683,7 @@ A very important example of transforming is a _time shift_, illustrated on the l
           stroke: series-stroke(2),
           label: $x(2t)$,
         ),
+        ylim: (0, 5),
         xlabel: $t$,
         width: 5cm,
         height: 3cm,
@@ -697,7 +701,7 @@ A very important example of transforming is a _time shift_, illustrated on the l
 === Example
 
 #example("Signal Operations")[
-  Given the signal $x(t)$ plotted below, sketch $3/5 x(-5/2 t + 1)$.
+  Given the signal $x(t)$ plotted in @fig-x-example, sketch $3/5 x(-5/2 t + 1)$.
 
   #let t = lq.linspace(-2, 4, num: 1000)
   #let x_func = t => {
@@ -714,7 +718,7 @@ A very important example of transforming is a _time shift_, illustrated on the l
 
   #let x_t_plus_1 = t.map(t => x_func(t + 1))
   #let x_neg_t_plus_1 = t.map(t => x_func(-t + 1))
-  #let x_5_2_t = t.map(t => x_func(-5 / 2 * t))
+  #let x_5_2_t = t.map(t => x_func(-5 / 2 * t + 1))
   #let x_5_2_t_plus_1 = t.map(t => 3 / 5 * x_func(-5 / 2 * t + 1))
 
   #cdiagram(
@@ -728,7 +732,7 @@ A very important example of transforming is a _time shift_, illustrated on the l
     yaxis: (ticks: (0, 1)),
     height: 2cm,
     width: 5cm,
-  )
+  ) <fig-x-example>
 
   The operations are depicted in @fig-signal-ops, one at a time.
 
@@ -745,12 +749,11 @@ A very important example of transforming is a _time shift_, illustrated on the l
   )
 
   #altfig(
-    alt: "Four plots read left to right, top to bottom. First, x(t+1): the original signal shifted one unit to the left, supported on [-1, 1]. Second, x(-t+1): that signal time-reversed, with the ramp on the left side. Third, x(-5/2 t): x(t) time-reversed and compressed by a factor of 5/2, supported on a short interval left of t = 0. Fourth, 3/5 x(-5/2 t + 1): the final result, compressed, shifted, and scaled to peak at 3/5.",
+    alt: "Four plots read left to right, top to bottom. First, x(t+1): the original signal shifted one unit to the left, supported on [-1, 1]. Second, x(-t+1): that signal time-reversed, with the ramp on the left side. Third, x(-5/2 t + 1): the reversed signal compressed by 5/2, supported on [-0.4, 0.4]. Fourth, 3/5 x(-5/2 t + 1): the final result, compressed, shifted, and scaled to peak at 3/5.",
     caption: [
       The transformation $3\/5 x(-5\/2 t + 1)$ built up one operation at a
       time: shift, then reverse, then scale the time axis, and finally scale the
-      amplitude. Doing the shift before the scaling is what keeps the $+1$ from
-      being applied to the compressed axis.
+      amplitude.
     ],
     align(center)[
       #grid(
@@ -759,7 +762,7 @@ A very important example of transforming is a _time shift_, illustrated on the l
         row-gutter: 1em,
         step-panel([$x(t+1)$], x_t_plus_1),
         step-panel([$x(-t+1)$], x_neg_t_plus_1),
-        step-panel([$x(-5/2 t)$], x_5_2_t),
+        step-panel([$x(-5/2 t + 1)$], x_5_2_t),
         step-panel([$3/5 x(-5/2 t + 1)$], x_5_2_t_plus_1),
       )],
   ) <fig-signal-ops>
@@ -769,7 +772,7 @@ A very important example of transforming is a _time shift_, illustrated on the l
 
 In many contexts, a _system_ can be interpreted as a process in which input signals are transformed by the system, or cause the system to respond in some way, resulting in other signals as outputs. For example, a high-fidelity system takes a recorded audio signal and generates a reproduction of that signal.
 
-A _continuous-time system_ is a system in which continuous-time input signals are applied and result in continuous-time output signals. Similarly, a _discrete-time system_ transforms discrete-time inputs into discrete-time outputs. Throughout the course, we will often represent the input-output relation of a system by notations such as $x(t) arrow y(t)$ and $x[n] arrow y[n]$, for continuous time and discrete time respectively. They are often depicted as
+A _continuous-time system_ is a system in which continuous-time input signals are applied and result in continuous-time output signals. Similarly, a _discrete-time system_ transforms discrete-time inputs into discrete-time outputs. Throughout the course, we will often represent the input-output relation of a system by notations such as $x(t) arrow y(t)$ and $x[n] arrow y[n]$, for continuous time and discrete time respectively. They are often depicted as in @fig-block.
 
 
 #altfig(
@@ -801,11 +804,11 @@ A _continuous-time system_ is a system in which continuous-time input signals ar
         edge((1, 0), (2, 0), "->-", label: $y[n]$),
       ),
     )],
-)
+) <fig-block>
 
 === Interconnections of Systems
 
-While one can construct a variety of system interconnections, there are several basic ones that are frequently encountered. A _series_ or _cascade_ connection of two systems is illustrated below.
+While one can construct a variety of system interconnections, there are several basic ones that are frequently encountered. A _series_ or _cascade_ connection of two systems is illustrated in @fig-cascade.
 
 #altfig(
   alt: "Block diagram of two cascaded systems: x[n] enters system 1, whose output feeds system 2, which then produces y[n].",
@@ -826,9 +829,9 @@ While one can construct a variety of system interconnections, there are several 
       edge((2, 0), (3, 0), "->-", label: $y[n]$),
     )
   ],
-)
+) <fig-cascade>
 
-It is also possible to have a series-parallel connection, as shown below.
+It is also possible to have a series-parallel connection, as shown in @fig-series-parallel.
 
 #figure(
   align(center)[
@@ -850,11 +853,12 @@ It is also possible to have a series-parallel connection, as shown below.
       node(s1, "system 1"),
       node(s2, "system 2"),
       node(s3, "system 3"),
-      node(p, inset: -1pt, stroke: 0pt),
+      node(p, $+$, radius: 0.7em, stroke: 1pt),
       edge(s1, s2, "->-"),
-      edge(s2, p),
+      edge(s2, p, "->-"),
       edge((-2, 0), (-1, 0), (-1, 1), s3, "->-"),
-      edge((1.5, 1), (0.78, 1), "r,u"),
+      edge(s3, (2, 1)),
+      edge((2, 1), p, "->-"),
       edge(p, (2.5, 0), "->-", $y[n]$, label-pos: 2, label-side: center),
     )
   ],
@@ -863,9 +867,9 @@ It is also possible to have a series-parallel connection, as shown below.
     A series-parallel interconnection: the input feeds two paths, which are
     summed to produce the output.
   ],
-)
+) <fig-series-parallel>
 
-Another important type of system interconnection is a _feedback interconnection_, an example of which is illustrated below. Here, the output of system 1 is the input to system 2, while the output of system 2 is fed back and added to the external input to produce the actual input to system 1.
+Another important type of system interconnection is a _feedback interconnection_, an example of which is illustrated in @fig-feedback. Here, the output of system 1 is the input to system 2, while the output of system 2 is fed back and added to the external input to produce the actual input to system 1.
 
 #figure(
   align(center)[
@@ -876,6 +880,7 @@ Another important type of system interconnection is a _feedback interconnection_
       mark-scale: 150%,
       node((2, 0), "system 1"),
       node((2, -1), "system 2"),
+      node((1, 0), $+$, radius: 0.7em, stroke: 1pt),
       edge((0, 0), (1, 0), "->-", label: $x(t)$),
       edge((2, 0), (3, 0), "->-"),
       edge((3, 0), (4, 0), "->-", label: $y(t)$),
@@ -889,9 +894,9 @@ Another important type of system interconnection is a _feedback interconnection_
   alt: "Block diagram of a feedback interconnection: input x(t) is summed with the output of system 2 to form the input to system 1; system 1's output y(t) is also fed back through system 2.",
   caption: [
     A feedback interconnection: the output of system 2 is added to the external
-    input, so the input to system 1 depends on its own past output.
+    input, so the input to system 1 depends on its own output.
   ],
-)
+) <fig-feedback>
 
 === Basic System Properties
 
@@ -947,10 +952,11 @@ Let us examine two particular systems, namely, $cal("S")_1: y(t) = t x(t)$, and 
 
 For system $cal("S")_2$, which happens to be stable, we would not be able to find a bounded input that results in an unbounded output. Specifically, let $B > 0$ be real, and let $x(t)$ be an arbitrary signal bounded by $B$, i.e., $|x(t)| < B$ for all $t$. Using the definition of $cal("S")_2$, we then see that if $x(t)$ satisfies $|x(t)|<B$, then $|y(t)|<e^B$. In other words, if any input to $cal("S")_2$ is bounded by an arbitrary positive number $B$, then the corresponding output is guaranteed to be bounded by $e^B$. Thus, $cal("S")_2$ is stable.
 
-Later in this class, we will learn more about linear time-invariant systems. The BIBO stability criterion is then
+Later in this class, we will study linear time-invariant (LTI) systems, whose output is $y[n] = sum_k x[k] h[n-k]$ for an impulse response $h[n]$. If $|x[n]| <= ||x||_infinity$ for all $n$, then
 $
-  |y[n]| = abs(sum_k x[k] h[n-k]) <= sum_k |x[k]| |h[n-k]| <= ||x||_infinity sum_k |h[n-k]| = ||x||_infinity sum_k |h[k]| < infinity
+  |y[n]| = abs(sum_k x[k] h[n-k]) <= sum_k |x[k]| |h[n-k]| <= ||x||_infinity sum_k |h[n-k]| = ||x||_infinity sum_k |h[k]|
 $
+so a bounded input gives a bounded output whenever $sum_k |h[k]| < infinity$; the converse also holds.
 In the continuous-time case,
 $
   integral_(-infinity)^(infinity) |h(tau)| "d"tau < infinity
@@ -963,7 +969,7 @@ In other words, a discrete-time LTI system is stable if and only if its impulse 
   A system is said to be time invariant if a time shift in the input signal results in an identical time shift in the output signal. That is, if $y[n]$ is the output of a discrete-time, time-invariant system when $x[n]$ is the input, then $y[n - n_0]$ is the output when $x[n - n_0]$ is applied.
 ]
 
-Let us consider the following system $cal("S"): y[n] = n x[n]$. This is a time-varying system. Suppose $x_1[n] = delta [n]$, which yields $y_1[n]$ that is identically 0. However, the input $x_2[n] = delta [n-1]$ yields the output $y_2[n] = delta [n-1]$, which is not a shifted version of $y_1[n]$. We can also show that for $x_1[n] = x[n-n_0]$, the system yields the output $y_1[n] = n x[n-n_0]$, which is not the shifted version of $y[n]$, i.e., $y[n-n_0] = (n-n_0) x[n - n_0] eq.not y_1[n]$.
+Let us consider the following system $cal("S"): y[n] = n x[n]$. This is a time-varying system. Suppose $x_1[n] = delta [n]$, which yields $y_1[n]$ that is identically 0. However, the input $x_2[n] = delta [n-1]$ yields the output $y_2[n] = delta [n-1]$, which is not a shifted version of $y_1[n]$. We can also show that for $x_3[n] = x[n-n_0]$, the system yields the output $y_3[n] = n x[n-n_0]$, which is not the shifted version of $y[n]$, i.e., $y[n-n_0] = (n-n_0) x[n - n_0] eq.not y_3[n]$.
 
 
 ==== Linearity
@@ -987,5 +993,5 @@ The first of these two properties is known as the _additivity_ property, while t
 
   To determine whether or not $cal("S")_1$ is linear, we consider two arbitrary inputs $x_1(t)$ and $x_2(t)$, $x_1(t) arrow y_1(t) = t x_1(t)$ and $x_2(t) arrow y_2(t) = t x_2(t)$. Let $x_3(t)$ be a linear combination of $x_1(t)$ and $x_2(t)$, that is $x_3(t) = a x_1(t) + b x_2(t)$, where $a$ and $b$ are arbitrary scalar constants. If $x_3(t)$ is the input to the system $cal("S")_1$, then the corresponding output may be expressed as $y_3(t) = t x_3(t) = t(a x_1(t) + b x_2(t)) = a y_1(t) + b y_2(t)$. Therefore, system $cal("S")_1$ is linear.
 
-  However, system $cal("S")_2$ is not linear. Suppose $x_1[n] arrow y_1[n] = 2 x_1[n] + 3$ and $x_2[n] arrow y_2[n] = 2 x_2[n] + 3$, however, the response to $x_3[n] = x_1[n] + x_2[n]$ is $y_3[n] = 2 (x_1[n] + x_2[n]) + 3 eq.not y_1[n] + y_2[n]$. Hence, the system $cal("S")_2$ is not linear.
+  However, system $cal("S")_2$ is not linear. Suppose $x_1[n] arrow y_1[n] = 2 x_1[n] + 3$ and $x_2[n] arrow y_2[n] = 2 x_2[n] + 3$. However, the response to $x_3[n] = x_1[n] + x_2[n]$ is $y_3[n] = 2 (x_1[n] + x_2[n]) + 3 eq.not y_1[n] + y_2[n]$. Hence, the system $cal("S")_2$ is not linear.
 ]

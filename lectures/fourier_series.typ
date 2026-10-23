@@ -6,7 +6,7 @@
 
 == The Response of LTI Systems to Complex Exponentials
 
-It is advantageous to study LTI systems by representing signals as linear combinations of basic signals that possess the following two properties
+It is advantageous to study LTI systems by representing signals as linear combinations of basic signals that possess the following two properties:
 
 - The set of basic signals can be used to construct a broad and useful class of signals
 - The response of an LTI system to each signal should be simple enough in structure to provide us with a convenient representation for the response of the system to any signal constructed as a linear combination of the basic signals.
@@ -82,7 +82,7 @@ To summarize,
       a_k = 1/T integral_T x(t) e^(-j k omega_0 t) "d"t = 1/T integral_T x(t) e^(-j k (2 pi)/T t) "d"t
     $,
   )
-  The set of coefficients ${a_k}_(k = -infinity)^(infinity)$ is referred to as the _Fourier series coefficients_. The coefficient $a_0$ is the DC component of the $x(t)$, and is given by
+  The set of coefficients ${a_k}_(k = -infinity)^(infinity)$ is referred to as the _Fourier series coefficients_. The coefficient $a_0$ is the DC component of $x(t)$, and is given by
   #eqalt(
     "a sub zero equals one over T times the integral of x of t over one period.",
     $
@@ -101,11 +101,11 @@ $
 $
 then the functions are said to be _normalized_, and hence are called _orthonormal_. A set of such functions ${phi_i (t)}, i = 0, plus.minus 1, plus.minus 2, dots.c$ is called an orthonormal set if every distinct pair in the set is orthogonal and every member has unit energy.
 
-Let $x(t)$ be a given signal. Consider the following approximations of $x(t)$ over the interval $a <= t <= b$:
+Let $x(t)$ be a given signal. Consider the following approximation of $x(t)$ over the interval $a <= t <= b$:
 $
   hat(x)_N (t) = sum_(i = -N)^N a_i phi_i (t)
 $
-Here, $a_i$ are complex constants. To measure the deviation between $x(t)$ and $hat(x)_N$, we consider the error defined as
+Here, $a_i$ are complex constants. To measure the deviation between $x(t)$ and $hat(x)_N (t)$, we consider the error defined as
 $
   e_N (t) = x(t) - hat(x)_N (t)
 $
@@ -114,7 +114,7 @@ $
   E_N = integral_a^b |e_N (t)|^2 "d"t
 $
 
-Let $phi_n (t) = e^(j n omega_0 t)$ and choose any interval of length $T = (2 pi) / omega_0$. The $a_i$ that minimize $E_N$ are
+Let $phi_n (t) = e^(j n omega_0 t)$, which are orthogonal (but each has energy $T$, not 1) over any interval of length $T = (2 pi)/omega_0$. The $a_i$ that minimize $E_N$ are
 $
   a_i = 1 / T integral_T x(t) e^(-j i omega_0 t) "d"t
 $
@@ -168,8 +168,13 @@ In general, a set of conditions developed by Dirichlet guarantees that $x(t)$ _e
 
   All we need to do is to calculate the Fourier series coefficients, with $T = 1$ and $omega_0 = 2 pi$:
   $
-    a_k = 1/T integral_T x(t) e^(-j k 2 pi t) "d"t = integral_(-1/2)^0 (-4 t - 1) e^(-j k 2 pi t) "d"t + integral_0^(1/2) (4 t - 1) e^(-j k 2 pi t) "d"t = dots.c
+    a_k = 1/T integral_T x(t) e^(-j k 2 pi t) "d"t = integral_(-1/2)^0 (-4 t - 1) e^(-j k 2 pi t) "d"t + integral_0^(1/2) (4 t - 1) e^(-j k 2 pi t) "d"t
   $
+  The wave is even, so only the cosine part of $e^(-j k 2 pi t)$ survives, and $integral_0^(1/2) cos(2 pi k t) "d"t = 0$ for $k != 0$. Hence $a_0 = 0$, and for $k != 0$,
+  $
+    a_k = 8 integral_0^(1/2) t cos(2 pi k t) "d"t = (2((-1)^k - 1))/(pi^2 k^2)
+  $
+  i.e., $a_k = -4/(pi^2 k^2)$ for odd $k$ and $a_k = 0$ for even $k != 0$.
 
 ]
 
@@ -215,7 +220,7 @@ In general, a set of conditions developed by Dirichlet guarantees that $x(t)$ _e
   $
     a_k = 1/T integral_(-T_1)^(T_1) e^(-j k omega_0 t) "d"t = -1/(j k omega_0 T) e^(-j k omega_0 t) lr(|, size: #200%)_(-T_1)^(T_1) = (sin (k omega_0 T_1)) / (k pi), quad k != 0
   $
-  where $omega_0 = (2 pi) / T$. When $k = 0$, $a_0 = (2 T_1) / T$. Let us look at the approximation $hat(x)_N (t)$:
+  where $omega_0 = (2 pi) / T$. When $k = 0$, $a_0 = (2 T_1) / T$. Let us look at the approximation $hat(x)_N (t)$, plotted in @fig-gibbs:
   $
     hat(x)_N (t) = sum_(k = -N)^N a_k e^(j k omega_0 t)
   $
@@ -291,7 +296,7 @@ In general, a set of conditions developed by Dirichlet guarantees that $x(t)$ _e
         row-gutter: 0.5em,
         ..(3, 8, 18, 28, 55, 80).map(gibbs-panel),
       )],
-  )
+  ) <fig-gibbs>
 ]
 
 == Properties of Continuous-Time Fourier Series
@@ -305,7 +310,7 @@ to denote the pairing of a periodic signal with its Fourier series coefficients.
 
 === Linearity
 
-Suppose $x(t) #fspair a_k$ and $y(t) #fspair b_k$, we have
+If $x(t) #fspair a_k$ and $y(t) #fspair b_k$, both with period $T$, then
 $
   z(t) = A x(t) + B y(t) #fspair c_k = A a_k + B b_k
 $
@@ -320,14 +325,14 @@ Letting $tau = t - t_0$ in the integral and noting that the new variable $tau$ w
 $
   1/T integral_T x(tau) e^(-j k omega_0 (tau + t_0)) "d"tau = e^(-j k omega_0 t_0) 1/T integral_T x(tau) e^(-j k omega_0 tau) "d"tau = e^(-j k omega_0 t_0) a_k
 $
-In short hand notation,
+In shorthand notation,
 $
   x(t - t_0) #fspair e^(-j k omega_0 t_0) a_k
 $
 
 === Time Reversal
 
-Suppose we have $y(t) = x(-t)$, we have
+For $y(t) = x(-t)$,
 $
   y(t) = x(-t) = sum_(k = -infinity)^(infinity) a_k e^(-j k 2 pi t / T) = sum_(m = -infinity)^(infinity) a_(-m) e^(j m 2 pi t / T), quad k = -m
 $
@@ -414,8 +419,8 @@ We summarize the properties below in a table.
 
       // Integration
       [Integration],
-      [$integral_(-infinity)^t x(tau) "d"tau$],
-      [$a_k / (j k omega_0)$, finite and periodic only if $a_0 = 0$],
+      [$integral_(-infinity)^t x(tau) "d"tau$, finite and periodic only if $a_0 = 0$],
+      [$a_k / (j k omega_0)$],
 
       // Symmetry
       [Conjugate Symm. for Real Signals], [$x(t)$ real], [$a_k = a_(-k)^*$],
@@ -447,7 +452,7 @@ $
 $
 That is, when $k$ is changed by any integer ($r$) multiple of $N$, the identical sequence is generated. This differs from the continuous-time case, in which the signals $phi_k (t)$ are different from one another.
 
-We now wish to express the periodic DT sequence in terms of linear combinations of the sequence $phi_k [n]$. Such a linear combination has the form
+We now wish to express the periodic DT sequence in terms of linear combinations of the sequences $phi_k [n]$. Such a linear combination has the form
 $
   x[n] = sum_k a_k phi_k [n] = sum_k a_k e^(j k omega_0 n) = sum_k a_k e^(j k (2 pi) / N n)
 $
@@ -502,7 +507,7 @@ $
 ]
 
 #example("Discrete-time Periodic Signal Fourier Series")[
-  Consider the signal $x[n] = sin omega_0 n$, which is the discrete-time counterpart of signal $x(t) = sin omega_0 t$. $x[n]$ is periodic only if $(2 pi) / omega_0$ is an integer, or a ratio of integers. For those cases, when $(2 pi) / omega_0$ is an integer $N$, $x[n]$ is periodic with fundamental period $N$. Expanding the signal as a sum of two complex exponentials, we get
+  Consider the signal $x[n] = sin omega_0 n$, which is the discrete-time counterpart of the signal $x(t) = sin omega_0 t$. $x[n]$ is periodic only if $(2 pi) / omega_0$ is an integer, or a ratio of integers. For those cases, when $(2 pi) / omega_0$ is an integer $N$, $x[n]$ is periodic with fundamental period $N$. Expanding the signal as a sum of two complex exponentials, we get
   $
     x[n] = 1/(2 j) e^(j (2 pi)/N n) - 1/(2 j) e^(-j (2 pi)/N n)
   $
@@ -550,9 +555,10 @@ Let us also consider the periodic discrete-time square wave of @fig-dt-square.
     height: 2.5cm,
     width: 10cm,
     ylim: (-0.2, 1.3),
-    lq.stem(k, k.map(k => square_series(k))),
-    lq.stem(k, k.map(k => square_series(k - N))),
-    lq.stem(k, k.map(k => square_series(k + N))),
+    // One color for all three periods: they are the same signal.
+    lq.stem(k, k.map(k => square_series(k)), color: c-accent),
+    lq.stem(k, k.map(k => square_series(k - N)), color: c-accent),
+    lq.stem(k, k.map(k => square_series(k + N)), color: c-accent),
     lq.place(N, -0.3, align: center, plabel[$N$]),
     lq.place(-N, -0.3, align: center, plabel[$-N$]),
     lq.place(N1, -0.3, align: center, plabel[$N_1$]),
@@ -577,7 +583,7 @@ $
   a_k = (2 N_1 + 1) / N, quad k = 0, plus.minus N, plus.minus 2 N, dots.c
 $
 
-Let us plot the sequence for different cases. In the following plots, we hold the pulse width fixed at $2 N_1 + 1 = 5$ and increase the period $N$.
+Let us plot the sequence for different cases. In @fig-dt-ak, we hold the pulse width fixed at $2 N_1 + 1 = 5$ and increase the period $N$.
 #let N1 = 2
 #let k = lq.linspace(-25, 25, num: 51)
 
@@ -607,7 +613,7 @@ Let us plot the sequence for different cases. In the following plots, we hold th
       row-gutter: 0.5em,
       ..(10, 20, 30, 40).map(ak-panel),
     )],
-)
+) <fig-dt-ak>
 
 In the continuous-time case, we observed the Gibbs phenomenon at the discontinuity, whereby, as the number of terms increased, the ripples in the partial sum became compressed toward the discontinuity, with the peak amplitude of the ripples remaining constant independently of the number of terms in the partial sum. Let us now consider the *analogous* sequence of partial sums for the discrete-time square wave, where, for convenience, we will assume that the period $N$ is odd:
 
@@ -640,16 +646,16 @@ $
   xlabel: $n$,
   height: 2.5cm,
   width: 7cm,
-  ylim: (-0.2, 1.3),
+  ylim: (-0.2, 1.6),
   lq.stem(k, xhat(M)),
-  lq.place(4, 1, align: center, plabel[$M = #M$]),
+  lq.place(9, 1.45, align: center, plabel[$M = #M$]),
 )
 
 #altfig(
   alt: "Four stem plots of the discrete-time partial-sum approximation x hat sub M of n for M equal to one, two, three, and four, with N equal to nine. As M grows, the stems converge toward the square-wave samples; once M equals four (which is N minus one over two), the approximation matches the original square wave exactly.",
   caption: [
     Partial sums $hat(x)_M [n]$ for $M = 1, 2, 3, 4$ with $N = 9$. Unlike the
-    continuous-time case there is no Gibbs overshoot: at $M = (N-1)\/2 = 4$ the
+    continuous-time case there is no convergence issue: at $M = (N-1)\/2 = 4$ the
     sum has $N$ terms and reproduces $x[n]$ exactly.
   ],
   align(center)[
@@ -661,7 +667,7 @@ $
     )],
 ) <fig-dt-partial-sums>
 
-We see that if $N$ is odd and we take $M = (N - 1)/2$, the sum includes exactly $N$ terms, consequently, from the synthesis equations, we have
+We see that if $N$ is odd and we take $M = (N - 1)/2$, the sum includes exactly $N$ terms; consequently, from the synthesis equation, we have
 $
   hat(x)_M [n] = x[n]
 $
@@ -751,7 +757,7 @@ Similarly, if $N$ is even, and we let $hat(x)_M [n] = sum_(k = -M + 1)^M a_k e^(
   $
     a_k = 1/N sum_(n = chevron.l N chevron.r) x[n] e^(-j k omega_0 n) = 1/N sum_(n = chevron.l N chevron.r) x[n] e^(-j k (2 pi)/N n)
   $
-  Both sums in fact 2 run over one full period, so either may be read as a Fourier series coefficient. The first gives $a_0 = 1/6 sum_(n=0)^5 x[n] = 1/3$ directly. For the second, note that $(-1)^n = e^(-j pi n)$ and that $pi = 3 dot (2 pi) \/ 6$, so
+  The sums in the second condition each run over one full period, so each equals $N$ times a Fourier series coefficient. The first gives $a_0 = 1/6 sum_(n=0)^5 x[n] = 1/3$ directly. For the second, note that $(-1)^n = e^(-j pi n)$ and that $pi = 3 dot (2 pi) \/ 6$, so
   $
     sum_(n = 2)^7 (-1)^n x[n] = sum_(n = chevron.l 6 chevron.r) x[n] e^(-j 3 (2 pi)/6 n) = N dot a_3 = 1
   $
@@ -759,12 +765,12 @@ Similarly, if $N$ is even, and we let $hat(x)_M [n] = sum_(k = -M + 1)^M a_k e^(
   $
     P = 1/N sum_(n = chevron.l N chevron.r) |x[n]|^2 = sum_(k = chevron.l N chevron.r) |a_k|^2
   $
-  The two facts fix $a_0$ and $a_3$ and say nothing about the remaining four coefficients, each of which only adds to the sum on the right. The power is therefore smallest when $a_1 = a_2 = a_4 = a_5 = 0$, and $x[n] = a_0 + a_3 e^(-j pi n) = 1/3 + (1/6) (-1)^n$.
+  The two facts fix $a_0$ and $a_3$ and say nothing about the remaining four coefficients, each of which only adds to the sum on the right. The power is therefore smallest when $a_1 = a_2 = a_4 = a_5 = 0$, and $x[n] = a_0 + a_3 e^(j pi n) = 1/3 + (1/6) (-1)^n$.
 ]
 
 == Table of Fourier Series Pairs
 
-The table below collects the basic Fourier series pairs derived in this chapter. In continuous time, $x(t)$ has period $T$ and $omega_0 = 2 pi \/ T$. In discrete time, $x[n]$ has period $N$ and $omega_0 = 2 pi \/ N$, and the coefficients $a_k$ are themselves periodic with period $N$, so a value given for $k = M$ also holds at $k = M plus.minus N, M plus.minus 2 N, dots.c$
+The table below collects the basic Fourier series pairs derived in this chapter. In continuous time, $x(t)$ has period $T$ and $omega_0 = 2 pi \/ T$. In discrete time, $x[n]$ has period $N$ and $omega_0 = 2 pi \/ N$, and the coefficients $a_k$ are themselves periodic with period $N$, so a value given for $k = M$ also holds at $k = M plus.minus N, M plus.minus 2 N, dots.c$.
 
 #note("Basic Fourier Series Pairs")[
   #align(center)[
@@ -840,7 +846,7 @@ where
 $
   H(z) = sum_k h[k] z^(-k)
 $
-is the $z$-transform. When $s$ or $z$ are general complex numbers, $H(s)$ and $H(z)$ are referred to as the *system functions* of the corresponding system. The system function restricted to $s = j omega$, i.e., $H(j omega)$ viewed as a function of $omega$, is referred to as the _frequency response_ of the system.
+is the $z$-transform. When $s$ or $z$ is a general complex number, $H(s)$ and $H(z)$ are referred to as the *system functions* of the corresponding system. The system function restricted to $s = j omega$, i.e., $H(j omega)$ viewed as a function of $omega$, is referred to as the _frequency response_ of the system.
 
 #definition("Frequency Response of an LTI System")[
   The _frequency response_ of a _continuous-time_ system is given by
@@ -850,7 +856,7 @@ is the $z$-transform. When $s$ or $z$ are general complex numbers, $H(s)$ and $H
       H(j omega) = integral_RR h(t) e^(-j omega t) "d"t
     $,
   )
-  where $h(t)$ is the impulse response of the said LTI system. In the _discrete-time_ case, the frequency response is written $H(e^(j omega))$, since the system function $H(z)$ is evaluated on the unit circle $z = e^(j omega)$ rather than on an imaginary axis:
+  where $h(t)$ is the impulse response of the said LTI system. In the _discrete-time_ case, the frequency response is written $H(e^(j omega))$, since the system function $H(z)$ is evaluated on the unit circle $z = e^(j omega)$ rather than on the imaginary axis:
   #eqalt(
     "H of e to the j omega equals the sum over all n of h of n times e to the negative j omega n.",
     $
@@ -859,11 +865,11 @@ is the $z$-transform. When $s$ or $z$ are general complex numbers, $H(s)$ and $H
   )
 ]
 
-Now, suppose that the input is now
+Now suppose that the input is
 $
   x(t) = sum_k a_k e^(s_k t) = sum_k a_k e^(j k omega_0 t)
 $
-The output of the LTI system is then
+with $s_k = j k omega_0$. The output of the LTI system is then
 $
   y(t) &= integral_RR h(tau) x(t - tau) "d"tau = integral_RR h(tau) sum_k a_k e^(s_k (t - tau)) "d"tau = sum_k a_k [integral_RR h(tau) e^(- s_k tau) "d"tau] e^(s_k t) \ &= sum_k a_k H(s_k) e^(s_k t) = sum_k a_k H(j k omega_0) e^(j k omega_0 t)
 $
@@ -871,9 +877,9 @@ Similarly, if the input to a discrete-time LTI system is now
 $
   x[n] = sum_k a_k z_k^n = sum_k a_k e^(j k omega_0 n)
 $
-The output is
+with $z_k = e^(j k omega_0)$, the output is
 $
-  y[n] & = sum_k h[k] x[n - k] = sum_k a_k H(z_k) z_k^n
+  y[n] & = sum_k h[k] x[n - k] = sum_k a_k H(z_k) z_k^n = sum_k a_k H(e^(j k omega_0)) e^(j k omega_0 n)
 $
 
 #example("Calculate Fourier series coefficients through frequency response")[
@@ -902,14 +908,14 @@ $
 
   Further, since both the input and the impulse response are real-valued signals, the output $y(t)$ must also be real-valued. One can verify this by checking that $a_k^* H^*(j k 2 pi) = a_(-k) H(-j k 2 pi)$, so the terms at $k$ and $-k$ are complex conjugates and their sum is real.
 
-
+  Hence the Fourier series coefficients of $y(t)$ are $b_k = a_k H(j k 2 pi) = a_k/(1 + j 2 pi k)$, e.g., $b_0 = 1$, $b_1 = 1/(4(1 + j 2 pi))$, $b_(-1) = 1/(4(1 - j 2 pi))$.
 ]
 
-== Examples of Filters Described by Differential Equations
+== Examples of Filters Described by Differential and Difference Equations
 
 // In many applications, frequency-selective filtering is accomplished through the use of LTI systems described by linear constant-coefficient differential (or difference) equations.
 
-#example("LCCDE via difference equations")[
+#example("First-Order Difference Equation and Moving Average")[
 
   Suppose an LTI system is described by the first-order difference equation
   $
@@ -927,12 +933,12 @@ $
   $
     h[n] = a^n u[n]
   $
-  The step response is then $s[n] = u[n] star h[n]$
+  assuming $|a| < 1$ so that the frequency response exists. The step response is then $s[n] = u[n] star h[n]$
   $
     s[n] = (1 - a^(n + 1)) / (1 - a) u[n]
   $
 
-  Consider next the transfer function of a _moving-average filter_, which is of the form
+  Consider next a _moving-average filter_, described by
   $
     y[n] = 1/3 (x[n-1] + x[n] + x[n+1])
   $
@@ -940,14 +946,14 @@ $
   $
     h[n] = 1/3 (delta [n+1] + delta [n] + delta [n-1])
   $
-  Thus, the corresponding frequency response is then
+  The corresponding frequency response is thus
   $
     H(e^(j omega)) = sum_k h[k] e^(-j omega k) = 1/3 [e^(j omega) + 1 + e^(-j omega)]
   $
 ]
 
 #example("RC Circuit")[
-  An RC circuit whose capacitor voltage is initially zero constitutes an LTI system describable by a linear constant-coefficient differential equation (LCCDE). Consider the following series RC circuit, driven by the source voltage $v_S (t)$, with $v_R (t)$ across the resistor and $v_C (t)$ across the capacitor.
+  An RC circuit whose capacitor voltage is initially zero constitutes an LTI system describable by a linear constant-coefficient differential equation (LCCDE). Consider the series RC circuit of @fig-rc, driven by the source voltage $v_S (t)$, with $v_R (t)$ across the resistor and $v_C (t)$ across the capacitor.
 
   #altfig(
     alt: "Series RC circuit schematic. A voltage source v sub S of t drives a resistor R in series with a capacitor C; the voltage across the resistor is v sub R of t and the voltage across the capacitor is v sub C of t.",
@@ -971,7 +977,7 @@ $
         draw.content((2.6, 0), $v_C (t)$, anchor: "west")
         draw.content((2, 0.7), $v_R (t)$, anchor: "north")
       })],
-  )
+  ) <fig-rc>
 
   If we take the capacitor's voltage as the output, we have
   $
@@ -993,7 +999,7 @@ $
     R C ("d"v_R (t))/("d"t) + v_R (t) = R C ("d"v_S (t))/("d"t)
   $
 
-  The transfer function (frequency response) is then obtained by substituting $v_S (t) = e^(j omega t)$ and we obtain $v_R (t) = G(j omega) e^(j omega t)$, viz.,
+  Substituting $v_S (t) = e^(j omega t)$ and $v_R (t) = G(j omega) e^(j omega t)$ into this LCCDE gives the frequency response
   $
     G (j omega) = (j omega R C) / (1 + j omega R C)
   $

@@ -4,7 +4,7 @@
 
 == Complex numbers <nonumber>
 
-Let $a, b in RR$ and $z in CC$, and let $j = sqrt(-1)$. The Cartesian form of a complex number is expressed as $z = a + j b$, where $a = Re{z}$ and $b = Im{z}$ are the real and imaginary part of the complex number $z$, respectively. When expressed in polar form, i.e., $z = r e^(j theta)$, where $r in [0, infinity)$ and $theta in [0, 2 pi)$, $r = |z|$ and $theta = angle z$ are the magnitude and phase of the complex number $z$. We have $a = r cos theta$, and $b = r sin theta$. Of course, $r = sqrt(a^2 + b^2)$ and $theta = arctan (b\/a)$, with the quadrant of $z$ deciding which branch of the arctangent to take.
+Let $a, b in RR$ and $z in CC$, and let $j = sqrt(-1)$. The Cartesian form of a complex number is expressed as $z = a + j b$, where $a = Re{z}$ and $b = Im{z}$ are the real and imaginary parts of the complex number $z$, respectively. When expressed in polar form, i.e., $z = r e^(j theta)$, where $r in [0, infinity)$ and $theta in [0, 2 pi)$, $r = |z|$ and $theta = angle z$ are the magnitude and phase of the complex number $z$. We have $a = r cos theta$, and $b = r sin theta$. Of course, $r = sqrt(a^2 + b^2)$ and $theta = arctan (b\/a)$, with the quadrant of $z$ deciding which branch of the arctangent to take.
 
 Let $z_1 = a_1 + j b_1$ and $z_2 = a_2 + j b_2$. Then
 $
@@ -71,23 +71,27 @@ $
   sin alpha cos beta &= 1/2 [sin (alpha + beta) + sin(alpha - beta)]
 $
 
+#block(breakable: false)[
 3. Taylor series
 
-For a function $f: RR -> RR$ or $f : CC -> CC$, which is infinitely differentiable at some point $alpha$, the Taylor series of $f(x)$ about $alpha$ is given by
+For a function $f: RR -> RR$ or $f : CC -> CC$, which is infinitely differentiable at some point $alpha$, the Taylor series of $f$ about $alpha$ is
 $
-  f(x) = sum_(k = 0)^infinity (f^((k)) (alpha)) / k! (x - alpha)^k
+  sum_(k = 0)^infinity (f^((k)) (alpha)) / k! (x - alpha)^k
 $
-where $f^((k))$ is the $k$-th derivative of $f(x)$.
+which equals $f(x)$ near $alpha$ when $f$ is analytic there. Here $f^((k))$ is the $k$-th derivative of $f$.
+]
 
 4. Binomial expansion
 $
   (a+b)^n = sum_(k = 0)^(n) binom(n, k) a^k b^(n - k)
 $
 
+#block(breakable: false)[
 5. Some integrals
 $
   integral_0^infinity x^n e^(-a x) "d"x = n! / (a^(n+1)), a > 0
 $
+]
 $
   integral_0^infinity e^(-a x^2) "d"x = 1/2 sqrt(pi / a), a > 0
 $

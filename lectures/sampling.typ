@@ -8,7 +8,7 @@ In this section, we attempt to bridge the gap between continuous-time and discre
 
 == The Sampling Theorem
 
-Let us consider a system that consists of a periodic impulse train and a multiplier.
+#block(sticky: true)[Let us consider a system that consists of a periodic impulse train and a multiplier.]
 
 #let x = lq.linspace(-2, 5, num: 50)
 #let xd = lq.arange(-2, 5, step: 0.7)
@@ -104,6 +104,7 @@ Because of the sampling property of the unit impulse discussed previously, we kn
 $
   x_p (t) = sum_(n = -infinity)^(infinity) x(n T) delta(t - n T)
 $
+where $p(t) = sum_(n=-infinity)^infinity delta(t - n T)$ is an impulse train with sampling period $T$, and $omega_s = (2 pi)/T$ is the sampling frequency.
 
 Now, let us discuss the frequency domain behavior of the sampling process. From the multiplication property, we know that
 $
@@ -119,6 +120,13 @@ $
 $
 
 That is, $X_p (j omega)$ is a periodic function of $omega$ consisting of a superposition of shifted replicas of $X(j omega)$, scaled by $1 / T$, as illustrated below.
+
+// The spectrum of a real x(t) is even, so the sketch is two mirrored lobes.
+// Both are negligible beyond |omega| = 3, the omega_M marked on the axis.
+#let spec(w) = (
+  1.2 * calc.exp(-(w + 1) * (w + 1) / 0.3)
+    + 1.2 * calc.exp(-(w - 1) * (w - 1) / 0.3)
+)
 
 #altfig(
   alt: "Two spectra side by side. Left: the original band-limited spectrum X of j omega, nonzero only between minus omega sub M and omega sub M. Right: the sampled spectrum X sub p of j omega, a periodic train of shifted copies of X of j omega spaced by omega sub s; dashed gray lines mark the centers at plus and minus omega sub s and plus and minus two omega sub s.",
@@ -140,10 +148,7 @@ That is, $X_p (j omega)$ is a periodic function of $omega$ consisting of a super
         height: 3cm,
         lq.plot(
           x,
-          x.map(x => (
-            1.5 * calc.exp(-(x + 1.0) * (x + 1.0) / 0.3)
-              + 0.8 * calc.exp(-(x - 0.5) * (x - 0.5) / 0.7)
-          )),
+          x.map(x => spec(x)),
           mark: none,
         ),
         lq.place(-3, -0.21, align: center)[$-omega_M$],
@@ -158,45 +163,30 @@ That is, $X_p (j omega)$ is a periodic function of $omega$ consisting of a super
         height: 3cm,
         lq.plot(
           x,
-          x.map(x => (
-            1.5 * calc.exp(-(x + 1.0) * (x + 1.0) / 0.3)
-              + 0.8 * calc.exp(-(x - 0.5) * (x - 0.5) / 0.7)
-          )),
+          x.map(x => spec(x)),
           mark: none,
         ),
         lq.plot(
           x,
-          x.map(x => (
-            1.5 * calc.exp(-((x - 7) + 1.0) * ((x - 7) + 1.0) / 0.3)
-              + 0.8 * calc.exp(-((x - 7) - 0.5) * ((x - 7) - 0.5) / 0.7)
-          )),
+          x.map(x => spec(x - 7)),
           color: c-green,
           mark: none,
         ),
         lq.plot(
           x,
-          x.map(x => (
-            1.5 * calc.exp(-((x + 7) + 1.0) * ((x + 7) + 1.0) / 0.3)
-              + 0.8 * calc.exp(-((x + 7) - 0.5) * ((x + 7) - 0.5) / 0.7)
-          )),
+          x.map(x => spec(x + 7)),
           color: c-green,
           mark: none,
         ),
         lq.plot(
           x,
-          x.map(x => (
-            1.5 * calc.exp(-((x + 14) + 1.0) * ((x + 14) + 1.0) / 0.3)
-              + 0.8 * calc.exp(-((x + 14) - 0.5) * ((x + 14) - 0.5) / 0.7)
-          )),
+          x.map(x => spec(x + 14)),
           color: c-green,
           mark: none,
         ),
         lq.plot(
           x,
-          x.map(x => (
-            1.5 * calc.exp(-((x - 14) + 1.0) * ((x - 14) + 1.0) / 0.3)
-              + 0.8 * calc.exp(-((x - 14) - 0.5) * ((x - 14) - 0.5) / 0.7)
-          )),
+          x.map(x => spec(x - 14)),
           color: c-green,
           mark: none,
         ),
@@ -226,7 +216,7 @@ That is, $X_p (j omega)$ is a periodic function of $omega$ consisting of a super
   )],
 )
 
-As we can see from the illustrations above, to guarantee that there is no overlapping in the frequency domain, we have the following theorem
+As the illustrations above show, the shifted replicas do not overlap provided $omega_s > 2 omega_M$, which leads to the following theorem.
 #theorem("Sampling Theorem")[
   Let $x(t)$ be a band-limited signal with $X(j omega) = 0$ for $|omega| > omega_M$. Then, $x(t)$ is uniquely determined by its samples $x(n T), n = 0, plus.minus 1, plus.minus 2, dots.c$ if
   #eqalt(
@@ -247,7 +237,7 @@ As we can see from the illustrations above, to guarantee that there is no overla
   The frequency $2 omega_M$, which, under the sampling theorem, must be exceeded by the sampling frequency, is commonly referred to as the _Nyquist rate_.
 ]
 
-== Reconstruction of a Signal from Its Samples using Interpolation
+== Reconstruction of a Signal from Its Samples Using Interpolation
 
 To reconstruct the signal from $X_p (j omega)$, all we need to do is to apply an ideal lowpass filter with cutoff frequency $omega_c$ satisfying $omega_M < omega_c < (omega_s - omega_M)$ in the frequency domain, as illustrated below.
 
@@ -272,45 +262,30 @@ To reconstruct the signal from $X_p (j omega)$, all we need to do is to apply an
         ylim: (-0.2, 1.9),
         lq.plot(
           x,
-          x.map(x => (
-            1.5 * calc.exp(-(x + 1.0) * (x + 1.0) / 0.3)
-              + 0.8 * calc.exp(-(x - 0.5) * (x - 0.5) / 0.7)
-          )),
+          x.map(x => spec(x)),
           mark: none,
         ),
         lq.plot(
           x,
-          x.map(x => (
-            1.5 * calc.exp(-((x - 7) + 1.0) * ((x - 7) + 1.0) / 0.3)
-              + 0.8 * calc.exp(-((x - 7) - 0.5) * ((x - 7) - 0.5) / 0.7)
-          )),
+          x.map(x => spec(x - 7)),
           color: c-green,
           mark: none,
         ),
         lq.plot(
           x,
-          x.map(x => (
-            1.5 * calc.exp(-((x + 7) + 1.0) * ((x + 7) + 1.0) / 0.3)
-              + 0.8 * calc.exp(-((x + 7) - 0.5) * ((x + 7) - 0.5) / 0.7)
-          )),
+          x.map(x => spec(x + 7)),
           color: c-green,
           mark: none,
         ),
         lq.plot(
           x,
-          x.map(x => (
-            1.5 * calc.exp(-((x + 14) + 1.0) * ((x + 14) + 1.0) / 0.3)
-              + 0.8 * calc.exp(-((x + 14) - 0.5) * ((x + 14) - 0.5) / 0.7)
-          )),
+          x.map(x => spec(x + 14)),
           color: c-green,
           mark: none,
         ),
         lq.plot(
           x,
-          x.map(x => (
-            1.5 * calc.exp(-((x - 14) + 1.0) * ((x - 14) + 1.0) / 0.3)
-              + 0.8 * calc.exp(-((x - 14) - 0.5) * ((x - 14) - 0.5) / 0.7)
-          )),
+          x.map(x => spec(x - 14)),
           color: c-green,
           mark: none,
         ),
@@ -345,6 +320,7 @@ To reconstruct the signal from $X_p (j omega)$, all we need to do is to apply an
         lq.plot((-4, 4), (1.7, 1.7), mark: none, stroke: (
           paint: c-orange,
         )),
+        lq.place(4.3, 1.7, align: left)[$omega_c$],
       )],
 
     [
@@ -357,10 +333,7 @@ To reconstruct the signal from $X_p (j omega)$, all we need to do is to apply an
         ylim: (-0.2, 1.9),
         lq.plot(
           x,
-          x.map(x => (
-            1.5 * calc.exp(-(x + 1.0) * (x + 1.0) / 0.3)
-              + 0.8 * calc.exp(-(x - 0.5) * (x - 0.5) / 0.7)
-          )),
+          x.map(x => spec(x)),
           mark: none,
         ),
         lq.place(-3, -0.21, align: center)[$-omega_M$],
@@ -407,7 +380,7 @@ $
 #let stair-coarse = make-staircase(xd, yd)
 
 #altfig(
-  alt: "Two plots. Left: the original continuous signal x of t. Right: its reconstruction x sub r of t, drawn as the solid curve, with one dashed green sinc kernel per sample and the sample values x sub p of t marked with blue crosses; the kernels sum to the solid curve.",
+  alt: "Two plots. Left: the original continuous signal x of t. Right: its reconstruction x sub r of t, drawn as the solid curve, with one dashed green sinc kernel per sample and the sample values x sub p of t marked with blue crosses; the solid curve is x of t, which the sum of all (untruncated) kernels reproduces.",
   caption: [
     The same reconstruction seen in the time domain: one sinc kernel per sample,
     each scaled by its sample value. Every kernel is zero at all the other
@@ -431,7 +404,8 @@ $
           xlabel: $t$,
           ylim: (-2, 2),
           width: 10cm,
-          lq.plot(x, x.map(x => f(x)), mark: none),
+          legend: (position: left + top),
+          lq.plot(x, x.map(x => f(x)), mark: none, label: $x_r (t)$),
           lq.stem(
             xd,
             xd.map(xd => f(xd)),
@@ -449,7 +423,7 @@ $
             mark: none,
             color: c-green,
             stroke: stroke(dash: "dashed"),
-            label: if i == 0 { $"sinc" (t - n T)$ },
+            label: if i == 0 { $op("sinc")(t - n T)$ },
           )),
         )
       ],
@@ -458,9 +432,11 @@ $
 
 == Sampling of Discrete-Time Signals
 
-#let x = lq.linspace(-2, 5, num: 30)
-#let xd = lq.arange1(-2, 5, step: 0.7)
-#let f(x) = 1.5 * calc.sin(x + 2) + 0.5 * calc.sin(3 * x)
+// A discrete-time signal lives on the integers, so every stem plot below is
+// drawn at integer n. x[n] samples the same smooth f as above, and p[n] has
+// period N = 3, so x_p[n] keeps exactly every third stem of x[n].
+#let n = range(-9, 13)
+#let g(m) = f(m / 3)
 #let make-staircase(x-vals, y-vals) = {
   let points = ()
   for i in range(x-vals.len() - 1) {
@@ -523,7 +499,7 @@ $
           ylim: (-2, 2),
           height: 2cm,
           width: 3cm,
-          lq.stem(x, x.map(x => f(x))),
+          lq.stem(n, n.map(g)),
         )
       ],
       [
@@ -533,7 +509,7 @@ $
           ylim: (-2, 2),
           height: 2cm,
           width: 3cm,
-          lq.stem(xd, xd.map(_ => 1)),
+          lq.stem(n, n.map(m => if calc.rem(m, 3) == 0 { 1 } else { 0 })),
         )],
       [
         #cdiagram(
@@ -542,8 +518,7 @@ $
           ylim: (-2, 2),
           height: 2cm,
           width: 3cm,
-          // lq.stem(xd, xd.map(xd => f(xd)), mark: "^"),
-          lq.stem(xd, xd.map(xd => f(xd))),
+          lq.stem(n, n.map(m => if calc.rem(m, 3) == 0 { g(m) } else { 0 })),
         )],
     )],
 )
@@ -556,7 +531,7 @@ where $m$ is an integer. The frequency-domain effect of discrete-time sampling f
 $
   x_p [n] = x[n] p[n] = sum_k x[k N] delta[n - k N]
 $
-in the frequency domain,
+and in the frequency domain,
 $
   X_p (e^(j omega)) = 1 / (2 pi) integral_(2 pi) P(e^(j theta)) X(e^(j(omega - theta))) "d"theta
 $
@@ -570,4 +545,4 @@ $
   X_p (e^(j omega)) = 1 / N sum_(k = 0)^(N - 1) X(e^(j (omega - k omega_s)))
 $
 
-Similar to the continuous-time case, when $omega_s > 2 omega_M$, there is no aliasing.
+Similar to the continuous-time case, if $X(e^(j omega)) = 0$ for $omega_M < |omega| <= pi$ and $omega_s > 2 omega_M$, the shifted replicas do not overlap (there is no _aliasing_), and $x[n]$ is recovered from $x_p [n]$ by an ideal lowpass filter with gain $N$ and cutoff between $omega_M$ and $omega_s - omega_M$.

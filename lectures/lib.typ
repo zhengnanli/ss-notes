@@ -101,8 +101,9 @@
 // running text the paragraph spacing hides that, but a figure at the top of a
 // page, or at the top of a boxed environment that broke across a page, has its
 // label sitting on the rule above it. A few points of headroom inside the
-// figure give that ink somewhere to go.
-#let _headroom(body) = pad(top: 5pt, body)
+// figure give that ink somewhere to go. The x axis label hangs below the box
+// the same way, onto the caption, so the figure gets room at the bottom too.
+#let _headroom(body) = pad(top: 5pt, bottom: 9pt, body)
 
 #let altfig(body, alt: "", caption: none) = if caption == none {
   figure(
@@ -793,7 +794,7 @@
     body,
     )
   },
-).with(numbering: boxnumbering)
+).with(numbering: boxnumbering, supplement: label)
 
 #let definition  = _thmbox("Definition",  "Definition",  olive)
 #let example     = _thmbox("example",     "Example",     orange)
