@@ -762,6 +762,58 @@ Similarly, if $N$ is even, and we let $hat(x)_M [n] = sum_(k = -M + 1)^M a_k e^(
   The two facts fix $a_0$ and $a_3$ and say nothing about the remaining four coefficients, each of which only adds to the sum on the right. The power is therefore smallest when $a_1 = a_2 = a_4 = a_5 = 0$, and $x[n] = a_0 + a_3 e^(-j pi n) = 1/3 + (1/6) (-1)^n$.
 ]
 
+== Table of Fourier Series Pairs
+
+The table below collects the basic Fourier series pairs derived in this chapter. In continuous time, $x(t)$ has period $T$ and $omega_0 = 2 pi \/ T$. In discrete time, $x[n]$ has period $N$ and $omega_0 = 2 pi \/ N$, and the coefficients $a_k$ are themselves periodic with period $N$, so a value given for $k = M$ also holds at $k = M plus.minus N, M plus.minus 2 N, dots.c$
+
+#note("Basic Fourier Series Pairs")[
+  #align(center)[
+    #table(
+      columns: 2,
+      align: center + horizon,
+      stroke: 0.5pt,
+      table.header([*Periodic Signal*], [*Fourier Series Coefficients*]),
+
+      table.cell(colspan: 2)[*Continuous time*: period $T$, $omega_0 = 2 pi \/ T$],
+
+      [$sum_(k = -infinity)^infinity a_k e^(j k omega_0 t)$], [$a_k$],
+
+      [$e^(j M omega_0 t)$], [$a_M = 1$, $a_k = 0$ otherwise],
+
+      [$cos(M omega_0 t)$], [$a_(plus.minus M) = 1/2$, $a_k = 0$ otherwise],
+
+      [$sin(M omega_0 t)$], [$a_M = 1/(2 j)$, $a_(-M) = -1/(2 j)$, $a_k = 0$ otherwise],
+
+      [$1$], [$a_0 = 1$, $a_k = 0$ otherwise],
+
+      [Square wave: $cases(1 & |t| < T_1, 0 & T_1 < |t| <= T\/2)$],
+      [$a_k = (sin(k omega_0 T_1))/(k pi)$ for $k != 0$, $a_0 = (2 T_1)/T$],
+
+      [$sum_(n = -infinity)^infinity delta(t - n T)$], [$a_k = 1/T$ for all $k$],
+
+      table.cell(colspan: 2)[*Discrete time*: period $N$, $omega_0 = 2 pi \/ N$],
+
+      [$sum_(k = chevron.l N chevron.r) a_k e^(j k omega_0 n)$], [$a_k$],
+
+      [$e^(j M omega_0 n)$], [$a_M = 1$, $a_k = 0$ otherwise in one period],
+
+      [$cos(M omega_0 n)$], [$a_(plus.minus M) = 1/2$, $a_k = 0$ otherwise in one period],
+
+      [$sin(M omega_0 n)$],
+      [$a_M = 1/(2 j)$, $a_(-M) = -1/(2 j)$, $a_k = 0$ otherwise in one period],
+
+      [$1$], [$a_0 = 1$, $a_k = 0$ otherwise in one period],
+
+      [Square wave: $cases(1 & |n| <= N_1, 0 & N_1 < |n| <= N\/2)$],
+      [$a_k = 1/N (sin[2 pi k (N_1 + 1\/2) \/ N])/(sin(pi k \/ N))$ for $k != 0$, $a_0 = (2 N_1 + 1)/N$],
+
+      [$sum_(r = -infinity)^infinity delta[n - r N]$], [$a_k = 1/N$ for all $k$],
+
+      [$(-1)^n$, $N$ even], [$a_(N\/2) = 1$, $a_k = 0$ otherwise in one period],
+    )
+  ]
+]
+
 
 == Fourier Series and LTI Systems
 

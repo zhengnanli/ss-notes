@@ -275,9 +275,9 @@ Finally, we have the following pair of equations:
     [$(2pi)/N sum_(k=-infinity)^(infinity) delta(omega - 2pi k/N)$],
     [$a_k = 1/N$ for all $k$],
 
-    [Periodic rec.: $cases(1 "if" 0 <= n <= N_1-1, 0 "if" N_1 <= n <= N-1)$],
-    [$(2pi)/N sum_(k=-infinity)^(infinity) (sin(pi k N_1/N))/(sin(pi k/N)) delta(omega - (2 pi k)/N)$],
-    [$a_k = (sin(pi k N_1/N))/(N sin(pi k/N))$ for $k != 0$, $a_0 = N_1/N$],
+    [Square wave: $cases(1 "if" |n| <= N_1, 0 "if" N_1 < |n| <= N\/2)$],
+    [$2pi sum_(k=-infinity)^(infinity) a_k delta(omega - (2 pi k)/N)$],
+    [$a_k = 1/N (sin[2 pi k (N_1 + 1\/2) \/ N])/(sin(pi k \/ N))$ for $k != 0$, $a_0 = (2 N_1 + 1)/N$],
 
     [$(-1)^n$],
     [$2pi sum_(k=-infinity)^(infinity) delta(omega - pi - 2pi k)$],
