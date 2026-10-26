@@ -554,6 +554,36 @@ We then have
   $ y(t) = 1/(b-a) (e^(-a t) u(t) - e^(-b t) u(t)) $
 ]
 
+== The Multiplication Property
+
+The convolution property has a dual: multiplication in the time domain corresponds to convolution in the frequency domain. Let $z(t) = x(t) y(t)$. Replacing $x(t)$ by its inverse Fourier transform, written with the dummy frequency variable $theta$, gives
+$
+  Z(j omega) = integral_RR x(t) y(t) e^(-j omega t) "d"t = integral_RR [1/(2 pi) integral_RR X(j theta) e^(j theta t) "d"theta] y(t) e^(-j omega t) "d"t
+$
+Exchanging the order of integration,
+$
+  Z(j omega) = 1/(2 pi) integral_RR X(j theta) [integral_RR y(t) e^(-j (omega - theta) t) "d"t] "d"theta
+$
+The bracketed term is the Fourier transform of $y(t)$ evaluated at frequency $omega - theta$, that is, $Y(j(omega - theta))$. Hence
+$
+  Z(j omega) = 1/(2 pi) integral_RR X(j theta) Y(j(omega - theta)) "d"theta
+$
+The integral is a convolution in the frequency variable: it has the same form as the convolution integral $integral_RR x(tau) h(t - tau) "d"tau$, with $omega$ in place of $t$ and the dummy variable $theta$ in place of $tau$. We write it as
+$
+  X(j omega) star Y(j omega) := integral_RR X(j theta) Y(j(omega - theta)) "d"theta
+$
+Note that $omega$ is the variable of the result, and $theta$ is integrated out; the notation does not mean that $X$ and $Y$ are multiplied at the same frequency.
+
+#attention("Multiplication Property")[
+  #eqalt(
+    "z of t equals x of t times y of t, which Fourier-transforms to Z of j omega equal to one over two pi times the integral over all theta of X of j theta times Y of j times omega minus theta, d theta.",
+    $
+      z(t) = x(t) y(t) #ftpair Z(j omega) = 1/(2 pi) X(j omega) star Y(j omega) = 1/(2 pi) integral_RR X(j theta) Y(j(omega - theta)) "d"theta
+    $,
+  )
+]
+The factor $1\/(2 pi)$ comes from the $1\/(2 pi)$ in the synthesis equation; it would disappear if we used frequency $f$ in hertz, where $x(t) y(t) #ftpair X(f) star Y(f)$.
+
 == Table of Fourier Properties and of Basic Fourier Transform Pairs
 
 #note("Continuous-Time Fourier Transform Properties")[
@@ -580,7 +610,7 @@ We then have
 
       [Convolution], [$x(t) star y(t)$], [$X(j omega) Y(j omega)$],
 
-      [Multiplication], [$x(t) y(t)$], [$1/(2 pi) X(j omega) star Y(j omega)$],
+      [Multiplication], [$x(t) y(t)$], [$1/(2 pi) integral_RR X(j theta) Y(j(omega - theta)) "d"theta$],
 
       [Differentiation in Time], [$"d"/("d"t) x(t)$], [$j omega X(j omega)$],
 

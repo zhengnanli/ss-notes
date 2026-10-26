@@ -153,6 +153,33 @@ Finally, we have the following pair of equations:
   $
 ]
 
+== The Multiplication Property
+
+As in continuous time, multiplication in the time domain corresponds to convolution in the frequency domain, but the convolution is now _periodic_. Let $z[n] = x[n] y[n]$. Replacing $x[n]$ by its synthesis equation, written with the dummy frequency variable $theta$, gives
+$
+  Z(e^(j omega)) = sum_(n = -infinity)^infinity x[n] y[n] e^(-j omega n) = sum_(n = -infinity)^infinity [1/(2 pi) integral_(2 pi) X(e^(j theta)) e^(j theta n) "d"theta] y[n] e^(-j omega n)
+$
+Exchanging the sum and the integral,
+$
+  Z(e^(j omega)) = 1/(2 pi) integral_(2 pi) X(e^(j theta)) [sum_(n = -infinity)^infinity y[n] e^(-j (omega - theta) n)] "d"theta = 1/(2 pi) integral_(2 pi) X(e^(j theta)) Y(e^(j(omega - theta))) "d"theta
+$
+since the bracketed sum is the DTFT of $y[n]$ evaluated at $omega - theta$.
+
+The integral differs from the continuous-time case in one way: it runs over a single interval of length $2 pi$, not over the whole real line. Both $X(e^(j theta))$ and $Y(e^(j(omega - theta)))$ are periodic in $theta$ with period $2 pi$, so their product is too, and integrating it over all of $RR$ would diverge (unless the product is zero). Integrating over one period, which can be any interval of length $2 pi$, gives the _periodic convolution_
+$
+  X(e^(j omega)) ast.op.o Y(e^(j omega)) := integral_(2 pi) X(e^(j theta)) Y(e^(j(omega - theta))) "d"theta
+$
+As with the continuous-time convolution, $omega$ is the variable of the result and $theta$ is integrated out. The result is itself periodic in $omega$ with period $2 pi$, as a DTFT must be.
+
+#attention("Multiplication Property")[
+  #eqalt(
+    "z of n equals x of n times y of n, which Fourier-transforms to Z of e to the j omega equal to one over two pi times the integral over any two-pi-length interval of X of e to the j theta times Y of e to the j times omega minus theta, d theta.",
+    $
+      z[n] = x[n] y[n] #ftpair Z(e^(j omega)) = 1/(2 pi) integral_(2 pi) X(e^(j theta)) Y(e^(j(omega - theta))) "d"theta
+    $,
+  )
+]
+
 == Tables of Fourier Transform Properties and Basic Fourier Transform Pairs
 
 #note("Discrete-Time Fourier Transform Properties")[
@@ -222,7 +249,7 @@ Finally, we have the following pair of equations:
   )
 ]
 
-#note("Discrete-Time Fourier Transform Pairs", breakable: false)[
+#note("Discrete-Time Fourier Transform Pairs")[
   #table(
     columns: 3,
     align: center + horizon,

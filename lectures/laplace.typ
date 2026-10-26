@@ -179,11 +179,14 @@ $
   x(t) = 1/(2 pi j) integral_(sigma - j infinity)^(sigma + j infinity) X(s) e^(s t) "d"s
 $
 
-#example("Inverse Laplace Transform", breakable: false)[
-  Let
-  $
-    X(s) = 1/ ((s+1) (s+2)), quad Re{s} > -1
-  $
+#example("Inverse Laplace Transform")[
+  // Unbreakable, so that "Let" cannot be stranded at the foot of a page
+  #block(breakable: false)[
+    Let
+    $
+      X(s) = 1/ ((s+1) (s+2)), quad Re{s} > -1
+    $
+  ]
   To obtain the inverse Laplace transform, we perform a partial-fraction expansion to obtain
   $
     X(s) = 1/(s + 1) - 1/(s + 2) //, quad Re{s} > -1
