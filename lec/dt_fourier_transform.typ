@@ -121,7 +121,256 @@ Finally, we have the following pair of equations:
   Note that since $X(e^(j omega)) e^(j omega n)$ is periodic with period $2 pi$, the interval of integration can be taken as _any_ interval of length $2 pi$.
 ]
 
-#example("Discrete-Time Fourier Transform")[
+The same argument holds for the Fourier series coefficients $a_k$ of any periodic sequence $tilde(x)[n]$ whose period is one copy of an $x[n]$ that vanishes outside the range $s <= n <= s + N - 1$:
+$
+  a_k = 1/N sum_(n = s)^(s + N - 1) tilde(x)[n] e^(-j k omega_0 n) = 1/N sum_(n = s)^(s + N - 1) x[n] e^(-j k omega_0 n) = 1/N sum_(n = -infinity)^infinity x[n] e^(-j k omega_0 n)
+$
+Comparing the equation with the DTFT, we conclude that
+$
+  a_k = 1/N X(e^(j omega)) lr(|, size: #200%)_(omega = k omega_0)
+$
+where $X(e^(j omega))$ is the DTFT of $x[n]$. As in continuous time, $N a_k$ are _samples_ of the DTFT of one period of $tilde(x)[n]$.
+
+== Convergence of the Discrete-Time Fourier Transform
+
+The synthesis equation integrates over a finite interval of length $2 pi$, so it raises no convergence question. The analysis equation is an infinite sum, and it converges if $x[n]$ satisfies either of the following conditions:
+
+- $x[n]$ is absolutely summable: $sum_(n = -infinity)^infinity |x[n]| < infinity$. The sum then converges uniformly to a continuous function of $omega$.
+- $x[n]$ has finite energy: $sum_(n = -infinity)^infinity |x[n]|^2 < infinity$. The sum then converges in the mean-square sense.
+
+Unlike the continuous-time case, there are no conditions on maxima, minima, or discontinuities, since a sequence has none of these within a finite interval. A sequence of finite duration always has a DTFT.
+
+== Examples of Discrete-Time Fourier Transforms
+
+#example("Discrete-Time Fourier Transform Pairs")[
+  #set math.equation(numbering: none)
+
+  Consider the signal
+  $
+    x[n] = a^n u[n], quad |a| < 1
+  $
+  The DTFT of it is
+  $
+    X(e^(j omega)) = sum_(n = 0)^infinity a^n e^(-j omega n) = sum_(n = 0)^infinity (a e^(-j omega))^n = 1 / (1 - a e^(-j omega)), quad |a| < 1
+  $
+  The geometric series converges because $|a e^(-j omega)| = |a| < 1$.
+
+  Consider then the signal
+  $
+    x[n] = a^(|n|), quad |a| < 1, quad a "real"
+  $
+  The DTFT is
+  $
+    X(e^(j omega)) = sum_(n = 0)^infinity a^n e^(-j omega n) + sum_(n = -infinity)^(-1) a^(-n) e^(-j omega n) = 1 / (1 - a e^(-j omega)) + (a e^(j omega)) / (1 - a e^(j omega)) = (1 - a^2) / (1 - 2 a cos omega + a^2)
+  $
+
+  Let us now determine the DTFT of the unit impulse
+  $
+    X(e^(j omega)) = sum_(n = -infinity)^infinity delta[n] e^(-j omega n) = 1
+  $
+
+  // Unbreakable, so that "is" cannot be stranded at the foot of a page
+  // with its equation on the next.
+  #block(breakable: false)[
+    The DTFT of the rectangular pulse
+    $
+      x[n] = cases(1\, quad |n| <= N_1, 0\, quad |n| > N_1)
+    $
+    is
+    $
+      X(e^(j omega)) = sum_(n = -N_1)^(N_1) e^(-j omega n) = (sin(omega (N_1 + 1\/2))) / (sin(omega \/ 2))
+    $
+    which follows from summing the finite geometric series and multiplying numerator and denominator by $e^(j omega \/ 2)$. At $omega = 0$ its value is $2 N_1 + 1$, the number of nonzero samples.
+  ]
+
+  // N1 = 2, so the peak is 2 N1 + 1 = 5 and the first null sits at
+  // omega = 2 pi / 5, where the label is placed.
+  #let N1 = 2
+  #let dirichlet = w => if calc.abs(calc.sin(w / 2)) < 1e-9 { 2 * N1 + 1 } else {
+    calc.sin(w * (N1 + 0.5)) / calc.sin(w / 2)
+  }
+  #altfig(
+    alt: "Two plots. Left: a discrete-time rectangular pulse x of n, stems of height one for n from minus N sub one to N sub one. Right: its DTFT X of e to the j omega, a periodic sinc-like curve with peaks of height two N sub one plus one at omega equal to zero and plus and minus two pi, and first zero crossings at plus and minus two pi over two N sub one plus one.",
+    caption: [
+      A rectangular pulse with $N_1 = 2$ (left) and its DTFT (right). The
+      transform has the same main-lobe shape as the continuous-time sinc, but
+      it repeats every $2 pi$.
+    ],
+    align(center)[
+      #grid(
+        columns: (1fr, 1fr),
+        column-gutter: 2em,
+        [
+          #let n = range(-6, 7)
+          #cdiagram(
+            title: $x[n]$,
+            xlabel: $n$,
+            height: 4cm,
+            width: 6cm,
+            ylim: (-0.4, 1.5),
+            lq.stem(n, n.map(n => if calc.abs(n) <= N1 { 1 } else { 0 })),
+            lq.place(-N1, -0.25, align: center, plabel[$-N_1$]),
+            lq.place(N1, -0.25, align: center, plabel[$N_1$]),
+          )],
+        [
+          #let w = lq.linspace(-2 * calc.pi, 2 * calc.pi, num: 801)
+          #cdiagram(
+            title: $X(e^(j omega))$,
+            xlabel: $omega$,
+            height: 4cm,
+            width: 6cm,
+            ylim: (-3, 6),
+            lq.plot(w, w.map(dirichlet), mark: none),
+            lq.place(-1.7, 5, align: center, plabel[$2 N_1 + 1$]),
+            lq.place(
+              2 * calc.pi / (2 * N1 + 1) - 0.3,
+              -2.2,
+              align: left,
+              plabel[$2 pi \/ (2 N_1 + 1)$],
+            ),
+            lq.place(2 * calc.pi, -0.6, align: center, plabel[$2 pi$]),
+            lq.place(-2 * calc.pi, -0.6, align: center, plabel[$-2 pi$]),
+          )
+        ],
+      )],
+  )
+
+  Consider a signal $x[n]$ whose DTFT is, over one period,
+  $
+    X(e^(j omega)) = cases(1\, quad |omega| < W, 0\, quad W < |omega| <= pi)
+  $
+  The inverse DTFT is
+  $
+    x[n] = 1 / (2 pi) integral_(-pi)^(pi) X(e^(j omega)) e^(j omega n) "d"omega = 1 / (2 pi) integral_(-W)^W e^(j omega n) "d"omega = (sin W n) / (pi n) = W / pi "sinc"((W n) / pi)
+  $
+  This sequence is not absolutely summable, but it has finite energy, so its DTFT converges in the mean-square sense.
+]
+
+== Properties of the Discrete-Time Fourier Transform
+
+We denote a DTFT pair as
+$
+  x[n] #ftpair X(e^(j omega))
+$
+
+We list the properties below, with short proofs of the periodicity, shifting, conjugation, and differencing and accumulation properties.
+
+- Periodicity:
+$
+  X(e^(j (omega + 2 pi))) = X(e^(j omega))
+$
+_Proof._ For every integer $n$, $e^(-j 2 pi n) = 1$, so
+$
+  X(e^(j (omega + 2 pi))) = sum_(n = -infinity)^infinity x[n] e^(-j omega n) e^(-j 2 pi n) = sum_(n = -infinity)^infinity x[n] e^(-j omega n) = X(e^(j omega))
+$
+The proof uses only that $n$ is an integer, which is why the CTFT has no counterpart of this property.
+- Linearity:
+$
+  a x[n] + b y[n] #ftpair a X(e^(j omega)) + b Y(e^(j omega))
+$
+#block(sticky: true)[- Time and Frequency Shifting:]
+$
+  x[n - n_0] #ftpair e^(-j omega n_0) X(e^(j omega))
+$
+$
+  e^(j omega_0 n) x[n] #ftpair X(e^(j (omega - omega_0)))
+$
+_Proof._ Substituting $m = n - n_0$ in the analysis equation, $m$ still runs over all integers, so
+$
+  sum_(n = -infinity)^infinity x[n - n_0] e^(-j omega n) = sum_(m = -infinity)^infinity x[m] e^(-j omega (m + n_0)) = e^(-j omega n_0) X(e^(j omega))
+$
+For the frequency shift, the exponential combines with the kernel,
+$
+  sum_(n = -infinity)^infinity e^(j omega_0 n) x[n] e^(-j omega n) = sum_(n = -infinity)^infinity x[n] e^(-j (omega - omega_0) n) = X(e^(j (omega - omega_0)))
+$
+- Conjugation and Conjugate Symmetry
+$
+  x^*[n] #ftpair X^*(e^(-j omega))
+$
+$
+  X(e^(-j omega)) = X^*(e^(j omega)) quad x[n] "real"
+$
+_Proof._ Pulling the conjugate out of the sum,
+$
+  sum_(n = -infinity)^infinity x^*[n] e^(-j omega n) = (sum_(n = -infinity)^infinity x[n] e^(j omega n))^* = (sum_(n = -infinity)^infinity x[n] e^(-j (-omega) n))^* = X^*(e^(-j omega))
+$
+If $x[n]$ is real, $x^*[n] = x[n]$, so $X(e^(j omega)) = X^*(e^(-j omega))$, or equivalently $X(e^(-j omega)) = X^*(e^(j omega))$.
+- Differencing and Accumulation
+$
+  x[n] - x[n - 1] #ftpair (1 - e^(-j omega)) X(e^(j omega))
+$
+$
+  sum_(m = -infinity)^n x[m] #ftpair 1 / (1 - e^(-j omega)) X(e^(j omega)) + pi X(e^(j 0)) sum_(k = -infinity)^infinity delta(omega - 2 pi k)
+$
+_Proof._ The first difference follows from linearity and the time-shifting property with $n_0 = 1$:
+$
+  x[n] - x[n - 1] #ftpair X(e^(j omega)) - e^(-j omega) X(e^(j omega)) = (1 - e^(-j omega)) X(e^(j omega))
+$
+For accumulation, $y[n] = sum_(m = -infinity)^n x[m] = x[n] star u[n]$, so by the convolution property (@sec-dt-convolution) $Y(e^(j omega)) = X(e^(j omega)) U(e^(j omega))$. As in continuous time, split the step into its average value and a zero-mean part,
+$
+  u[n] = 1/2 + 1/2 s[n], quad s[n] = cases(1\, quad n >= 0, -1\, quad n < 0)
+$
+The constant transforms to $1/2 dot 2 pi sum_k delta(omega - 2 pi k) = pi sum_k delta(omega - 2 pi k)$. For $s[n]$, the first difference is $s[n] - s[n - 1] = 2 delta[n]$, so $(1 - e^(-j omega)) S(e^(j omega)) = 2$ and $S(e^(j omega)) = 2 \/ (1 - e^(-j omega))$, with no impulses since $s[n]$ has zero average. Hence
+$
+  U(e^(j omega)) = 1 / (1 - e^(-j omega)) + pi sum_(k = -infinity)^infinity delta(omega - 2 pi k)
+$
+and
+$
+  Y(e^(j omega)) = 1 / (1 - e^(-j omega)) X(e^(j omega)) + pi sum_(k = -infinity)^infinity X(e^(j 2 pi k)) delta(omega - 2 pi k) = 1 / (1 - e^(-j omega)) X(e^(j omega)) + pi X(e^(j 0)) sum_(k = -infinity)^infinity delta(omega - 2 pi k)
+$
+where the last step uses periodicity, $X(e^(j 2 pi k)) = X(e^(j 0))$.
+- Time Reversal
+$
+  x[-n] #ftpair X(e^(-j omega))
+$
+- Time Expansion. Since $n$ must be an integer, $x[a n]$ has no direct counterpart of $x(a t)$. Instead, we insert $k - 1$ zeros between samples:
+$
+  x_((k))[n] = cases(x[n \/ k]\, quad n "a multiple of" k, 0\, quad "otherwise") #ftpair X(e^(j k omega))
+$
+- Differentiation in Frequency
+$
+  n x[n] #ftpair j ("d"X(e^(j omega))) / ("d"omega)
+$
+- Parseval's
+$
+  sum_(n = -infinity)^infinity |x[n]|^2 = 1 / (2 pi) integral_(2 pi) |X(e^(j omega))|^2 "d"omega
+$
+
+== The Convolution Property <sec-dt-convolution>
+
+The argument from continuous time carries over. The complex exponential $e^(j omega n)$ is an eigenfunction of a discrete-time LTI system with impulse response $h[n]$, with eigenvalue
+$
+  H(e^(j omega)) = sum_(n = -infinity)^infinity h[n] e^(-j omega n)
+$
+the frequency response. The synthesis equation writes $x[n]$ as a superposition of these exponentials, each weighted by $X(e^(j omega))$, so the system scales each one by $H(e^(j omega))$, and $Y(e^(j omega)) = H(e^(j omega)) X(e^(j omega))$.
+
+As a more formal derivation, let us consider the convolution sum
+$
+  y[n] = sum_(k = -infinity)^infinity x[k] h[n - k]
+$
+and its DTFT,
+$
+  Y(e^(j omega)) = sum_(n = -infinity)^infinity [sum_(k = -infinity)^infinity x[k] h[n - k]] e^(-j omega n) = sum_(k = -infinity)^infinity x[k] [sum_(n = -infinity)^infinity h[n - k] e^(-j omega n)]
+$
+by the time-shift property, the bracketed term is simply
+$
+  sum_(n = -infinity)^infinity h[n - k] e^(-j omega n) = e^(-j omega k) H(e^(j omega))
+$
+We then have
+$
+  Y(e^(j omega)) = H(e^(j omega)) sum_(k = -infinity)^infinity x[k] e^(-j omega k) = H(e^(j omega)) X(e^(j omega))
+$
+
+#attention("Convolution Property")[
+  #eqalt(
+    "y of n equals h of n convolved with x of n, which Fourier-transforms to Y of e to the j omega equal to H of e to the j omega times X of e to the j omega.",
+    $
+      y[n] = h[n] star x[n] #ftpair Y(e^(j omega)) = H(e^(j omega)) X(e^(j omega))
+    $,
+  )
+]
+
+#example("Obtaining Outputs in Frequency Domain")[
   #set math.equation(numbering: none)
   Consider an LTI system with impulse response
   $
@@ -287,6 +536,10 @@ As with the continuous-time convolution, $omega$ is the variable of the result a
     [$-a^n u[-n-1]$, $|a| > 1$], [$1/(1 - a e^(-j omega))$], [N/A],
 
     [$n a^n u[n]$, $|a| < 1$], [$a e^(-j omega)/(1 - a e^(-j omega))^2$], [N/A],
+
+    [$a^(|n|)$, $a$ real, $|a| < 1$], [$(1 - a^2)/(1 - 2a cos omega + a^2)$], [N/A],
+
+    [$((n + r - 1)!)/(n! (r - 1)!) a^n u[n]$, $|a| < 1$], [$1/(1 - a e^(-j omega))^r$], [N/A],
 
     [$delta[n - n_0]$], [$e^(-j omega n_0)$], [N/A],
 

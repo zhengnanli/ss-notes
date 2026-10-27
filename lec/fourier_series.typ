@@ -330,6 +330,18 @@ $
   x(t - t_0) #fspair e^(-j k omega_0 t_0) a_k
 $
 
+=== Frequency Shifting
+
+Multiplying $x(t)$ by the harmonic $e^(j M omega_0 t)$, with $M$ an integer, keeps the period $T$ and shifts the coefficients by $M$:
+$
+  e^(j M omega_0 t) x(t) = sum_(k = -infinity)^infinity a_k e^(j (k + M) omega_0 t) = sum_(m = -infinity)^infinity a_(m - M) e^(j m omega_0 t), quad m = k + M
+$
+That is,
+$
+  e^(j M omega_0 t) x(t) #fspair a_(k - M)
+$
+This is the dual of time shifting: a shift in one domain is multiplication by a complex exponential in the other.
+
 === Time Reversal
 
 For $y(t) = x(-t)$,
@@ -364,6 +376,29 @@ then
 $
   x^*(t) #fspair a_(-k)^*
 $
+To see this, conjugate the synthesis equation; since $(e^(j k omega_0 t))^* = e^(-j k omega_0 t)$,
+$
+  x^*(t) = sum_(k = -infinity)^infinity a_k^* e^(-j k omega_0 t) = sum_(m = -infinity)^infinity a_(-m)^* e^(j m omega_0 t), quad m = -k
+$
+If $x(t)$ is real, then $x^*(t) = x(t)$, and since the coefficients of a signal are unique, $a_k = a_(-k)^*$.
+
+=== Differentiation and Integration
+
+Differentiating the synthesis equation term by term,
+$
+  ("d"x(t))/("d"t) = sum_(k = -infinity)^infinity a_k ("d")/("d"t) e^(j k omega_0 t) = sum_(k = -infinity)^infinity (j k omega_0 a_k) e^(j k omega_0 t)
+$
+so
+$
+  ("d"x(t))/("d"t) #fspair j k omega_0 a_k
+$
+For integration, let $y(t) = integral_(-infinity)^t x(tau) "d"tau$. Over one period $y$ grows by $integral_T x(tau) "d"tau = T a_0$, so $y(t)$ is periodic (and finite) only if $a_0 = 0$. In that case $y(t)$ has period $T$ and coefficients $b_k$, and since $"d"y(t) \/ "d"t = x(t)$, the differentiation property gives $j k omega_0 b_k = a_k$, that is,
+$
+  integral_(-infinity)^t x(tau) "d"tau #fspair a_k / (j k omega_0), quad k != 0
+$
+The coefficient $b_0$, the average value of $y(t)$, is not determined by $x(t)$: it is the constant of integration.
+
+Unlike the discrete-time case, the coefficients $a_k$ of a continuous-time signal have no periodicity, since the harmonics $e^(j k omega_0 t)$ are distinct for every $k$.
 
 === Parseval's Relation
 
@@ -674,6 +709,55 @@ $
 Similarly, if $N$ is even, and we let $hat(x)_M [n] = sum_(k = -M + 1)^M a_k e^(j k (2 pi)/N n)$, then with $M = N / 2$, this sum consists of $N$ terms, and again, we conclude that $hat(x)_M [n] = x[n]$.
 
 == Properties of Discrete-Time Fourier Series
+
+We use the same notation $x[n] #fspair a_k$ as in continuous time, with $x[n]$ periodic with period $N$ and $omega_0 = 2 pi \/ N$. Most properties are proved as in continuous time, with the integral over a period replaced by a sum over a period. We prove the periodicity, shifting, conjugation, and first difference and running sum properties below, and summarize all properties in a table.
+
+=== Periodicity
+
+The coefficients are periodic in $k$ with period $N$:
+$
+  a_(k + N) = a_k
+$
+This follows from the analysis equation, since $e^(-j N omega_0 n) = e^(-j 2 pi n) = 1$ for every integer $n$:
+$
+  a_(k + N) = 1/N sum_(n = chevron.l N chevron.r) x[n] e^(-j k omega_0 n) e^(-j 2 pi n) = a_k
+$
+It is the coefficient-domain form of $phi_k [n] = phi_(k + N) [n]$, and the reason any $N$ consecutive values of $k$ suffice in the synthesis equation.
+
+=== Time Shifting
+
+A shifted periodic signal $x[n - n_0]$ keeps the period $N$. Substituting $m = n - n_0$, which runs over $N$ consecutive integers when $n$ does,
+$
+  1/N sum_(n = chevron.l N chevron.r) x[n - n_0] e^(-j k omega_0 n) = e^(-j k omega_0 n_0) 1/N sum_(m = chevron.l N chevron.r) x[m] e^(-j k omega_0 m) = e^(-j k (2 pi)/N n_0) a_k
+$
+
+=== Frequency Shifting
+
+Multiplying by the harmonic $e^(j M omega_0 n)$ shifts the coefficients:
+$
+  e^(j M omega_0 n) x[n] = sum_(k = chevron.l N chevron.r) a_k e^(j (k + M) omega_0 n) = sum_(m = chevron.l N chevron.r) a_(m - M) e^(j m omega_0 n), quad m = k + M
+$
+so $e^(j M (2 pi)/N n) x[n] #fspair a_(k - M)$. As $k$ runs over $N$ consecutive integers, so does $m$, so the sum is still over one period.
+
+=== Conjugation
+
+Conjugating the synthesis equation,
+$
+  x^*[n] = sum_(k = chevron.l N chevron.r) a_k^* e^(-j k omega_0 n) = sum_(m = chevron.l N chevron.r) a_(-m)^* e^(j m omega_0 n), quad m = -k
+$
+so $x^*[n] #fspair a_(-k)^*$. If $x[n]$ is real, $x^*[n] = x[n]$, and uniqueness of the coefficients gives $a_k = a_(-k)^*$.
+
+=== First Difference and Running Sum
+
+By linearity and the time-shifting property with $n_0 = 1$,
+$
+  x[n] - x[n - 1] #fspair a_k - e^(-j k (2 pi)/N) a_k = (1 - e^(-j k (2 pi)/N)) a_k
+$
+For the running sum $y[n] = sum_(r = -infinity)^n x[r]$, over one period $y$ grows by $sum_(r = chevron.l N chevron.r) x[r] = N a_0$, so $y[n]$ is periodic (and finite) only if $a_0 = 0$. In that case, with coefficients $b_k$, the first difference $y[n] - y[n - 1] = x[n]$ gives $(1 - e^(-j k (2 pi)/N)) b_k = a_k$, so
+$
+  sum_(r = -infinity)^n x[r] #fspair 1/(1 - e^(-j k (2 pi)/N)) a_k, quad k != 0, plus.minus N, plus.minus 2 N, dots.c
+$
+At $k = 0, plus.minus N, dots.c$ the factor $1 - e^(-j k (2 pi)/N)$ vanishes, and $b_0$, the average of $y[n]$, is the undetermined constant of summation.
 
 #note("Properties of Discrete-Time Fourier Series")[
   #align(center)[

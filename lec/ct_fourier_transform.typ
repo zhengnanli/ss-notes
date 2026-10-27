@@ -421,7 +421,7 @@ $
   x(t) #ftpair X(j omega)
 $
 
-We list the properties without proof below:
+We list the properties below, with short proofs of the shifting, conjugation, and differentiation and integration properties. Each proof starts from the analysis or synthesis equation.
 
 - Linearity:
 $
@@ -431,6 +431,19 @@ $
 $
   x(t - t_0) #ftpair e^(-j omega t_0) X(j omega)
 $
+_Proof._ Substituting $tau = t - t_0$ in the analysis equation,
+$
+  integral_RR x(t - t_0) e^(-j omega t) "d"t = integral_RR x(tau) e^(-j omega (tau + t_0)) "d"tau = e^(-j omega t_0) integral_RR x(tau) e^(-j omega tau) "d"tau = e^(-j omega t_0) X(j omega)
+$
+- Frequency Shifting:
+$
+  e^(j omega_0 t) x(t) #ftpair X(j(omega - omega_0))
+$
+_Proof._ The exponential combines with the kernel of the analysis equation,
+$
+  integral_RR e^(j omega_0 t) x(t) e^(-j omega t) "d"t = integral_RR x(t) e^(-j (omega - omega_0) t) "d"t = X(j(omega - omega_0))
+$
+Shifting in time multiplies the transform by a linear phase, and multiplying by a complex exponential in time shifts the transform; the two properties are duals.
 - Conjugation and Conjugate Symmetry
 $
   x^*(t) #ftpair X^*(-j omega)
@@ -438,6 +451,11 @@ $
 $
   X(-j omega) = X^*(j omega) quad x(t) "real"
 $
+_Proof._ Since $(e^(j omega t))^* = e^(-j omega t)$, the conjugate can be pulled out of the integral,
+$
+  integral_RR x^*(t) e^(-j omega t) "d"t = (integral_RR x(t) e^(j omega t) "d"t)^* = (integral_RR x(t) e^(-j (-omega) t) "d"t)^* = X^*(-j omega)
+$
+If $x(t)$ is real, then $x^*(t) = x(t)$, so the two transforms agree: $X(j omega) = X^*(-j omega)$. Replacing $omega$ by $-omega$ gives the form above. In polar form, $|X(j omega)|$ is even and $angle X(j omega)$ is odd.
 - Differentiation and Integration
 $
   ("d"x(t))/("d"t) #ftpair j omega X(j omega)
@@ -445,6 +463,27 @@ $
 $
   integral_(-infinity)^t x(tau) "d"tau #ftpair 1/(j omega) X(j omega) + pi X(0) delta(omega)
 $
+_Proof._ Differentiating both sides of the synthesis equation with respect to $t$, the derivative acts only on $e^(j omega t)$:
+$
+  ("d"x(t))/("d"t) = 1/(2 pi) integral_RR X(j omega) ("d")/("d"t) e^(j omega t) "d"omega = 1/(2 pi) integral_RR [j omega X(j omega)] e^(j omega t) "d"omega
+$
+The bracketed term is therefore the transform of $"d"x(t) \/ "d"t$.
+
+For integration, note that $y(t) = integral_(-infinity)^t x(tau) "d"tau = x(t) star u(t)$, so by the convolution property (@sec-ct-convolution) $Y(j omega) = X(j omega) U(j omega)$. To find $U(j omega)$, split the step into its average value and a zero-mean part,
+$
+  u(t) = 1/2 + 1/2 "sgn"(t)
+$
+The constant transforms to $1/2 dot 2 pi delta(omega) = pi delta(omega)$. For the sign function, $"d" "sgn"(t) \/ "d"t = 2 delta(t)$, so by the differentiation property $j omega S(j omega) = 2$, and $S(j omega) = 2 \/ (j omega)$; there is no impulse at $omega = 0$ because $"sgn"(t)$ has zero average. Hence
+$
+  U(j omega) = 1/(j omega) + pi delta(omega)
+$
+and
+$
+  Y(j omega) = X(j omega) [1/(j omega) + pi delta(omega)] = 1/(j omega) X(j omega) + pi X(0) delta(omega)
+$
+since $X(j omega) delta(omega) = X(0) delta(omega)$. The impulse carries the average (DC) value of the running integral, which differentiation destroys and integration cannot recover from $X(j omega) \/ (j omega)$ alone.
+
+Unlike the DTFT, the CTFT has no periodicity property: $e^(-j omega t)$ is not periodic in $omega$ for every $t$, so $X(j omega)$ is in general not periodic.
 - Time and Frequency Scaling
 $
   x(a t) #ftpair 1/(|a|) X((j omega) / a)
@@ -458,7 +497,7 @@ $
   integral_RR |x(t)|^2 "d"t = 1/(2 pi) integral_RR |X(j omega)|^2 "d"omega
 $
 
-== The Convolution Property
+== The Convolution Property <sec-ct-convolution>
 
 We start by looking at the inverse Fourier transform,
 
