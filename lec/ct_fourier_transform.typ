@@ -570,7 +570,7 @@ $
 $
 The integral is a convolution in the frequency variable: it has the same form as the convolution integral $integral_RR x(tau) h(t - tau) "d"tau$, with $omega$ in place of $t$ and the dummy variable $theta$ in place of $tau$. We write it as
 $
-  X(j omega) star Y(j omega) := integral_RR X(j theta) Y(j(omega - theta)) "d"theta
+  X(j omega) star Y(j omega) eq.delta integral_RR X(j theta) Y(j(omega - theta)) "d"theta
 $
 Note that $omega$ is the variable of the result, and $theta$ is integrated out; the notation does not mean that $X$ and $Y$ are multiplied at the same frequency.
 

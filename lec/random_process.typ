@@ -127,12 +127,12 @@ We now discuss the joint behavior of the random processes $X(t)$ and $Y(t)$. A f
 
 - Strict sense stationary (SSS): $X(t + tau)$ has the same statistics as $X(t)$, $forall t$, meaning that every joint density is invariant under a common shift of all its time arguments. At first order,
 $
-  f_X (x; t) = f_X (x; t + tau) equiv f_X (x)
+  f_X (x; t) = f_X (x; t + tau) eq.delta f_X (x)
 $
 #block(breakable: false)[
 - Wide sense stationary (WSS):
 $
-  m_X (t + tau) = m_X (t) equiv m_X; R_X (t_1, t_2) = R_X (t_1 + tau, t_2 + tau) equiv R_X (t_1 - t_2)
+  m_X (t + tau) = m_X (t) eq.delta m_X; R_X (t_1, t_2) = R_X (t_1 + tau, t_2 + tau) eq.delta R_X (t_1 - t_2)
 $
 ]
 - Cyclo-stationary process: for a period $T$

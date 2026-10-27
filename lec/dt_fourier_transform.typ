@@ -167,7 +167,7 @@ since the bracketed sum is the DTFT of $y[n]$ evaluated at $omega - theta$.
 
 The integral differs from the continuous-time case in one way: it runs over a single interval of length $2 pi$, not over the whole real line. Both $X(e^(j theta))$ and $Y(e^(j(omega - theta)))$ are periodic in $theta$ with period $2 pi$, so their product is too, and integrating it over all of $RR$ would diverge (unless the product is zero). Integrating over one period, which can be any interval of length $2 pi$, gives the _periodic convolution_
 $
-  X(e^(j omega)) ast.op.o Y(e^(j omega)) := integral_(2 pi) X(e^(j theta)) Y(e^(j(omega - theta))) "d"theta
+  X(e^(j omega)) ast.op.o Y(e^(j omega)) eq.delta integral_(2 pi) X(e^(j theta)) Y(e^(j(omega - theta))) "d"theta
 $
 As with the continuous-time convolution, $omega$ is the variable of the result and $theta$ is integrated out. The result is itself periodic in $omega$ with period $2 pi$, as a DTFT must be.
 

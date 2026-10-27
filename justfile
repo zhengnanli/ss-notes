@@ -1,4 +1,4 @@
-set working-directory := "lectures"
+set working-directory := "lec"
 
 entry := "lec.typ"
 output := "lec.pdf"

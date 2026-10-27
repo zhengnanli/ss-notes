@@ -33,7 +33,7 @@ jobs:
     - name: Compile lecture notes
       run: |
         mkdir -p output
-        cd lectures
+        cd lec
         typst compile --input git-hash=${{ steps.git_hash.outputs.hash }} lec.typ ../output/lec.pdf
         echo "Compiled lec.pdf with git hash: ${{ steps.git_hash.outputs.hash }}"
     

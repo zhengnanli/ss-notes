@@ -830,7 +830,7 @@ $
 is the input of a continuous-time LTI system, then the output is given by
 $
   y(t) &= integral_RR h(tau) x (t - tau) "d"tau = integral_RR h(tau) e^(s (t - tau)) "d"tau = integral_RR h(tau) e^(s t) e^(-s tau) "d"tau \
-  &= e^(s t) integral_RR h(tau) e^(-s tau) "d"tau equiv e^(s t) H(s)
+  &= e^(s t) integral_RR h(tau) e^(-s tau) "d"tau eq.delta e^(s t) H(s)
 $
 where
 $
