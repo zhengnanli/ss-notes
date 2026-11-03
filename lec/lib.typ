@@ -105,7 +105,10 @@
 // the same way, onto the caption, so the figure gets room at the bottom too.
 #let _headroom(body) = pad(top: 5pt, bottom: 9pt, body)
 
-#let altfig(body, alt: "", caption: none) = if caption == none {
+// `placement: auto` lets a large figure float to the top or bottom of a page
+// instead of leaving a blank tail where it would not fit. Use it only on a
+// top-level figure: one inside an example box would split the box around it.
+#let altfig(body, alt: "", caption: none, placement: none) = if caption == none {
   figure(
     _headroom(body),
     alt: alt,
@@ -113,20 +116,27 @@
     kind: image,
     supplement: none,
     numbering: none,
+    placement: placement,
   )
 } else {
-  figure(_headroom(body), alt: alt, caption: caption, kind: image)
+  figure(
+    _headroom(body),
+    alt: alt,
+    caption: caption,
+    kind: image,
+    placement: placement,
+  )
 }
 
 // Centered lilaq plot. Pass `alt:` and `caption:` to make it a numbered figure;
 // pass neither to get a bare centered plot, which is what a panel inside a
 // larger figure wants.
-#let cdiagram(alt: none, caption: none, ..args) = {
+#let cdiagram(alt: none, caption: none, placement: none, ..args) = {
   let default-args = (width: 8cm, height: 4cm)
   let merged-args = default-args + args.named()
   let body = align(center, lq.diagram(..merged-args, ..args.pos()))
   if alt == none and caption == none { body } else {
-    altfig(alt: alt, caption: caption, body)
+    altfig(alt: alt, caption: caption, placement: placement, body)
   }
 }
 

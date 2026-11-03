@@ -459,6 +459,7 @@ The quantized signal is then modeled as the original plus additive noise, $Q(x[n
 #let tq = lq.linspace(0, 1, num: 600)
 #let xq = tq.map(t => calc.sin(2 * calc.pi * t))
 #altfig(
+  placement: auto,
   alt: "Two stacked plots over one period of a sinusoid, time from 0 to 1. Top: a unit-amplitude sine wave drawn as a smooth curve, and its 3-bit quantized version drawn as a staircase that takes only the eight levels plus or minus 0.125, 0.375, 0.625 and 0.875. Bottom: the quantization error, the difference between the staircase and the sine, which is a sawtooth-like signal that stays between minus 0.125 and 0.125, the dashed lines at plus and minus half a step.",
   caption: [
     A 3-bit quantizer with $X_m = 1$, so $Delta = 1/4$. Top: the input

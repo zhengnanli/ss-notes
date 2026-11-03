@@ -168,40 +168,41 @@ The unit circle $|z| = 1$ plays the role in the z-plane that the $j omega$-axis 
     -a^n u[-n - 1] #zpair 1 / (1 - a z^(-1)) = z / (z - a), quad |z| < |a|
   $
   The two signals have *the same* algebraic expression. Only the ROC, shown in @fig-z-roc1, tells them apart.
-
-  #altfig(
-    alt: "Two pole-zero plots in the z-plane for X of z equals z over z minus a with a equal to 0.8. Both show a zero at the origin, a pole at z equals 0.8, and the unit circle dashed. Panel (a) shades the exterior of the circle of radius 0.8, the ROC of the right-sided signal a to the n u of n. Panel (b) shades the disc of radius 0.8, the ROC of the left-sided signal minus a to the n u of minus n minus one.",
-    caption: [
-      One expression, $X(z) = z \/ (z - a)$ with $a = 0.8$, and two ROCs:
-      $|z| > a$ for the right-sided $a^n u[n]$ (a) and $|z| < a$ for the
-      left-sided $-a^n u[-n-1]$ (b). The dashed curve is the unit circle.
-    ],
-    align(center)[
-      #grid(
-        columns: (1fr, 1fr),
-        column-gutter: 1em,
-        panel(
-          zplane(
-            poles: ((0.8, 0),),
-            zeros: ((0, 0),),
-            roc: (0.8, none),
-            lq.place(0.8, 0.12, align: center + bottom, plabel[$a$]),
-          ),
-          [(a) $|z| > a$],
-        ),
-        panel(
-          zplane(
-            poles: ((0.8, 0),),
-            zeros: ((0, 0),),
-            roc: (0, 0.8),
-            lq.place(0.8, 0.12, align: center + bottom, plabel[$a$]),
-          ),
-          [(b) $|z| < a$],
-        ),
-      )
-    ],
-  ) <fig-z-roc1>
 ] <ex-z-fourier>
+
+#altfig(
+  placement: auto,
+  alt: "Two pole-zero plots in the z-plane for X of z equals z over z minus a with a equal to 0.8. Both show a zero at the origin, a pole at z equals 0.8, and the unit circle dashed. Panel (a) shades the exterior of the circle of radius 0.8, the ROC of the right-sided signal a to the n u of n. Panel (b) shades the disc of radius 0.8, the ROC of the left-sided signal minus a to the n u of minus n minus one.",
+  caption: [
+    One expression, $X(z) = z \/ (z - a)$ with $a = 0.8$, and two ROCs:
+    $|z| > a$ for the right-sided $a^n u[n]$ (a) and $|z| < a$ for the
+    left-sided $-a^n u[-n-1]$ (b). The dashed curve is the unit circle.
+  ],
+  align(center)[
+    #grid(
+      columns: (1fr, 1fr),
+      column-gutter: 1em,
+      panel(
+        zplane(
+          poles: ((0.8, 0),),
+          zeros: ((0, 0),),
+          roc: (0.8, none),
+          lq.place(0.8, 0.12, align: center + bottom, plabel[$a$]),
+        ),
+        [(a) $|z| > a$],
+      ),
+      panel(
+        zplane(
+          poles: ((0.8, 0),),
+          zeros: ((0, 0),),
+          roc: (0, 0.8),
+          lq.place(0.8, 0.12, align: center + bottom, plabel[$a$]),
+        ),
+        [(b) $|z| < a$],
+      ),
+    )
+  ],
+) <fig-z-roc1>
 
 #example("Examples of z-Transforms")[
   Consider the sum of two right-sided exponentials,
@@ -389,63 +390,66 @@ As $omega$ goes from $0$ to $pi$, the point $e^(j omega)$ walks along the upper 
     |H(e^(j omega))| = 1 / (|e^(j omega) - a|) = 1 / sqrt(1 - 2 a cos omega + a^2)
   $
   At $omega = 0$, the point $e^(j omega) = 1$ is closest to the pole and $|H| = 1 \/ (1 - a)$. At $omega = pi$, it is farthest away and $|H| = 1 \/ (1 + a)$. The system is a low-pass filter, and the closer $a$ is to $1$, the sharper the peak. With $-1 < a < 0$, the pole sits on the negative real axis and the system is high-pass. @fig-z-geom shows the vectors and the resulting magnitude for $a = 0.6$.
+]
 
-  #let a = 0.6
-  #let w0 = 1.1
-  #let ws = lq.linspace(0, calc.pi, num: 200)
-  #altfig(
-    alt: "Left: z-plane with the unit circle, a zero at the origin and a pole at z equals 0.6. A point on the unit circle at angle omega equal to about 1.1 radians is joined by an arrow from the zero (of length one) and an arrow from the pole. Right: the magnitude of H of e to the j omega for omega from 0 to pi, falling from 2.5 at omega equals 0 to 0.625 at omega equals pi.",
-    caption: [
-      Geometric evaluation for $H(z) = z \/ (z - 0.6)$. The magnitude response is
-      the reciprocal of the length of the vector from the pole to $e^(j omega)$
-      (left), which is shortest at $omega = 0$, so the response peaks there
-      (right).
-    ],
-    align(center)[
-      #grid(
-        columns: (1fr, 1.4fr),
-        column-gutter: 1em,
-        align: horizon,
-        zplane(
-          poles: ((a, 0),),
-          zeros: ((0, 0),),
-          lim: 1.4,
-          lq.line(
-            (0, 0),
-            (calc.cos(w0), calc.sin(w0)),
-            stroke: c-green,
-            tip: tiptoe.stealth,
-          ),
-          lq.line(
-            (a, 0),
-            (calc.cos(w0), calc.sin(w0)),
-            stroke: c-accent,
-            tip: tiptoe.stealth,
-          ),
-          lq.place(
-            calc.cos(w0) + 0.05,
-            calc.sin(w0) + 0.15,
-            align: left,
-            plabel[$e^(j omega)$],
-          ),
+#[
+#let a = 0.6
+#let w0 = 1.1
+#let ws = lq.linspace(0, calc.pi, num: 200)
+#altfig(
+  placement: auto,
+  alt: "Left: z-plane with the unit circle, a zero at the origin and a pole at z equals 0.6. A point on the unit circle at angle omega equal to about 1.1 radians is joined by an arrow from the zero (of length one) and an arrow from the pole. Right: the magnitude of H of e to the j omega for omega from 0 to pi, falling from 2.5 at omega equals 0 to 0.625 at omega equals pi.",
+  caption: [
+    Geometric evaluation for $H(z) = z \/ (z - 0.6)$. The magnitude response is
+    the reciprocal of the length of the vector from the pole to $e^(j omega)$
+    (left), which is shortest at $omega = 0$, so the response peaks there
+    (right).
+  ],
+  align(center)[
+    #grid(
+      columns: (1fr, 1.4fr),
+      column-gutter: 1em,
+      align: horizon,
+      zplane(
+        poles: ((a, 0),),
+        zeros: ((0, 0),),
+        lim: 1.4,
+        lq.line(
+          (0, 0),
+          (calc.cos(w0), calc.sin(w0)),
+          stroke: c-green,
+          tip: tiptoe.stealth,
         ),
-        lq.diagram(
-          width: 6cm,
-          height: 4cm,
-          xlabel: $omega$,
-          ylabel: $|H(e^(j omega))|$,
-          xlim: (0, 3.4),
-          ylim: (0, 2.8),
-          xaxis: (
-            ticks: ((0, $0$), (calc.pi / 2, $pi/2$), (calc.pi, $pi$)),
-            subticks: none,
-          ),
-          yaxis: (ticks: lbl((1, 2)), subticks: none),
-          lq.plot(ws, ws.map(w => 1 / vec-len(w, a, 0)), mark: none),
+        lq.line(
+          (a, 0),
+          (calc.cos(w0), calc.sin(w0)),
+          stroke: c-accent,
+          tip: tiptoe.stealth,
         ),
-      )
-    ],
-  ) <fig-z-geom>
+        lq.place(
+          calc.cos(w0) + 0.05,
+          calc.sin(w0) + 0.15,
+          align: left,
+          plabel[$e^(j omega)$],
+        ),
+      ),
+      lq.diagram(
+        width: 6cm,
+        height: 4cm,
+        xlabel: $omega$,
+        ylabel: $|H(e^(j omega))|$,
+        xlim: (0, 3.4),
+        ylim: (0, 2.8),
+        xaxis: (
+          ticks: ((0, $0$), (calc.pi / 2, $pi/2$), (calc.pi, $pi$)),
+          subticks: none,
+        ),
+        yaxis: (ticks: lbl((1, 2)), subticks: none),
+        lq.plot(ws, ws.map(w => 1 / vec-len(w, a, 0)), mark: none),
+      ),
+    )
+  ],
+) <fig-z-geom>
 ]
 
 #example("Zeros of the Moving-Average Filter")[
@@ -644,7 +648,7 @@ A consequence: if $x[n]$ is causal and $X(z)$ is rational, then $X(z)$ is finite
   *Initial-Value Theorem.* If $x[n] = 0$ for $n < 0$, then $x[0] = lim_(z -> infinity) X(z)$.
 ]
 
-#note("z-Transform Pairs", breakable: false)[
+#note("z-Transform Pairs")[
   #table(
     columns: 3,
     align: center + horizon,
@@ -763,33 +767,36 @@ Run forward in time, the recursion gives the causal impulse response $h[n] = a^n
       h[n] = -(1/2)^n u[-n - 1] - 2 (3)^n u[-n - 1]
     $
   No choice is both causal and stable, as the first theorem predicts from the pole at $z = 3$.
+]
 
-  #let pz = (poles: ((0.5, 0), (3, 0)), zeros: ((0, 0), (4 / 3, 0)))
-  #altfig(
-    alt: "Three z-plane pole-zero plots of the same H of z, with poles at one half and three, zeros at zero and four thirds, and the unit circle dashed. Panel (a) shades the exterior of the circle of radius three: causal, unstable. Panel (b) shades the ring between radius one half and radius three, which contains the unit circle: stable, not causal. Panel (c) shades the disc of radius one half: anticausal, unstable.",
-    caption: [
-      One $H(z)$, three ROCs: causal but unstable (a), stable but not causal
-      (b), and neither (c). Only (b) contains the unit circle.
-    ],
-    align(center)[
-      #grid(
-        columns: (1fr, 1fr, 1fr),
-        column-gutter: 0.5em,
-        panel(
-          zplane(..pz, roc: (3, none), lim: 3.6, ticks: (-3, 3), size: 3.9cm),
-          [(a) $|z| > 3$],
-        ),
-        panel(
-          zplane(..pz, roc: (0.5, 3), lim: 3.6, ticks: (-3, 3), size: 3.9cm),
-          [(b) $1/2 < |z| < 3$],
-        ),
-        panel(
-          zplane(..pz, roc: (0, 0.5), lim: 3.6, ticks: (-3, 3), size: 3.9cm),
-          [(c) $|z| < 1/2$],
-        ),
-      )
-    ],
-  ) <fig-z-roc-stab>
+#[
+#let pz = (poles: ((0.5, 0), (3, 0)), zeros: ((0, 0), (4 / 3, 0)))
+#altfig(
+  placement: auto,
+  alt: "Three z-plane pole-zero plots of the same H of z, with poles at one half and three, zeros at zero and four thirds, and the unit circle dashed. Panel (a) shades the exterior of the circle of radius three: causal, unstable. Panel (b) shades the ring between radius one half and radius three, which contains the unit circle: stable, not causal. Panel (c) shades the disc of radius one half: anticausal, unstable.",
+  caption: [
+    One $H(z)$, three ROCs: causal but unstable (a), stable but not causal
+    (b), and neither (c). Only (b) contains the unit circle.
+  ],
+  align(center)[
+    #grid(
+      columns: (1fr, 1fr, 1fr),
+      column-gutter: 0.5em,
+      panel(
+        zplane(..pz, roc: (3, none), lim: 3.6, ticks: (-3, 3), size: 3.9cm),
+        [(a) $|z| > 3$],
+      ),
+      panel(
+        zplane(..pz, roc: (0.5, 3), lim: 3.6, ticks: (-3, 3), size: 3.9cm),
+        [(b) $1/2 < |z| < 3$],
+      ),
+      panel(
+        zplane(..pz, roc: (0, 0.5), lim: 3.6, ticks: (-3, 3), size: 3.9cm),
+        [(c) $|z| < 1/2$],
+      ),
+    )
+  ],
+) <fig-z-roc-stab>
 ]
 
 === (optional) Noncausal Systems
@@ -900,6 +907,7 @@ and setting this equal to $1/2$ gives the 3-dB cutoff frequency, $cos omega_c = 
 
 #let ws = lq.linspace(0, calc.pi, num: 300)
 #cdiagram(
+  placement: auto,
   alt: "Magnitude responses of the first-order low-pass filter for alpha equal to 0.5, 0.8 and 0.95, plotted for omega from 0 to pi. All three equal one at omega equals zero; the larger alpha, the faster the response falls, with alpha equals 0.95 dropping below 0.1 by omega about 0.5.",
   caption: [
     Magnitude response of $H(z) = (1 - alpha) \/ (1 - alpha z^(-1))$. A pole closer

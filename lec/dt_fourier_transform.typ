@@ -800,6 +800,7 @@ Zero-padding does not, however, improve _resolution_, the ability to tell two ne
 #let rec32 = range(32).map(two-tones)
 #let rec128 = range(128).map(two-tones)
 #altfig(
+  placement: auto,
   alt: "Two plots of normalized DTFT magnitude against omega over pi, from 0.25 to 0.6. Left, a 32-sample record: the zero-padded spectrum is a single broad lobe peaking near 0.415, and the six stems of the unpadded 32-point DFT, at multiples of one sixteenth, sample that lobe coarsely. Right, a 128-sample record of the same signal: two narrow, separate peaks of height about one half at 0.40 and 0.43, marked by dashed vertical lines.",
   caption: [
     $x[n] = cos(0.40 pi n) + cos(0.43 pi n)$, magnitude spectrum $|X(e^(j omega))| \/ L$.
@@ -888,6 +889,7 @@ Choosing a window is therefore a trade-off between resolution and leakage. A lon
   calc.max(-90, 20 * calc.log(calc.max(mag, 1e-9), base: 10))
 }
 #altfig(
+  placement: auto,
   alt: "Three plots. Left: the 32-point DFT magnitude of a cosine exactly on bin 4, a single stem of height 16 at k equals 4 and zeros elsewhere. Middle: the same for a cosine at bin 4.5, two stems near 10 at k equals 4 and 5 and smaller stems that decay slowly across all other bins. Right: window spectra in decibels against omega over pi from 0 to 1 for length 32; the rectangular window, solid, has a narrow main lobe and side lobes starting near minus 13 dB that decay slowly; the Hann window, dashed, has a main lobe twice as wide and side lobes starting near minus 31 dB that fall off quickly.",
   caption: [
     Spectral leakage. A 32-point DFT of $cos(2 pi k_0 n \/ 32)$ with (a) $k_0 = 4$,

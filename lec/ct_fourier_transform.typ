@@ -227,7 +227,7 @@ $
   x(t) = lim_(omega_0 arrow 0) 1 / (2 pi) sum_(k = -infinity)^(infinity) X(j k omega_0) e^(j k omega_0 t) omega_0 = 1 / (2 pi ) integral_RR X(j omega) e^(j omega t) "d"omega
 $
 
-The process of $omega_0 arrow 0$ is depicted below. As $omega_0 arrow 0$, the summation converges to the integral of $X(j omega) e^(j omega t)$.
+@fig-riemann depicts the process of $omega_0 arrow 0$. As $omega_0 arrow 0$, the summation converges to the integral of $X(j omega) e^(j omega t)$.
 
 #let x = lq.linspace(-2, 5, num: 100)
 #let xd = lq.arange(-2, 5, step: 0.3)
@@ -248,7 +248,10 @@ The process of $omega_0 arrow 0$ is depicted below. As $omega_0 arrow 0$, the su
 #let stair-coarse = make-staircase(xd, yd)
 
 #align(center)[
+  // Floats, so that a page too short for it is filled with the text that
+  // follows rather than left with a blank tail.
   #cdiagram(
+    placement: auto,
     alt: "Smooth continuous curve of X of j omega times e to the j omega t plotted against omega, overlaid with a blue staircase approximation that samples the curve at spacing omega-zero. The discrete samples approach the continuous integral as omega-zero approaches zero.",
     caption: [
       The synthesis sum as a Riemann sum: rectangles of width $omega_0$ under
@@ -277,7 +280,7 @@ The process of $omega_0 arrow 0$ is depicted below. As $omega_0 arrow 0$, the su
     )),
     lq.place(0.4, -0.2, align: left)[$omega_0$],
     lq.place(0.4, 1.8, align: left)[$X(j k omega_0) e^(j k omega_0 t)$],
-  )]
+  ) <fig-riemann>]
 
 We define the Fourier transform pair as follows.
 #definition("Fourier Transform Pair")[
@@ -676,51 +679,52 @@ If the phase is not linear, components at different frequencies are delayed by d
     tau(omega) = "d" / ("d"omega) arctan(omega tau_0) = tau_0 / (1 + (omega tau_0)^2)
   $
   Near $omega = 0$ the phase is close to the line $-omega tau_0$, and low-frequency components are delayed by about $tau_0$. As $omega$ grows, the phase bends toward $-pi \/ 2$ and the group delay falls to zero (@fig-group-delay). For a narrowband pulse at $omega_0 = 2 \/ tau_0$, the envelope is delayed by $tau(omega_0) = tau_0 \/ 5$ and scaled by $|H(j omega_0)| = 1 \/ sqrt(5)$.
-
-  #altfig(
-    alt: "Two plots against omega tau sub zero from zero to five. Left: the phase of H, minus the arctangent of omega tau sub zero, starting at zero and bending down toward minus pi over two; a dashed straight line, minus omega tau sub zero, is tangent to it at the origin. Right: the group delay tau of omega divided by tau sub zero, equal to one over one plus omega squared tau sub zero squared, starting at one and decaying toward zero; a dashed horizontal line at one marks the constant delay of the tangent line.",
-    caption: [
-      Phase (left) and group delay (right) of $H(j omega) = 1 \/ (1 + j omega tau_0)$.
-      The dashed lines belong to the ideal delay $e^(-j omega tau_0)$, whose
-      phase is the tangent at the origin and whose group delay is constant.
-    ],
-    align(center)[
-      #let w = lq.linspace(0, 5, num: 201)
-      #grid(
-        columns: (1fr, 1fr),
-        column-gutter: 2em,
-        cdiagram(
-          title: $angle H(j omega)$,
-          xlabel: $omega tau_0$,
-          width: 6cm,
-          height: 4cm,
-          ylim: (-2, 0.3),
-          yaxis: (
-            ticks: ((0, $0$), (-calc.pi / 4, $-pi/4$), (-calc.pi / 2, $-pi/2$)),
-            subticks: none,
-          ),
-          lq.plot(w, w.map(w => -calc.atan(w).rad()), mark: none),
-          lq.plot(
-            w.filter(w => w <= 2),
-            w.filter(w => w <= 2).map(w => -w),
-            mark: none,
-            stroke: series-stroke(1),
-          ),
-          lq.place(1.45, -1.75, align: right, plabel(fill: c-blue)[$-omega tau_0$]),
-        ),
-        cdiagram(
-          title: $tau(omega) \/ tau_0$,
-          xlabel: $omega tau_0$,
-          width: 6cm,
-          height: 4cm,
-          ylim: (0, 1.25),
-          lq.plot(w, w.map(w => 1 / (1 + w * w)), mark: none),
-          lq.plot(w, w.map(w => 1), mark: none, stroke: series-stroke(1)),
-        ),
-      )
-    ],
-  ) <fig-group-delay>
 ]
+
+#altfig(
+  placement: auto,
+  alt: "Two plots against omega tau sub zero from zero to five. Left: the phase of H, minus the arctangent of omega tau sub zero, starting at zero and bending down toward minus pi over two; a dashed straight line, minus omega tau sub zero, is tangent to it at the origin. Right: the group delay tau of omega divided by tau sub zero, equal to one over one plus omega squared tau sub zero squared, starting at one and decaying toward zero; a dashed horizontal line at one marks the constant delay of the tangent line.",
+  caption: [
+    Phase (left) and group delay (right) of $H(j omega) = 1 \/ (1 + j omega tau_0)$.
+    The dashed lines belong to the ideal delay $e^(-j omega tau_0)$, whose
+    phase is the tangent at the origin and whose group delay is constant.
+  ],
+  align(center)[
+    #let w = lq.linspace(0, 5, num: 201)
+    #grid(
+      columns: (1fr, 1fr),
+      column-gutter: 2em,
+      cdiagram(
+        title: $angle H(j omega)$,
+        xlabel: $omega tau_0$,
+        width: 6cm,
+        height: 4cm,
+        ylim: (-2, 0.3),
+        yaxis: (
+          ticks: ((0, $0$), (-calc.pi / 4, $-pi/4$), (-calc.pi / 2, $-pi/2$)),
+          subticks: none,
+        ),
+        lq.plot(w, w.map(w => -calc.atan(w).rad()), mark: none),
+        lq.plot(
+          w.filter(w => w <= 2),
+          w.filter(w => w <= 2).map(w => -w),
+          mark: none,
+          stroke: series-stroke(1),
+        ),
+        lq.place(1.45, -1.75, align: right, plabel(fill: c-blue)[$-omega tau_0$]),
+      ),
+      cdiagram(
+        title: $tau(omega) \/ tau_0$,
+        xlabel: $omega tau_0$,
+        width: 6cm,
+        height: 4cm,
+        ylim: (0, 1.25),
+        lq.plot(w, w.map(w => 1 / (1 + w * w)), mark: none),
+        lq.plot(w, w.map(w => 1), mark: none, stroke: series-stroke(1)),
+      ),
+    )
+  ],
+) <fig-group-delay>
 
 The same ideas carry over to discrete time. A delay of $n_0$ samples has frequency response $e^(-j omega n_0)$ and group delay $n_0$. A finite impulse response that is symmetric about its midpoint, $h[n] = h[M - 1 - n]$, has phase $-omega (M - 1) \/ 2$ apart from jumps of $pi$ where the real amplitude changes sign. Its group delay is the constant $(M - 1) \/ 2$, which is why symmetric FIR filters, such as the moving average, are the standard choice when phase distortion must be avoided. We return to this in the discrete-time chapters.
 
@@ -875,7 +879,7 @@ The rectangular pulse, by contrast, has infinite RMS bandwidth: $|X(j omega)|^2$
     )]
 ]
 
-#note("Continuous-Time Fourier Transform Pairs", breakable: false)[
+#note("Continuous-Time Fourier Transform Pairs")[
   #align(center)[
     #table(
       columns: 3,

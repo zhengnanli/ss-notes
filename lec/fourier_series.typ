@@ -225,78 +225,86 @@ In general, a set of conditions developed by Dirichlet guarantees that $x(t)$ _e
     hat(x)_N (t) = sum_(k = -N)^N a_k e^(j k omega_0 t)
   $
 
-  #let T = 1
-  #let T1 = 0.3 * T
-  #let omega0 = 2 * calc.pi / T
-  #let a = k => ct-square-ak(k, period: T, half-width: T1)
 
-  #let square_series = N => {
-    let x = lq.linspace(-T / 2, T / 2, num: 501)
-    let sum = ()
+]
 
-    for i in range(x.len()) {
-      sum.push(0.0)
-    }
+// The Gibbs figure floats, so it sits outside the example box; its plotting
+// helpers live in this scoped block with it.
+#[
+#let x = lq.linspace(-6, 6, num: 1000)
+#let T = 1
+#let T1 = 0.3 * T
+#let omega0 = 2 * calc.pi / T
+#let a = k => ct-square-ak(k, period: T, half-width: T1)
 
-    for i in range(x.len()) {
-      sum.at(i) += a(0)
+#let square_series = N => {
+  let x = lq.linspace(-T / 2, T / 2, num: 501)
+  let sum = ()
 
-      for k in range(-N, N + 1) {
-        if k != 0 {
-          sum.at(i) += a(k) * calc.cos(k * omega0 * x.at(i))
-        }
+  for i in range(x.len()) {
+    sum.push(0.0)
+  }
+
+  for i in range(x.len()) {
+    sum.at(i) += a(0)
+
+    for k in range(-N, N + 1) {
+      if k != 0 {
+        sum.at(i) += a(k) * calc.cos(k * omega0 * x.at(i))
       }
     }
-    (x, sum)
   }
+  (x, sum)
+}
 
 
-  #let gibbs-panel = N => {
-    let (xx, sum) = square_series(N)
-    lq.diagram(
-      title: $hat(x)_N (t)$,
-      xlabel: $t$,
-      ylim: (-0.4, 1.4),
-      xlim: (-0.6, 0.6),
-      xaxis: (ticks: (-0.5, 0, 0.5), subticks: none),
-      height: 2cm,
-      width: 7cm,
-      lq.plot(xx, sum, mark: none),
-      lq.plot((T1, T1), (0, 1), mark: none, stroke: (
-        dash: "dashed",
-        paint: c-muted,
-      )),
-      lq.plot((-T1, -T1), (0, 1), mark: none, stroke: (
-        dash: "dashed",
-        paint: c-muted,
-      )),
-      lq.plot((-T1, T1), (1, 1), mark: none, stroke: (
-        dash: "dashed",
-        paint: c-muted,
-      )),
-      lq.place(0.5, 1.3, align: center, plabel[$N = #N$]),
-      lq.place(T1, -0.3, align: center, plabel[$T_1$]),
-      lq.place(-T1, -0.3, align: center, plabel[$-T_1$]),
-      lq.place(T / 2, -0.3, align: center, plabel[$T/2$]),
-      lq.place(-T / 2, -0.3, align: center, plabel[$-T/2$]),
-    )
-  }
+#let gibbs-panel = N => {
+  let (xx, sum) = square_series(N)
+  lq.diagram(
+    title: $hat(x)_N (t)$,
+    xlabel: $t$,
+    ylim: (-0.4, 1.4),
+    xlim: (-0.6, 0.6),
+    xaxis: (ticks: (-0.5, 0, 0.5), subticks: none),
+    height: 2cm,
+    width: 7cm,
+    lq.plot(xx, sum, mark: none),
+    lq.plot((T1, T1), (0, 1), mark: none, stroke: (
+      dash: "dashed",
+      paint: c-muted,
+    )),
+    lq.plot((-T1, -T1), (0, 1), mark: none, stroke: (
+      dash: "dashed",
+      paint: c-muted,
+    )),
+    lq.plot((-T1, T1), (1, 1), mark: none, stroke: (
+      dash: "dashed",
+      paint: c-muted,
+    )),
+    lq.place(0.5, 1.3, align: center, plabel[$N = #N$]),
+    lq.place(T1, -0.3, align: center, plabel[$T_1$]),
+    lq.place(-T1, -0.3, align: center, plabel[$-T_1$]),
+    lq.place(T / 2, -0.3, align: center, plabel[$T/2$]),
+    lq.place(-T / 2, -0.3, align: center, plabel[$-T/2$]),
+  )
+}
 
-  #altfig(
-    alt: "Six partial-sum approximations of the square wave for N equal to three, eight, eighteen, twenty-eight, fifty-five, and eighty. As N grows, the approximation tightens against the rectangular pulse, but a persistent overshoot near the discontinuities at plus and minus T sub one remains, illustrating the Gibbs phenomenon.",
-    caption: [
-      Partial sums $hat(x)_N (t)$ of the square wave for $N = 3, 8, 18, 28, 55,$
-      and $80$. The ripples crowd toward the two discontinuities as $N$ grows,
-      but their peak overshoot does not shrink: this is the Gibbs phenomenon.
-    ],
-    align(center)[
-      #grid(
-        columns: (1fr, 1fr),
-        column-gutter: 2em,
-        row-gutter: 0.5em,
-        ..(3, 8, 18, 28, 55, 80).map(gibbs-panel),
-      )],
-  ) <fig-gibbs>
+#altfig(
+  placement: auto,
+  alt: "Six partial-sum approximations of the square wave for N equal to three, eight, eighteen, twenty-eight, fifty-five, and eighty. As N grows, the approximation tightens against the rectangular pulse, but a persistent overshoot near the discontinuities at plus and minus T sub one remains, illustrating the Gibbs phenomenon.",
+  caption: [
+    Partial sums $hat(x)_N (t)$ of the square wave for $N = 3, 8, 18, 28, 55,$
+    and $80$. The ripples crowd toward the two discontinuities as $N$ grows,
+    but their peak overshoot does not shrink: this is the Gibbs phenomenon.
+  ],
+  align(center)[
+    #grid(
+      columns: (1fr, 1fr),
+      column-gutter: 2em,
+      row-gutter: 0.5em,
+      ..(3, 8, 18, 28, 55, 80).map(gibbs-panel),
+    )],
+) <fig-gibbs>
 ]
 
 == Properties of Continuous-Time Fourier Series
@@ -687,6 +695,7 @@ $
 )
 
 #altfig(
+  placement: auto,
   alt: "Four stem plots of the discrete-time partial-sum approximation x hat sub M of n for M equal to one, two, three, and four, with N equal to nine. As M grows, the stems converge toward the square-wave samples; once M equals four (which is N minus one over two), the approximation matches the original square wave exactly.",
   caption: [
     Partial sums $hat(x)_M [n]$ for $M = 1, 2, 3, 4$ with $N = 9$. Unlike the
