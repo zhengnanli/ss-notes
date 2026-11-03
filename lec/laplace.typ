@@ -220,6 +220,169 @@ $
   $
 ]
 
+== Properties of the Laplace Transform <sec-laplace-properties>
+
+The properties of the Laplace transform mirror those of the continuous-time Fourier transform. The difference is that each one also says what happens to the ROC. Throughout, let
+$
+  x(t) #lpair X(s), quad s in R, quad quad x_1 (t) #lpair X_1 (s), quad s in R_1, quad quad x_2 (t) #lpair X_2 (s), quad s in R_2
+$
+where $R$, $R_1$, and $R_2$ denote the regions of convergence. We give short proofs of the properties used most often.
+
+- Linearity:
+$
+  a x_1 (t) + b x_2 (t) #lpair a X_1 (s) + b X_2 (s), quad "ROC contains" R_1 inter R_2
+$
+The ROC can be larger than $R_1 inter R_2$ when a pole of one term is cancelled by a zero of the other. For example, $x_1 (t) = e^(-t) u(t)$ and $x_2 (t) = e^(-t) u(t) - e^(-2 t) u(t)$ both have ROC $Re{s} > -1$, but $x_1 (t) - x_2 (t) = e^(-2 t) u(t)$ has ROC $Re{s} > -2$.
+#block(sticky: true)[- Time Shifting:]
+$
+  x(t - t_0) #lpair e^(-s t_0) X(s), quad "ROC" = R
+$
+_Proof._ Substitute $tau = t - t_0$:
+$
+  integral_RR x(t - t_0) e^(-s t) "d"t = integral_RR x(tau) e^(-s (tau + t_0)) "d"tau = e^(-s t_0) X(s)
+$
+The factor $e^(-s t_0)$ is finite for every $s$, so it does not change where the integral converges. #qed
+#block(sticky: true)[- Shifting in the $s$-Domain:]
+$
+  e^(s_0 t) x(t) #lpair X(s - s_0), quad "ROC" = R + Re{s_0}
+$
+_Proof._ $integral_RR e^(s_0 t) x(t) e^(-s t) "d"t = integral_RR x(t) e^(-(s - s_0) t) "d"t = X(s - s_0)$, which converges when $s - s_0 in R$. The ROC therefore moves sideways by $Re{s_0}$, and every pole and zero moves by $s_0$. #qed
+- Time Scaling:
+$
+  x(a t) #lpair 1 / (|a|) X(s / a), quad "ROC" = a R
+$
+For $a < 0$, the ROC is reflected about the $j omega$-axis as well as scaled. In particular, time reversal gives $x(-t) #lpair X(-s)$ with ROC $-R$.
+- Conjugation:
+$
+  x^*(t) #lpair X^*(s^*), quad "ROC" = R
+$
+If $x(t)$ is real, $X(s) = X^*(s^*)$. The poles and zeros of $X(s)$ then come in complex-conjugate pairs, as in @fig-roc1.
+#block(sticky: true)[- Convolution:]
+$
+  x_1 (t) star x_2 (t) #lpair X_1 (s) X_2 (s), quad "ROC contains" R_1 inter R_2
+$
+_Proof._ Exchange the order of integration and use the time-shifting property:
+$
+  integral_RR [integral_RR x_1 (tau) x_2 (t - tau) "d"tau] e^(-s t) "d"t = integral_RR x_1 (tau) [integral_RR x_2 (t - tau) e^(-s t) "d"t] "d"tau = integral_RR x_1 (tau) e^(-s tau) X_2 (s) "d"tau = X_1 (s) X_2 (s)
+$
+#qed
+
+As with linearity, pole-zero cancellation can enlarge the ROC. This property is the reason the system function $H(s) = Y(s) \/ X(s)$ describes an LTI system completely.
+#block(sticky: true)[- Differentiation in the Time Domain:]
+$
+  ("d"x(t)) / ("d"t) #lpair s X(s), quad "ROC contains" R
+$
+_Proof._ Differentiate the inverse transform under the integral sign:
+$
+  ("d"x(t)) / ("d"t) = 1 / (2 pi j) integral_(sigma - j infinity)^(sigma + j infinity) s X(s) e^(s t) "d"s
+$
+which is the inverse transform of $s X(s)$. The ROC can grow if $X(s)$ has a pole at $s = 0$ that the factor $s$ cancels. #qed
+- Differentiation in the $s$-Domain:
+$
+  -t x(t) #lpair ("d"X(s)) / ("d"s), quad "ROC" = R
+$
+_Proof._ Differentiate $X(s) = integral_RR x(t) e^(-s t) "d"t$ with respect to $s$ under the integral sign. #qed
+
+For example, applying this to $e^(-a t) u(t) #lpair 1 \/ (s + a)$ gives
+$
+  t e^(-a t) u(t) #lpair 1 / (s + a)^2, quad Re{s} > -a
+$
+- Integration in the Time Domain:
+$
+  integral_(-infinity)^t x(tau) "d"tau #lpair 1 / s X(s), quad "ROC contains" R inter {Re{s} > 0}
+$
+_Proof._ The running integral is $x(t) star u(t)$, and $u(t) #lpair 1 \/ s$ with ROC $Re{s} > 0$. The result follows from the convolution property. #qed
+#block(sticky: true)[- The Initial- and Final-Value Theorems:]
+If $x(t) = 0$ for $t < 0$ and $x(t)$ contains no impulses or higher-order singularities at $t = 0$, then
+$
+  x(0^+) = lim_(s -> infinity) s X(s)
+$
+If, in addition, $s X(s)$ has all of its poles in the left half-plane, then $x(t)$ settles to a constant and
+$
+  lim_(t -> infinity) x(t) = lim_(s -> 0) s X(s)
+$
+For example, the step response of $H(s) = 1 \/ (s + 1)$ is $Y(s) = 1 \/ (s (s + 1))$. The theorems give $y(0^+) = lim_(s -> infinity) 1 \/ (s + 1) = 0$ and $y(infinity) = lim_(s -> 0) 1 \/ (s + 1) = 1$, in agreement with $y(t) = (1 - e^(-t)) u(t)$. The condition matters: for $X(s) = 1 \/ (s - 1)$, the formula gives $lim_(s -> 0) s \/ (s - 1) = 0$, yet $x(t) = e^t u(t)$ grows without bound.
+
+== Tables of Laplace Transform Properties and Basic Laplace Transform Pairs
+
+#note("Laplace Transform Properties")[
+  #table(
+    columns: 4,
+    align: center + horizon,
+    stroke: 0.5pt,
+    table.header([*Property*], [*Signal*], [*Laplace Transform*], [*ROC*]),
+
+    [], [$x(t)$ \ $x_1 (t)$ \ $x_2 (t)$], [$X(s)$ \ $X_1 (s)$ \ $X_2 (s)$], [$R$ \ $R_1$ \ $R_2$],
+
+    [Linearity], [$a x_1 (t) + b x_2 (t)$], [$a X_1 (s) + b X_2 (s)$], [At least $R_1 inter R_2$],
+
+    [Time Shifting], [$x(t - t_0)$], [$e^(-s t_0) X(s)$], [$R$],
+
+    [Shifting in the $s$-Domain], [$e^(s_0 t) x(t)$], [$X(s - s_0)$], [$R + Re{s_0}$],
+
+    [Time Scaling], [$x(a t)$], [$1 / (|a|) X(s / a)$], [$a R$],
+
+    [Time Reversal], [$x(-t)$], [$X(-s)$], [$-R$],
+
+    [Conjugation], [$x^*(t)$], [$X^*(s^*)$], [$R$],
+
+    [Convolution], [$x_1 (t) star x_2 (t)$], [$X_1 (s) X_2 (s)$], [At least $R_1 inter R_2$],
+
+    [Differentiation in Time], [$("d"x(t)) / ("d"t)$], [$s X(s)$], [At least $R$],
+
+    [Differentiation in $s$], [$-t x(t)$], [$("d"X(s)) / ("d"s)$], [$R$],
+
+    [Integration in Time],
+    [$integral_(-infinity)^t x(tau) "d"tau$],
+    [$1 / s X(s)$],
+    [At least $R inter {Re{s} > 0}$],
+  )
+
+  *Initial- and Final-Value Theorems.* If $x(t) = 0$ for $t < 0$ and $x(t)$ contains no impulses or higher-order singularities at $t = 0$, then $x(0^+) = lim_(s -> infinity) s X(s)$. If, in addition, all poles of $s X(s)$ lie in the left half-plane, then $lim_(t -> infinity) x(t) = lim_(s -> 0) s X(s)$.
+]
+
+#note("Laplace Transform Pairs")[
+  #table(
+    columns: 3,
+    align: center + horizon,
+    stroke: 0.5pt,
+    table.header([*Signal*], [*Laplace Transform*], [*ROC*]),
+
+    [$delta(t)$], [$1$], [All $s$],
+
+    [$u(t)$], [$1 / s$], [$Re{s} > 0$],
+
+    [$-u(-t)$], [$1 / s$], [$Re{s} < 0$],
+
+    [$t^(n-1) / ((n - 1)!) u(t)$], [$1 / s^n$], [$Re{s} > 0$],
+
+    [$-t^(n-1) / ((n - 1)!) u(-t)$], [$1 / s^n$], [$Re{s} < 0$],
+
+    [$e^(-a t) u(t)$], [$1 / (s + a)$], [$Re{s} > -Re{a}$],
+
+    [$-e^(-a t) u(-t)$], [$1 / (s + a)$], [$Re{s} < -Re{a}$],
+
+    [$t^(n-1) / ((n - 1)!) e^(-a t) u(t)$], [$1 / (s + a)^n$], [$Re{s} > -Re{a}$],
+
+    [$-t^(n-1) / ((n - 1)!) e^(-a t) u(-t)$], [$1 / (s + a)^n$], [$Re{s} < -Re{a}$],
+
+    [$delta(t - T)$], [$e^(-s T)$], [All $s$],
+
+    [$cos(omega_0 t) u(t)$], [$s / (s^2 + omega_0^2)$], [$Re{s} > 0$],
+
+    [$sin(omega_0 t) u(t)$], [$omega_0 / (s^2 + omega_0^2)$], [$Re{s} > 0$],
+
+    [$e^(-a t) cos(omega_0 t) u(t)$], [$(s + a) / ((s + a)^2 + omega_0^2)$], [$Re{s} > -a$],
+
+    [$e^(-a t) sin(omega_0 t) u(t)$], [$omega_0 / ((s + a)^2 + omega_0^2)$], [$Re{s} > -a$],
+
+    [$u_n (t) = ("d"^n delta(t)) / ("d"t^n)$], [$s^n$], [All $s$],
+
+    [$u_(-n) (t) = underbrace(u(t) star dots.c star u(t), n "times")$], [$1 / s^n$], [$Re{s} > 0$],
+  )
+  In the two damped-sinusoid rows, $a$ is real.
+]
+
 == Analysis and Characterization of LTI Systems using the Laplace Transform
 
 === Causality

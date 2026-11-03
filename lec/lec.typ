@@ -43,4 +43,5 @@
 #include "dt_fourier_transform.typ"
 #include "sampling.typ"
 #include "laplace.typ"
+#include "z_transform.typ"
 #include "math.typ"

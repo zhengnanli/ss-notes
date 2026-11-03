@@ -466,7 +466,7 @@ The unit step response $s[n]$ or $s(t)$ is related to the impulse response by:
     y[3] & = x[3] - x[2] - y[2] = 0 - 0 - 2 = -2 \
     y[4] & = dots.c
   $
-  The impulse response is $h[n] = delta[n] + 2 (-1)^n u[n-1]$. The sum $sum_k |h[k]| = 1 + sum_(n = 1)^infinity |2 (-1)^n| = 1 + sum_(n=1)^infinity 2$ diverges, so the system is *not* BIBO stable. // Later in this class, we will learn more about _z-transform_, and from there, the (BIBO) stability of such a system can be determined by the positions of their poles. _If all poles of the z-transform of the system are strictly within the unit circle, the said system is stable._
+  The impulse response is $h[n] = delta[n] + 2 (-1)^n u[n-1]$. The sum $sum_k |h[k]| = 1 + sum_(n = 1)^infinity |2 (-1)^n| = 1 + sum_(n=1)^infinity 2$ diverges, so the system is *not* BIBO stable. Its z-transform, $H(z) = (1 - z^(-1)) \/ (1 + z^(-1))$, has a pole at $z = -1$, on the unit circle. In the topic on the z-transform (@sec-z-lti), we will see that this alone rules out stability: _a causal system is stable if and only if all poles of its system function lie strictly inside the unit circle._
   - To examine the linearity and time-invariance, we can use mathematical induction. For a signal $x[n]$ that starts at time zero,
   $
     y[0] & = x[0] \
@@ -484,6 +484,84 @@ The unit step response $s[n]$ or $s(t)$ is related to the impulse response by:
   $
   or in other words, $y_1[n] = y[n - m], forall n >= m >= 0$. Under initial rest, each output sample is a fixed linear combination of present and past inputs, and delaying the input delays the output; the system is therefore LTI.
 ]
+
+=== (optional) Correlation
+
+Convolution asks how a system responds to a signal. A closely related operation, _correlation_, asks how much two signals resemble each other when one is slid past the other. Radar, sonar, and GPS receivers all use it to measure delay, and it is the starting point of the matched filter in the random-processes topic.
+
+#definition("Cross-Correlation and Autocorrelation")[
+  For two finite-energy signals, the _cross-correlation_ at lag $ell$ (or $tau$) is
+  $
+    r_(x y)[ell] = sum_(n = -infinity)^infinity x[n] y^*[n - ell], quad quad r_(x y)(tau) = integral_RR x(t) y^*(t - tau) "d"t
+  $
+  The _autocorrelation_ is the cross-correlation of a signal with itself, $r_x [ell] = r_(x x)[ell]$ and $r_x (tau) = r_(x x)(tau)$. For real signals the conjugates have no effect.
+]
+
+Correlation is a convolution in disguise. Writing out the convolution of $x[n]$ with $y^*[-n]$ gives
+$
+  x[ell] star y^*[-ell] = sum_(k = -infinity)^infinity x[k] y^*[-(ell - k)] = sum_(k = -infinity)^infinity x[k] y^*[k - ell] = r_(x y)[ell]
+$
+and likewise $r_(x y)(tau) = x(tau) star y^*(-tau)$. Correlating with $y$ is therefore the same as passing $x$ through an LTI system whose impulse response is $y$ reversed in time (and conjugated). In terms of the graphical convolution method, correlation slides $y$ past $x$ without first reversing it.
+
+The autocorrelation has three properties that follow directly from the definition. We state them in discrete time; the continuous-time versions are identical with sums replaced by integrals.
+1. At zero lag it is the energy: $r_x [0] = sum_n |x[n]|^2 = E_x$.
+2. It is conjugate symmetric: $r_x [-ell] = r_x^* [ell]$. For a real signal it is even.
+3. It is largest at zero lag: $|r_x [ell]| <= r_x [0]$ for every $ell$. This is the Cauchy--Schwarz inequality, $|sum_n x[n] x^*[n - ell]|^2 <= sum_n |x[n]|^2 sum_n |x[n - ell]|^2 = E_x^2$.
+
+The third property is what makes correlation useful for measuring delay: a signal resembles itself best when it is lined up with itself.
+
+#example("Autocorrelation and Delay Estimation")[
+  Let $x[n] = delta[n] + 2 delta[n - 1] + 3 delta[n - 2]$. Sliding $x$ past itself and summing the overlapping products,
+  $
+    r_x [0] = 1^2 + 2^2 + 3^2 = 14, quad r_x [plus.minus 1] = 1 dot 2 + 2 dot 3 = 8, quad r_x [plus.minus 2] = 1 dot 3 = 3
+  $
+  and $r_x [ell] = 0$ for $|ell| > 2$. As expected, $r_x$ is even with its peak $r_x [0] = E_x = 14$.
+
+  Now suppose a receiver observes an echo $y[n] = x[n - 2]$ and does not know the delay. The cross-correlation of the echo with the transmitted signal is
+  $
+    r_(y x)[ell] = sum_n x[n - 2] x[n - ell] = r_x [ell - 2]
+  $
+  which is $r_x$ shifted to the right by two. Its peak sits at $ell = 2$, the unknown delay (@fig-xcorr).
+
+  #let lags = range(-3, 6)
+  #let rx(l) = if l == 0 { 14 } else if calc.abs(l) == 1 { 8 } else if calc.abs(l) == 2 { 3 } else { 0 }
+  #altfig(
+    alt: "Two stem plots against the lag ell from minus three to five. Left: the autocorrelation r sub x of ell, with values 3, 8, 14, 8, 3 at lags minus two through two and a peak of 14 at lag zero. Right: the cross-correlation r sub y x of ell, the same shape shifted right by two, with its peak of 14 at lag two.",
+    caption: [
+      The autocorrelation $r_x [ell]$ peaks at zero lag (left). The
+      cross-correlation of the echo $y[n] = x[n - 2]$ with $x[n]$ is the same
+      shape shifted to $ell = 2$, so the location of its peak reveals the delay (right).
+    ],
+    align(center)[
+      #grid(
+        columns: 2,
+        column-gutter: 2em,
+        lq.diagram(
+          title: $r_x [ell]$,
+          xlabel: $ell$,
+          width: 5cm,
+          height: 3cm,
+          ylim: (0, 16),
+          lq.stem(lags, lags.map(rx)),
+        ),
+        lq.diagram(
+          title: $r_(y x)[ell]$,
+          xlabel: $ell$,
+          width: 5cm,
+          height: 3cm,
+          ylim: (0, 16),
+          lq.stem(lags, lags.map(l => rx(l - 2)), color: c-blue),
+        ),
+      )
+    ],
+  ) <fig-xcorr>
+]
+
+For a periodic signal the sum or integral over all time does not converge, so we correlate over one period instead. For a real signal $f(t)$ with period $1$,
+$
+  R(tau) = integral_0^1 f(t) f(t + tau) "d"t
+$
+This $R(tau)$ is itself periodic, and it is again largest at $tau = 0$, where it equals the average power of $f(t)$. In the Fourier-series topic, a homework problem asks you to show that the Fourier series coefficients of $R(tau)$ are the squared magnitudes $|hat(f)(n)|^2$ of those of $f(t)$, so the autocorrelation keeps the magnitude of every harmonic and discards its phase.
 
 
 

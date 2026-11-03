@@ -818,6 +818,11 @@
 #let fspair = $limits(arrow.l.r)^(cal("F S"))$
 #let ftpair = $limits(arrow.l.r)^(cal("F"))$
 #let lpair = $limits(arrow.l.r)^(cal("L"))$
+#let zpair = $limits(arrow.l.r)^(cal("Z"))$
+
+// End-of-proof mark, pushed to the right margin of the proof's last line.
+// After a display equation that ends a proof, it goes on a line of its own.
+#let qed = [#h(1fr)$square$]
 
 // Numerical helpers ===================================================
 // These exist so that the figures can be computed from the same formulas that

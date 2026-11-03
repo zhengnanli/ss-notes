@@ -403,7 +403,7 @@ Similar to the Fourier series, there is a set of conditions which are sufficient
         )
       ],
     )],
-  )
+  ) <fig-rect-pulse>
   Consider a signal $x(t)$ whose Fourier transform is
   $
     X(j omega) = cases(1\, quad |omega| < W, 0\, quad |omega| > W)
@@ -435,6 +435,7 @@ _Proof._ Substituting $tau = t - t_0$ in the analysis equation,
 $
   integral_RR x(t - t_0) e^(-j omega t) "d"t = integral_RR x(tau) e^(-j omega (tau + t_0)) "d"tau = e^(-j omega t_0) integral_RR x(tau) e^(-j omega tau) "d"tau = e^(-j omega t_0) X(j omega)
 $
+#qed
 - Frequency Shifting:
 $
   e^(j omega_0 t) x(t) #ftpair X(j(omega - omega_0))
@@ -443,6 +444,8 @@ _Proof._ The exponential combines with the kernel of the analysis equation,
 $
   integral_RR e^(j omega_0 t) x(t) e^(-j omega t) "d"t = integral_RR x(t) e^(-j (omega - omega_0) t) "d"t = X(j(omega - omega_0))
 $
+#qed
+
 Shifting in time multiplies the transform by a linear phase, and multiplying by a complex exponential in time shifts the transform; the two properties are duals.
 - Conjugation and Conjugate Symmetry
 $
@@ -455,7 +458,7 @@ _Proof._ Since $(e^(j omega t))^* = e^(-j omega t)$, the conjugate can be pulled
 $
   integral_RR x^*(t) e^(-j omega t) "d"t = (integral_RR x(t) e^(j omega t) "d"t)^* = (integral_RR x(t) e^(-j (-omega) t) "d"t)^* = X^*(-j omega)
 $
-If $x(t)$ is real, then $x^*(t) = x(t)$, so the two transforms agree: $X(j omega) = X^*(-j omega)$. Replacing $omega$ by $-omega$ gives the form above. In polar form, $|X(j omega)|$ is even and $angle X(j omega)$ is odd.
+If $x(t)$ is real, then $x^*(t) = x(t)$, so the two transforms agree: $X(j omega) = X^*(-j omega)$. Replacing $omega$ by $-omega$ gives the form above. In polar form, $|X(j omega)|$ is even and $angle X(j omega)$ is odd. #qed
 - Differentiation and Integration
 $
   ("d"x(t))/("d"t) #ftpair j omega X(j omega)
@@ -481,7 +484,7 @@ and
 $
   Y(j omega) = X(j omega) [1/(j omega) + pi delta(omega)] = 1/(j omega) X(j omega) + pi X(0) delta(omega)
 $
-since $X(j omega) delta(omega) = X(0) delta(omega)$. The impulse carries the average (DC) value of the running integral, which differentiation destroys and integration cannot recover from $X(j omega) \/ (j omega)$ alone.
+since $X(j omega) delta(omega) = X(0) delta(omega)$. The impulse carries the average (DC) value of the running integral, which differentiation destroys and integration cannot recover from $X(j omega) \/ (j omega)$ alone. #qed
 
 Unlike the DTFT, the CTFT has no periodicity property: $e^(-j omega t)$ is not periodic in $omega$ for every $t$, so $X(j omega)$ is in general not periodic.
 - Time and Frequency Scaling
@@ -623,6 +626,201 @@ Note that $omega$ is the variable of the result, and $theta$ is integrated out; 
 ]
 The factor $1\/(2 pi)$ comes from the $1\/(2 pi)$ in the synthesis equation; it would disappear if we used frequency $f$ in hertz, where $x(t) y(t) #ftpair X(f) star Y(f)$.
 
+== (optional) Linear Phase and Group Delay <sec-group-delay>
+
+The time-shifting property says that delaying a signal by $t_0$ multiplies its transform by $e^(-j omega t_0)$. An ideal delay is therefore the LTI system
+$
+  H(j omega) = e^(-j omega t_0), quad |H(j omega)| = 1, quad angle H(j omega) = -omega t_0
+$
+Its phase is a _linear_ function of frequency, with slope $-t_0$. Every frequency component is delayed by the same $t_0$, so the output has exactly the shape of the input.
+
+A general system has a phase $angle H(j omega)$ that is not a straight line. To measure the delay it imposes near a frequency $omega$, we use the local slope of the phase.
+
+#definition("Group Delay")[
+  The _group delay_ of an LTI system with frequency response $H(j omega)$ is
+  $
+    tau(omega) = - "d" / ("d"omega) angle H(j omega)
+  $
+  where the phase is _unwrapped_, that is, taken as a continuous function of $omega$ without the $2 pi$ jumps that a principal value would introduce. For the ideal delay, $tau(omega) = t_0$ at every frequency.
+]
+
+The name comes from what happens to a narrowband pulse, a slowly varying envelope $s(t)$ that modulates a carrier at $omega_0$:
+$
+  x(t) = s(t) cos(omega_0 t) = Re{s(t) e^(j omega_0 t)}
+$
+Suppose that $S(j omega)$ is negligible outside a small band $|omega| < W$, with $W << omega_0$. By the frequency-shifting property, the complex signal $s(t) e^(j omega_0 t)$ has transform $S(j(omega - omega_0))$, which is concentrated near $omega_0$. Over that narrow band we may approximate the magnitude by a constant and the phase by its tangent line. Write $phi(omega) = angle H(j omega)$, so that
+$
+  H(j omega) approx |H(j omega_0)| e^(j [phi(omega_0) - tau(omega_0) (omega - omega_0)]), quad |omega - omega_0| < W
+$
+The output for the complex input is then
+$
+  |H(j omega_0)| e^(j phi(omega_0)) e^(-j tau(omega_0) (omega - omega_0)) S(j(omega - omega_0)) #ftpair |H(j omega_0)| e^(j phi(omega_0)) s(t - tau(omega_0)) e^(j omega_0 t)
+$
+where the time-shifting property (with delay $tau(omega_0)$) acts on the envelope and the frequency-shifting property restores the carrier. For a real $h(t)$, the response to $x(t)$ is the real part of this:
+$
+  y(t) approx |H(j omega_0)| thin s(t - tau(omega_0)) cos(omega_0 t + phi(omega_0))
+$
+The envelope arrives late by the group delay $tau(omega_0)$, the slope of the phase. The carrier is shifted by the phase itself, $phi(omega_0)$, which in general is a different amount. The two agree only when the phase is linear and passes through the origin.
+
+If the phase is not linear, components at different frequencies are delayed by different amounts, and a broadband input comes out with a different shape even if $|H(j omega)| = 1$ at every frequency. This is _phase distortion_. Where the shape of a waveform matters, as in data transmission or audio, a filter is therefore designed to have nearly constant group delay across its passband, not merely the right magnitude response.
+
+#example("Group Delay of a First-Order System")[
+  #block(sticky: true)[
+    Consider the first-order lowpass system
+  ]
+  $
+    H(j omega) = 1 / (1 + j omega tau_0), quad angle H(j omega) = - arctan(omega tau_0)
+  $
+  Differentiating the phase,
+  $
+    tau(omega) = "d" / ("d"omega) arctan(omega tau_0) = tau_0 / (1 + (omega tau_0)^2)
+  $
+  Near $omega = 0$ the phase is close to the line $-omega tau_0$, and low-frequency components are delayed by about $tau_0$. As $omega$ grows, the phase bends toward $-pi \/ 2$ and the group delay falls to zero (@fig-group-delay). For a narrowband pulse at $omega_0 = 2 \/ tau_0$, the envelope is delayed by $tau(omega_0) = tau_0 \/ 5$ and scaled by $|H(j omega_0)| = 1 \/ sqrt(5)$.
+
+  #altfig(
+    alt: "Two plots against omega tau sub zero from zero to five. Left: the phase of H, minus the arctangent of omega tau sub zero, starting at zero and bending down toward minus pi over two; a dashed straight line, minus omega tau sub zero, is tangent to it at the origin. Right: the group delay tau of omega divided by tau sub zero, equal to one over one plus omega squared tau sub zero squared, starting at one and decaying toward zero; a dashed horizontal line at one marks the constant delay of the tangent line.",
+    caption: [
+      Phase (left) and group delay (right) of $H(j omega) = 1 \/ (1 + j omega tau_0)$.
+      The dashed lines belong to the ideal delay $e^(-j omega tau_0)$, whose
+      phase is the tangent at the origin and whose group delay is constant.
+    ],
+    align(center)[
+      #let w = lq.linspace(0, 5, num: 201)
+      #grid(
+        columns: (1fr, 1fr),
+        column-gutter: 2em,
+        cdiagram(
+          title: $angle H(j omega)$,
+          xlabel: $omega tau_0$,
+          width: 6cm,
+          height: 4cm,
+          ylim: (-2, 0.3),
+          yaxis: (
+            ticks: ((0, $0$), (-calc.pi / 4, $-pi/4$), (-calc.pi / 2, $-pi/2$)),
+            subticks: none,
+          ),
+          lq.plot(w, w.map(w => -calc.atan(w).rad()), mark: none),
+          lq.plot(
+            w.filter(w => w <= 2),
+            w.filter(w => w <= 2).map(w => -w),
+            mark: none,
+            stroke: series-stroke(1),
+          ),
+          lq.place(1.45, -1.75, align: right, plabel(fill: c-blue)[$-omega tau_0$]),
+        ),
+        cdiagram(
+          title: $tau(omega) \/ tau_0$,
+          xlabel: $omega tau_0$,
+          width: 6cm,
+          height: 4cm,
+          ylim: (0, 1.25),
+          lq.plot(w, w.map(w => 1 / (1 + w * w)), mark: none),
+          lq.plot(w, w.map(w => 1), mark: none, stroke: series-stroke(1)),
+        ),
+      )
+    ],
+  ) <fig-group-delay>
+]
+
+The same ideas carry over to discrete time. A delay of $n_0$ samples has frequency response $e^(-j omega n_0)$ and group delay $n_0$. A finite impulse response that is symmetric about its midpoint, $h[n] = h[M - 1 - n]$, has phase $-omega (M - 1) \/ 2$ apart from jumps of $pi$ where the real amplitude changes sign. Its group delay is the constant $(M - 1) \/ 2$, which is why symmetric FIR filters, such as the moving average, are the standard choice when phase distortion must be avoided. We return to this in the discrete-time chapters.
+
+== (optional) The Time-Bandwidth Relation <sec-time-bandwidth>
+
+The rectangular pulse of @fig-rect-pulse showed that narrowing a pulse widens the main lobe of its transform. The time-scaling property makes this exact for any signal:
+$
+  x(a t) #ftpair 1 / (|a|) X((j omega) / a)
+$
+Compressing a signal in time by a factor $a > 1$ stretches its transform in frequency by the same factor. A signal cannot be made both short in time and narrow in frequency by rescaling it. The question this section answers is whether a cleverer choice of _shape_ can do better.
+
+To answer it, we need a measure of width that applies to any signal, not just to pulses with a clear first null. Let $x(t)$ have finite energy $E = integral_RR |x(t)|^2 "d"t$, and assume for simplicity that it is centered at $t = 0$ and that its spectrum is centered at $omega = 0$ (otherwise, measure from the centers). Treating $|x(t)|^2 \/ E$ and $|X(j omega)|^2 \/ (2 pi E)$ as distributions of energy over time and over frequency, which by Parseval's relation both integrate to one, define the _RMS duration_ and _RMS bandwidth_
+$
+  Delta_t^2 = 1 / E integral_RR t^2 |x(t)|^2 "d"t, quad Delta_omega^2 = 1 / (2 pi E) integral_RR omega^2 |X(j omega)|^2 "d"omega
+$
+
+#theorem("Time-Bandwidth Relation")[
+  For any finite-energy signal $x(t)$ for which these quantities exist,
+  $
+    Delta_t Delta_omega >= 1 / 2
+  $
+  with equality if and only if $x(t)$ is a Gaussian pulse, $x(t) = A e^(-t^2 \/ (2 sigma^2))$.
+]
+
+_Proof (for real $x(t)$)._ By the differentiation property, $x'(t) #ftpair j omega X(j omega)$, so Parseval's relation gives
+$
+  integral_RR omega^2 |X(j omega)|^2 "d"omega = 2 pi integral_RR |x'(t)|^2 "d"t, quad "that is," quad Delta_omega^2 = 1 / E integral_RR |x'(t)|^2 "d"t
+$
+Next, since $x(t) x'(t) = 1/2 "d" / ("d"t) x^2 (t)$, integration by parts (with $t x^2 (t) -> 0$ as $|t| -> infinity$) gives
+$
+  integral_RR t x(t) x'(t) "d"t = [1/2 t x^2 (t)]_(-infinity)^infinity - 1/2 integral_RR x^2 (t) "d"t = -E / 2
+$
+The Cauchy-Schwarz inequality, $|integral_RR f g "d"t|^2 <= integral_RR f^2 "d"t integral_RR g^2 "d"t$, applied with $f = t x(t)$ and $g = x'(t)$, then yields
+$
+  E^2 / 4 <= integral_RR t^2 x^2 (t) "d"t integral_RR x'^2 (t) "d"t = (E Delta_t^2) (E Delta_omega^2)
+$
+which is $Delta_t Delta_omega >= 1 \/ 2$. Equality in Cauchy-Schwarz requires $x'(t) = -c thin t x(t)$ for a constant $c > 0$, whose solutions are exactly the Gaussians $A e^(-c t^2 \/ 2)$. #qed
+
+#example("The Gaussian Pulse")[
+  #block(sticky: true)[
+    The Fourier transform of a Gaussian pulse is again a Gaussian:
+  ]
+  $
+    e^(-t^2 \/ (2 sigma^2)) #ftpair sigma sqrt(2 pi) thin e^(-sigma^2 omega^2 \/ 2)
+  $
+  A Gaussian of width $sigma$ in time is a Gaussian of width $1 \/ sigma$ in frequency (@fig-gaussians). Here $|x(t)|^2 = e^(-t^2 \/ sigma^2)$ is a Gaussian with variance $sigma^2 \/ 2$, so $Delta_t = sigma \/ sqrt(2)$. Likewise $|X(j omega)|^2$ has variance $1 \/ (2 sigma^2)$, so $Delta_omega = 1 \/ (sqrt(2) sigma)$. The product is
+  $
+    Delta_t Delta_omega = sigma / sqrt(2) dot.c 1 / (sqrt(2) sigma) = 1 / 2
+  $
+  which meets the bound with equality for every $sigma$.
+
+  #altfig(
+    alt: "Two plots. Left: three Gaussian pulses e to the minus t squared over two sigma squared, all of height one, for sigma equal to one half, one, and two; the pulse with sigma equal to two is the widest. Right: their Fourier transforms, sigma root two pi times e to the minus sigma squared omega squared over two, against omega; the transform for sigma equal to two is the tallest and narrowest, and the one for sigma equal to one half is the lowest and widest.",
+    caption: [
+      Gaussian pulses of three widths (left) and their transforms (right),
+      drawn in matching styles. The widest pulse has the narrowest spectrum;
+      the product of the two RMS widths is $1 \/ 2$ for all three.
+    ],
+    align(center)[
+      #let t = lq.linspace(-5, 5, num: 301)
+      #let w = lq.linspace(-6, 6, num: 301)
+      #let sigmas = (0.5, 1.0, 2.0)
+      #grid(
+        columns: (1fr, 1fr),
+        column-gutter: 2em,
+        cdiagram(
+          title: $x(t)$,
+          xlabel: $t$,
+          width: 6cm,
+          height: 4cm,
+          ylim: (0, 1.6),
+          ..sigmas.enumerate().map(((i, s)) => lq.plot(
+            t,
+            t.map(t => calc.exp(-t * t / (2 * s * s))),
+            mark: none,
+            stroke: series-stroke(i),
+          )),
+        ),
+        cdiagram(
+          title: $X(j omega)$,
+          xlabel: $omega$,
+          width: 6cm,
+          height: 4cm,
+          ylim: (0, 5.5),
+          legend: (position: right + top),
+          ..sigmas.enumerate().map(((i, s)) => lq.plot(
+            w,
+            w.map(w => s * calc.sqrt(2 * calc.pi) * calc.exp(-s * s * w * w / 2)),
+            mark: none,
+            stroke: series-stroke(i),
+            label: $sigma = #s$,
+          )),
+        ),
+      )
+    ],
+  ) <fig-gaussians>
+]
+
+The rectangular pulse, by contrast, has infinite RMS bandwidth: $|X(j omega)|^2$ decays only like $1 \/ omega^2$, so $omega^2 |X(j omega)|^2$ does not decay at all. Its jumps put impulses into $x'(t)$. This is why the main-lobe width, not $Delta_omega$, was the natural measure of its bandwidth in @fig-rect-pulse. Sharp edges in time always cost bandwidth.
+
 == Table of Fourier Properties and of Basic Fourier Transform Pairs
 
 #note("Continuous-Time Fourier Transform Properties")[
@@ -657,7 +855,7 @@ The factor $1\/(2 pi)$ comes from the $1\/(2 pi)$ in the synthesis equation; it 
       [$integral_(-infinity)^t x(tau) "d"tau$],
       [$1/(j omega) X(j omega) + pi X(0) delta(omega)$],
 
-      [Differentiation in Frequency], [$t x(t)$], [$j "d"/("d" omega) X(j omega)$],
+      [Differentiation in Frequency], [$t x(t)$], [$j "d"/("d"omega) X(j omega)$],
 
       [Conjugate Symmetry for Real Signals],
       [$x(t)$ real],

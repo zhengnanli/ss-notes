@@ -430,6 +430,82 @@ $
     )],
 )
 
+== (optional) Quantization
+
+The introduction distinguished _discrete-time_ signals, whose time axis has been sampled, from _digital_ signals, whose amplitude can also take only finitely many values. Sampling produces the first. A computer needs the second, because each sample must be stored in a fixed number of bits. The step that rounds each sample to one of finitely many levels is called _quantization_. An analog-to-digital converter (ADC) performs both steps: it samples, as described above, and then quantizes. Unlike sampling of a band-limited signal, quantization cannot be undone; the best we can do is to make its error small.
+
+=== The uniform quantizer
+A $B$-bit uniform quantizer covers a full-scale range $[-X_m, X_m]$ with $2^B$ equally spaced levels. The spacing, or _step size_, is
+$
+  Delta = (2 X_m) / 2^B
+$
+Each input $x$ is replaced by the nearest level $Q(x)$. As long as the input stays within the full-scale range, the _quantization error_
+$
+  e = Q(x) - x
+$
+satisfies $|e| <= Delta \/ 2$ (@fig-quantization). Each additional bit halves $Delta$ and therefore halves the worst-case error.
+
+
+=== The additive noise model
+The error is a deterministic function of the input, but for a busy signal and a small step it behaves like noise. The standard model treats $e$ as a random variable uniformly distributed on $[-Delta \/ 2, Delta \/ 2]$ and independent of the signal. Its mean is zero and its variance (the noise power) is
+$
+  sigma_e^2 = integral_(-Delta \/ 2)^(Delta \/ 2) e^2 dot 1 / Delta "d"e = 1 / Delta [e^3 / 3]_(-Delta \/ 2)^(Delta \/ 2) = Delta^2 / 12
+$
+The quantized signal is then modeled as the original plus additive noise, $Q(x[n]) = x[n] + e[n]$.
+
+#let B = 3
+#let delta-q = 2 / calc.pow(2, B)
+#let quant(x) = calc.clamp(delta-q * (calc.floor(x / delta-q) + 0.5), -1 + delta-q / 2, 1 - delta-q / 2)
+#let tq = lq.linspace(0, 1, num: 600)
+#let xq = tq.map(t => calc.sin(2 * calc.pi * t))
+#altfig(
+  alt: "Two stacked plots over one period of a sinusoid, time from 0 to 1. Top: a unit-amplitude sine wave drawn as a smooth curve, and its 3-bit quantized version drawn as a staircase that takes only the eight levels plus or minus 0.125, 0.375, 0.625 and 0.875. Bottom: the quantization error, the difference between the staircase and the sine, which is a sawtooth-like signal that stays between minus 0.125 and 0.125, the dashed lines at plus and minus half a step.",
+  caption: [
+    A 3-bit quantizer with $X_m = 1$, so $Delta = 1/4$. Top: the input
+    $x(t) = sin(2 pi t)$ and its quantized version $Q(x(t))$, which takes
+    only $2^3 = 8$ levels. Bottom: the error $e = Q(x) - x$ stays within
+    $plus.minus Delta \/ 2$ (dashed).
+  ],
+  align(center)[
+    #stack(
+      spacing: 0.6em,
+      lq.diagram(
+        width: 10cm,
+        height: 3.5cm,
+        ylim: (-1.15, 1.15),
+        xaxis: (ticks: shared-ticks((0, 0.25, 0.5, 0.75, 1), false), subticks: none),
+        yaxis: (ticks: (-0.875, -0.375, 0.125, 0.625), subticks: none),
+        lq.plot(tq, xq, mark: none, color: c-muted, label: $x(t)$),
+        lq.plot(tq, xq.map(quant), mark: none, color: c-accent, label: $Q(x(t))$),
+        legend: (position: right + bottom),
+      ),
+      lq.diagram(
+        xlabel: $t$,
+        width: 10cm,
+        height: 2.2cm,
+        title: $e(t) = Q(x(t)) - x(t)$,
+        ylim: (-0.2, 0.2),
+        xaxis: (ticks: shared-ticks((0, 0.25, 0.5, 0.75, 1), false), subticks: none),
+        yaxis: (ticks: (-0.125, 0, 0.125), subticks: none),
+        lq.plot(tq, xq.map(x => quant(x) - x), mark: none, color: c-blue),
+        lq.plot((0, 1), (0.125, 0.125), mark: none, stroke: (dash: "dashed", paint: c-muted)),
+        lq.plot((0, 1), (-0.125, -0.125), mark: none, stroke: (dash: "dashed", paint: c-muted)),
+      ),
+    )
+  ],
+) <fig-quantization>
+
+=== Signal-to-quantization-noise ratio
+Consider a full-scale sinusoid $x(t) = X_m cos(omega_0 t)$, whose average power is $X_m^2 \/ 2$. With $Delta = 2 X_m \/ 2^B$, the signal-to-quantization-noise ratio is
+$
+  "SQNR" = (X_m^2 \/ 2) / (Delta^2 \/ 12) = (6 X_m^2) / Delta^2 = (6 X_m^2 dot 2^(2 B)) / (4 X_m^2) = 3 / 2 dot 2^(2 B)
+$
+In decibels,
+$
+  "SQNR"_"dB" = 10 log_10 (3 / 2) + 20 B log_10 2 approx 1.76 + 6.02 B "dB"
+$
+This is the "6 dB per bit" rule: each extra bit improves the SQNR by about 6 dB. A 16-bit audio converter, for instance, achieves about 98 dB. The uniform model is only approximate when $B$ is small; for the 3-bit quantizer of @fig-quantization the formula gives 19.8 dB, while the actual SQNR of a full-scale sinusoid is about 19.1 dB, because the error is visibly not random there.
+
 == Sampling of Discrete-Time Signals
 
 // A discrete-time signal lives on the integers, so every stem plot below is
